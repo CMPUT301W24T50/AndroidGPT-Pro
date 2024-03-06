@@ -11,9 +11,9 @@ public class ProfileDbCtrl extends DatabaseCtrl {
     private String pPhn;
     private String pEml;
 
-    public int genNewProfile() {
-        return 0;
-    }
+//    public int createNewProfile() {
+//        return 0;
+//    }
 
     public void setInitProfile(int profileID,
                                String profileName,
