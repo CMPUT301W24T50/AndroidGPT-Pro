@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,30 +13,37 @@ public class OpeningScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opening_screen);
 
-        CardView attendeeCard = findViewById(R.id.first_card);
-        CardView organizerCard = findViewById(R.id.second_card);
-        CardView adminCard = findViewById(R.id.third_card);
+        CardView userCard = findViewById(R.id.first_card);
+        CardView adminCard = findViewById(R.id.second_card);
 
-        attendeeCard.setOnClickListener(new View.OnClickListener() {
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID");
+
+        ProfileDatabaseControl newProfile = new ProfileDatabaseControl(userID);
+        newProfile.setpGeoTracking(false);
+        newProfile.setProfileEmail("");
+        newProfile.setProfilePhoneNumber("");
+
+        Intent newIntent = new Intent(OpeningScreenActivity.this, ProfileActivity.class);
+        newIntent.putExtra("userID", userID);
+        userCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Builds new attendee profile and navigates to Events screen
+                // Builds attendee profile and navigates to Profile activity
+                newProfile.initProfile("user");
+                startActivity(newIntent);
             }
         });
 
-//        organizerCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Builds new organizer profile and navigates to organizer main screen
-//            }
-//        });
+        adminCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Builds admin profile and navigates to Profile activity
+                newProfile.initProfile("admin");
+                startActivity(newIntent);
+            }
+        });
 
-//        adminCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Brings user to sign in screen
-//            }
-//        });
     }
 
 }

@@ -155,7 +155,6 @@ public class ProfileDatabaseControl {
         pDocRef.update("pSignUpEvents", FieldValue.arrayRemove(eventID));
     }
 
-
     /**
      * This is an adder used to add the given event ID to the user profile check in list.
      * @param eventID
@@ -187,3 +186,4 @@ public class ProfileDatabaseControl {
         });
     }
 }
+
