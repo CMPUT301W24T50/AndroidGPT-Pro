@@ -15,7 +15,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView profileNameTextView;
     private TextView phoneNumberTextView;
     private TextView emailTextView;
-
     private ToggleButton geolocationToggle;
 
     @Override
@@ -38,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileNameTextView.setText(profile.getProfileName());
         phoneNumberTextView.setText(profile.getProfilePhoneNumber());
         emailTextView.setText(profile.getProfileEmail());
-        geolocationToggle.setChecked(profile.getpGeoTracking());
+//        geolocationToggle.setChecked(profile.getpGeoTracking());
 
         // Handle click event for edit profile button
         Button editProfileButton = findViewById(R.id.btn_edit_profile);
