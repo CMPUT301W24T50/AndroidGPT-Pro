@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidGPT-Pro</string>
+    <string name="scan_qr">Scan QR Code</string>
 </resources>
