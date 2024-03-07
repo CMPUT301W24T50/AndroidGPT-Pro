@@ -16,8 +16,10 @@ public class EventDbCtrl {
     private String eDescription;
     private String eTime;
 
-    public EventDbCtrl() {
+    private EventDbCtrl() {
         db = FirebaseFirestore.getInstance();
         eRef = db.collection("UserProfile");
     }
+
+    // Not completed. All methods are set to private.
 }
