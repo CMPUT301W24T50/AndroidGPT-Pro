@@ -75,6 +75,7 @@ public class EventDatabaseControl {
         eColRef.document(eventID).set(data);
     }
 
+    
     public String getEventName(String eventID) {
         eID = eventID;
         downloadData();
