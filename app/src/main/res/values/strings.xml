@@ -5,4 +5,5 @@
     <string name="email">Email</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="geolocation_tracking">Geolocation Tracking</string>
+    <string name="scan_qr">Scan QR Code</string>
 </resources>

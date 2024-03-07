@@ -28,7 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
         phoneNumberTextView = findViewById(R.id.text_phone_number);
         emailTextView = findViewById(R.id.text_email);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
-        
+
         // Get profile information from intent or database and display it
         // displayProfileInfo();
 
