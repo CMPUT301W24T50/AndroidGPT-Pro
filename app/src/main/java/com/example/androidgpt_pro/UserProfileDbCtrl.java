@@ -29,7 +29,7 @@ public class UserProfileDbCtrl {
     private String upfPhoneNumber;
     private String upfEmail;
 
-    
+
     /**
      * This is the constructor of class UserProfileDbCtrl.
      * @param profileID
@@ -108,9 +108,6 @@ public class UserProfileDbCtrl {
     }
 
 
-    /**
-     * This is a function to upload data to the database.
-     */
     private void uploadData() {
         HashMap<String, String> data = new HashMap<>();
         data.put("upfName", upfName);
@@ -119,9 +116,6 @@ public class UserProfileDbCtrl {
         upfRef.document(upfID).set(data);
     }
 
-    /**
-     * This is a function to download data from the database.
-     */
     private void downloadData() {
         upfRef.document(upfID)
                 .get()
