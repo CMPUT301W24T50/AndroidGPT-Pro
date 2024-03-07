@@ -73,6 +73,17 @@ public class Event implements Parcelable {
         this.eventDescription = eventDescription;
     }
 
+    /**
+     * this create an event
+     * @param eventName
+     * @param eventLocationApt
+     * @param eventLocationCity
+     * @param eventId
+     * @param eventDate
+     * @param eventDescription
+     * @param eventImageUrl
+     */
+
     public Event(String eventName, String eventLocationApt, String eventLocationCity, String eventId, String eventDate, String eventDescription, String eventImageUrl) {
         this.eventName = eventName;
         this.eventLocationApt = eventLocationApt;

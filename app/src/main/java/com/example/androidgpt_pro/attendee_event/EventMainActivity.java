@@ -14,6 +14,7 @@ import com.example.androidgpt_pro.R;
 import java.util.ArrayList;
 
 public class EventMainActivity extends AppCompatActivity {
+    // This is the main page of event where displayed all the past and upcoming events
     private ListView eventList;
     private ArrayList<Event> eventDataList;
     private ArrayAdapter<Event> eventAdapter;
