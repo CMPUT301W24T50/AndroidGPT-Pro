@@ -22,12 +22,13 @@ public class ProfileDatabaseControl {
     private String pRole;
     private String pPhoneNumber;
     private String pEmail;
+    private Boolean pGLTState = Boolean.TRUE;
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
 
 
     /**
-     * This is the constructor of class UserProfileDbCtrl.
+     * This is the constructor of class ProfileDatabaseControl.
      * @param profileID
      * profileID: String
      * A unique profile ID, which will index an entire user's profile.
@@ -51,6 +52,7 @@ public class ProfileDatabaseControl {
         data.put("pRole", pRole);
         data.put("pPhoneNumber", pPhoneNumber);
         data.put("pEmail", pEmail);
+        data.put("pGLTState", pGLTState);
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         pDocRef.set(data);
@@ -87,6 +89,16 @@ public class ProfileDatabaseControl {
         return pEmail;
     }
 
+    /**
+     * This is a getter for Profile Geo-Location Tracking State.
+     * @return profileGLTState
+     * profileGLTState: A state of Geo-Location Tracking.
+     */
+    public Boolean getProfileGLTState() {
+        downloadData();
+        return pGLTState;
+    }
+
 
     /**
      * This is a setter for Profile Name.
@@ -114,7 +126,16 @@ public class ProfileDatabaseControl {
     public void setProfileEmail(String profileEmail) {
         pDocRef.update("pEmail", profileEmail);
     }
-    
+
+    /**
+     * This is a setter for Profile Geo-Location Tracking State.
+     * @param profileGLTState
+     * profileGLTState: A state of Geo-Location Tracking.
+     */
+    public void setProfileGLTState(Boolean profileGLTState) {
+        pDocRef.update("pGLTState", profileGLTState);
+    }
+
 
     /**
      * This is an adder used to add the given event ID to the user profile sign up list.
@@ -152,6 +173,7 @@ public class ProfileDatabaseControl {
         pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(eventID));
     }
 
+
     private void downloadData() {
         pDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -159,6 +181,7 @@ public class ProfileDatabaseControl {
                 pName = documentSnapshot.getString("pName");
                 pPhoneNumber = documentSnapshot.getString("pPhoneNumber");
                 pEmail = documentSnapshot.getString("pEmail");
+                pGLTState = documentSnapshot.getBoolean("pGLTState");
             }
         });
     }
