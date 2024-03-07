@@ -33,9 +33,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Attendee"
+                android:text="User"
                 android:textSize="24sp"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="10dp" />
 
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
@@ -51,27 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Organizer"
-            android:textSize="24sp"
-            android:layout_marginStart="4dp" />
-
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:id="@+id/third_card"
-        android:layout_marginTop="13dp"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/second_card">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="Administrator"
             android:textSize="24sp"
-            android:layout_marginStart="4dp" />
+            android:layout_marginStart="10dp" />
 
     </androidx.cardview.widget.CardView>
 
