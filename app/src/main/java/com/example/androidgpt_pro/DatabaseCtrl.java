@@ -18,25 +18,4 @@ public class DatabaseCtrl {
         eventRef = db.collection("Event");
         profileRef = db.collection("Profile");
     }
-
-    public int createNewProfile() {
-        HashMap<String, String> data = new HashMap<>();
-        data.put("profileID", "00000000");
-        data.put("profileName", "STAT");
-        data.put("profilePassword", "");
-        data.put("profileImage", "");
-        data.put("profilePhoneNumber", "");
-        data.put("profileEmail", "");
-        profileRef.document("00000000").set(data);
-        return 0;
-    }
-
-    public void createNewEvent() {
-        HashMap<String, String> data = new HashMap<>();
-        data.put("EventID", "00000000");
-        data.put("EventName", "STAT");
-        data.put("EventDescription", "");
-        data.put("EventImage", "");
-        eventRef.document("00000000").set(data);
-    }
 }
