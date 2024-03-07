@@ -7,6 +7,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -25,6 +27,8 @@ public class EventDatabaseControl {
     private String eSpfLocation;
     private String eDescription;
     private String eTime;
+    private ArrayList<String> eSignUpProfiles;
+    private ArrayList<String> eCheckInProfiles;
 
 
     /**
@@ -71,56 +75,87 @@ public class EventDatabaseControl {
         eColRef.document(eventID).set(data);
     }
 
-    public String getEventName() {
-        return "";
+    public String getEventName(String eventID) {
+        eID = eventID;
+        downloadData();
+        return eName;
     }
 
-    public String getEventLocation() {
-        return "";
+    public String getEventLocation(String eventID) {
+        eID = eventID;
+        downloadData();
+        return eLocation;
     }
 
-    public String getEventSimplifiedLocation() {
-        return "";
+    public String getEventSimplifiedLocation(String eventID) {
+        eID = eventID;
+        downloadData();
+        return eSpfLocation;
     }
 
-    public String getEventDescription() {
-        return "";
+    public String getEventDescription(String eventID) {
+        eID = eventID;
+        downloadData();
+        return eDescription;
     }
 
-    public String getEventTime() {
-        return "";
-    }
-
-
-    public void setEventName(String eventName) {
-
-    }
-
-    public void setEventLocation(String eventLocation) {
-
-    }
-
-    public void setEventSimplifiedLocation(String eventSimplifiedLocation) {
-
-    }
-
-    public void setEventDescription(String eventDescription) {
-
-    }
-
-    public void setEventTime(String eventTime) {
-
+    public String getEventTime(String eventID) {
+        eID = eventID;
+        downloadData();
+        return eTime;
     }
 
 
-    public void addEventProfile(String profileID) {
-
+    public void setEventName(String eventID, String eventName) {
+        eColRef.document(eventID).update("eName", eventName);
     }
 
-    public void delEventProfile(String profileID) {
-
+    public void setEventLocation(String eventID, String eventLocation) {
+        eColRef.document(eventID).update("eLocation", eventLocation);
     }
 
+    public void setEventSimplifiedLocation(String eventID, String eventSimplifiedLocation) {
+        eColRef.document(eventID).update("eSpfLocation", eventSimplifiedLocation);
+    }
+
+    public void setEventDescription(String eventID, String eventDescription) {
+        eColRef.document(eventID).update("eDescription", eventDescription);
+    }
+
+    public void setEventTime(String eventID, String eventTime) {
+        eColRef.document(eventID).update("eTime", eventTime);
+    }
+
+
+//    public void addEventSignUpProfile(String profileID) {
+//
+//    }
+//
+//    public void delEventSignUpProfile(String profileID) {
+//
+//    }
+//
+//    public void addEventCheckInProfile(String profileID) {
+//
+//    }
+//
+//    public void delEventCheckInProfile(String profileID) {
+//
+//    }
+
+
+    private void downloadData() {
+        eColRef.document(eID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                eName = documentSnapshot.getString("eName");
+                eLocation = documentSnapshot.getString("eLocation");
+                eSpfLocation = documentSnapshot.getString("eSpfLocation");
+                eDescription = documentSnapshot.getString("eDescription");
+                eTime = documentSnapshot.getString("eTime");
+            }
+        });
+    }
 
     private String strAddOne(String value) {
         int intValue = Integer.parseInt(value);
