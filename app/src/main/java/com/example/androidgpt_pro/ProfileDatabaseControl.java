@@ -22,7 +22,8 @@ public class ProfileDatabaseControl {
     private String pRole;
     private String pPhoneNumber;
     private String pEmail;
-    private ArrayList<String> pEvents;
+    private ArrayList<String> pSignUpEvents;
+    private ArrayList<String> pCheckInEvents;
 
 
     /**
@@ -50,7 +51,8 @@ public class ProfileDatabaseControl {
         data.put("pRole", pRole);
         data.put("pPhoneNumber", pPhoneNumber);
         data.put("pEmail", pEmail);
-        data.put("pEvents", pEvents);
+        data.put("pSignUpEvents", pSignUpEvents);
+        data.put("pCheckInEvents", pCheckInEvents);
         pDocRef.set(data);
     }
 
@@ -115,21 +117,40 @@ public class ProfileDatabaseControl {
 
 
     /**
-     * This is an adder used to add the given event ID to the user profile.
+     * This is an adder used to add the given event ID to the user profile sign up list.
      * @param eventID
      * eventID: The ID of the event that needs to be added.
      */
-    public void addProfileEvent(String eventID) {
-        pDocRef.update("pEvents", FieldValue.arrayUnion(eventID));
+    public void addProfileSignUpEvent(String eventID) {
+        pDocRef.update("pSignUpEvents", FieldValue.arrayUnion(eventID));
     }
 
     /**
-     * This is a deleter that can remove event that need to de-registration.
+     * This is a deleter that can remove event that need to cancel sign up.
      * @param eventID
      * eventID: The ID of the event that needs to be deleted.
      */
-    public void delProfileEvent(String eventID) {
-        pDocRef.update("pEvents", FieldValue.arrayRemove(eventID));
+    public void delProfileSignUpEvent(String eventID) {
+        pDocRef.update("pSignUpEvents", FieldValue.arrayRemove(eventID));
+    }
+
+
+    /**
+     * This is an adder used to add the given event ID to the user profile check in list.
+     * @param eventID
+     * eventID: The ID of the event that needs to be added.
+     */
+    public void addProfileCheckInEvent(String eventID) {
+        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
+    }
+
+    /**
+     * This is a deleter that can remove event that need to cancel check in.
+     * @param eventID
+     * eventID: The ID of the event that needs to be deleted.
+     */
+    public void delProfileCheckInEvent(String eventID) {
+        pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(eventID));
     }
 
 
