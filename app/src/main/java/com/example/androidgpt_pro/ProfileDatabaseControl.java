@@ -22,7 +22,6 @@ public class ProfileDatabaseControl {
     private String pRole;
     private String pPhoneNumber;
     private String pEmail;
-    private Boolean pGeoTracking;
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
 
@@ -115,23 +114,7 @@ public class ProfileDatabaseControl {
     public void setProfileEmail(String profileEmail) {
         pDocRef.update("pEmail", profileEmail);
     }
-
-    /**
-     * This is a getter for Profile Geo-Location Tracking
-     * @return users set preference
-     */
-    public Boolean getpGeoTracking() {
-        return pGeoTracking;
-    }
-
-    /**
-     * This is a setter for Profile Geo-Location Tracking
-     * @param pGeoTracking
-     * pGeoTracking: users preference whether to track location
-     */
-    public void setpGeoTracking(Boolean pGeoTracking) {
-        this.pGeoTracking = pGeoTracking;
-    }
+    
 
     /**
      * This is an adder used to add the given event ID to the user profile sign up list.
