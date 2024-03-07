@@ -31,6 +31,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Get profile information from intent or database and display it
         // displayProfileInfo();
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID");
+
+        ProfileDatabaseControl profile = new ProfileDatabaseControl(userID);
+        profileNameTextView.setText(profile.getProfileName());
+        phoneNumberTextView.setText(profile.getProfilePhoneNumber());
+        emailTextView.setText(profile.getProfileEmail());
+        geolocationToggle.setChecked(profile.getpGeoTracking());
 
         // Handle click event for edit profile button
         Button editProfileButton = findViewById(R.id.btn_edit_profile);
@@ -74,4 +82,3 @@ public class ProfileActivity extends AppCompatActivity {
 //        emailTextView.setText(email);
 //    }
 }
-

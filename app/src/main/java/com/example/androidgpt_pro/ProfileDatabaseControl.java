@@ -114,7 +114,7 @@ public class ProfileDatabaseControl {
     public void setProfileEmail(String profileEmail) {
         pDocRef.update("pEmail", profileEmail);
     }
-
+    
 
     /**
      * This is an adder used to add the given event ID to the user profile sign up list.
@@ -134,7 +134,6 @@ public class ProfileDatabaseControl {
         pDocRef.update("pSignUpEvents", FieldValue.arrayRemove(eventID));
     }
 
-
     /**
      * This is an adder used to add the given event ID to the user profile check in list.
      * @param eventID
@@ -153,7 +152,6 @@ public class ProfileDatabaseControl {
         pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(eventID));
     }
 
-
     private void downloadData() {
         pDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -165,3 +163,4 @@ public class ProfileDatabaseControl {
         });
     }
 }
+
