@@ -18,6 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
 
+/**
+ * This class allows the user to browse all events in the database.
+ * The user can select an event to see the event details and sign up.
+ */
 public class EventBrowseActivity extends AppCompatActivity {
     // TODO: when the user click the event button in the Navigation bar, it jumps to this page with all events listed.
     BottomNavigationView navigationTabs;

@@ -17,6 +17,10 @@ import androidx.annotation.NonNull;
 
 import com.journeyapps.barcodescanner.ScanOptions;
 
+/**
+ * This class is used to scan QR codes and navigates the user
+ * to the event page
+ */
 public class QRScannerActivity extends ComponentActivity {
 
     BottomNavigationView navigationTabs;

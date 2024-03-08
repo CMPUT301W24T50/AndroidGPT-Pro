@@ -7,6 +7,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+/**
+ * This class generates a QR code for an event
+ */
 public class QRCodeGenerator {
 
     // Method to generate Sign-up QR Code Bitmap

@@ -16,6 +16,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class manages the array of events to be displayed in the EventBrowseActivity
+ */
 public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
 
     private String eID;
