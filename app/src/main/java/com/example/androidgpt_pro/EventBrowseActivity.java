@@ -61,15 +61,15 @@ public class EventBrowseActivity extends AppCompatActivity {
         createSampleEvent();
 
         // handle click action
-        // handle click action
         listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(EventBrowseActivity.this, EventActivity.class);
-                intent.putExtra("EVENT_ID",eID);
+                intent.putExtra("eventID",eID);
                 startActivity(intent);
             }
         });
+
         // this is navigation bar
         navigationTabs = findViewById(R.id.navigation);
         navigationTabs.setSelectedItemId(R.id.profile_tab);
