@@ -32,6 +32,7 @@ public class EventBrowseActivity extends AppCompatActivity {
     private ArrayList<String> eventNames = new ArrayList<>();
     private ArrayAdapter<String> eventArrayAdapter;
     private ListView listViewEvents;
+    private String eID;
 
     private void createSampleEvent() {
         // We're going to add a hardcoded ID for demonstration purposes
@@ -41,7 +42,7 @@ public class EventBrowseActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         EventDatabaseControl edc = new EventDatabaseControl();
                         String eLastEventID = documentSnapshot.getString("eLastEventID");
-                        String eID = edc.strAddOne(eLastEventID);
+                        eID = edc.strAddOne(eLastEventID);
                         HashMap<String, String> data = new HashMap<>();
                         data.put("eLastEventID", eID);
                         colRef.document("00000000").set(data);
@@ -69,18 +70,15 @@ public class EventBrowseActivity extends AppCompatActivity {
         createSampleEvent();
 
         // handle click action
-        listViewEvents.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // handle click action
+        listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(EventBrowseActivity.this, EventActivity.class);
+                intent.putExtra("EVENT_ID",eID);
+                startActivity(intent);
             }
         });
-
         // this is navigation bar
         navigationTabs = findViewById(R.id.navigation);
         navigationTabs.setSelectedItemId(R.id.profile_tab);
