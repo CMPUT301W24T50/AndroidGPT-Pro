@@ -42,9 +42,35 @@ public class QRScannerActivity extends ComponentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
-
         Button btnScanQR = findViewById(R.id.btnScanQR);
         btnScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID");
+        navigationTabs = findViewById(R.id.navigation);
+        navigationTabs.setSelectedItemId(R.id.qr_scanner_tab);
+        navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.events_tab) {
+                    Intent newIntent = new Intent(QRScannerActivity.this, EventBrowseActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
+                } else if (itemId == R.id.qr_scanner_tab) {
+                    Intent newIntent = new Intent(QRScannerActivity.this, QRScannerActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
+                } else if (itemId == R.id.profile_tab) {
+                    Intent newIntent = new Intent(QRScannerActivity.this, ProfileActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
+                } else {
+                    throw new IllegalArgumentException("menu item ID does not exist");
+                }
+                return false;
+            }
+        });
     }
 
     private boolean isSignupQRCode(String data) {
