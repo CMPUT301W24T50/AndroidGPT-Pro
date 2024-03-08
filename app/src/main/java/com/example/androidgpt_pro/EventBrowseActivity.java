@@ -24,6 +24,7 @@ public class EventBrowseActivity extends AppCompatActivity {
     private ArrayList<String> eventNames = new ArrayList<>();
     private ArrayAdapter<String> eventArrayAdapter;
     private ListView listViewEvents;
+    // private ArrayList<EventDatabaseControl> eventList;
     private String eID;
 
     private void createSampleEvent() {
@@ -42,6 +43,12 @@ public class EventBrowseActivity extends AppCompatActivity {
                             "City Center",
                             "This is a sample event.",
                             "April 10, 2024 8:00 PM");
+//                    eventList = new ArrayList<EventDatabaseControl>();
+//                    eventList.add(edc.initEvent(eID, "Sample Event",
+//                            "123 Main St",
+//                            "City Center",
+//                            "This is a sample event.",
+//                            "April 10, 2024 8:00 PM"));
                     eventNames.add("Sample Event");
                     eventArrayAdapter.notifyDataSetChanged();
                 }
@@ -55,6 +62,7 @@ public class EventBrowseActivity extends AppCompatActivity {
         String userID = intent.getStringExtra("userID");
 
         listViewEvents = findViewById(R.id.event_list_view);
+        // eventArrayAdapter = new EventArrayAdapter<>(this, )
         eventArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventNames);
         listViewEvents.setAdapter(eventArrayAdapter);
 
