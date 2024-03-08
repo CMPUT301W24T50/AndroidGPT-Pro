@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/events_tab"
+        android:title="Events"
+        android:icon="@drawable/events_icon" />
+    <item android:id="@+id/qr_scanner_tab"
+        android:title="QR Scanner"
+        android:icon="@drawable/qr_scan_icon" />
+    <item android:id="@+id/profile_tab"
+        android:title="Profile"
+        android:icon="@drawable/profile_icon" />
+</menu>
