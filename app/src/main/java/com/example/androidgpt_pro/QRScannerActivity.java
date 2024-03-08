@@ -57,8 +57,9 @@ public class QRScannerActivity extends ComponentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    // Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
-                    // startActivity(newIntent);
+                    Intent newIntent = new Intent(QRScannerActivity.this, EventBrowseActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
