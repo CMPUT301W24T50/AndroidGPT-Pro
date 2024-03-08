@@ -90,10 +90,6 @@
         app:layout_constraintTop_toBottomOf="@+id/event_location2" />
 
 
-    <!--this button should be assigned to the profile
-not sure how to pass the data yet
-two fragment? one for sign up one for check in?-->
-
     <TextView
         android:id="@+id/event_description"
         android:layout_width="match_parent"
@@ -102,23 +98,28 @@ two fragment? one for sign up one for check in?-->
         android:text="Event Detail Sample"
         android:textColor="#C59696"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_description_title" />
 
-    <ImageView
-        android:id="@+id/event_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_description"
-        app:layout_constraintVertical_bias="0.0" />
+
+<!--image later-->
+<!--    <ImageView-->
+<!--        android:id="@+id/event_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_launcher_background"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/button"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/event_description"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
+
+    <!--this button should be assigned to the profile
+not sure how to pass the data yet
+two fragment? one for sign up one for check in?-->
 
     <Button
         android:id="@+id/button"
@@ -127,7 +128,7 @@ two fragment? one for sign up one for check in?-->
         android:text="Sign Up/Check In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_image" />
+        app:layout_constraintTop_toBottomOf="@+id/event_description" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
