@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Event Title"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_name"
+        android:layout_marginTop="10dp"
+        android:text="Event Date"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/event_location1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address1(apt/street name)"
+        android:textSize="18sp"
+        android:layout_below="@id/event_date"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/event_location2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address2(city/province)"
+        android:textSize="18sp"
+        android:layout_below="@id/event_location1"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/event_description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Detail"
+        android:textSize="18sp"
+        android:layout_below="@id/event_location2"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/event_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_description_title"
+        android:layout_marginTop="5dp"
+        android:text="Event Detail Sample"
+        android:textColor="#BFA3A3"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_sign_up_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BTN"
+        android:layout_below="@id/event_description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="62dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/navigation"
+        app:menu="@menu/bottom_nav"
+        android:layout_alignParentBottom="true"
+        />
+
+
+</RelativeLayout>
