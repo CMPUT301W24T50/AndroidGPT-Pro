@@ -6,30 +6,54 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import android.widget.ArrayAdapter;
 
 public class EventBrowseActivity extends AppCompatActivity {
     // TODO: when the user click the event button in the Navigation bar, it jumps to this page with all events listed.
+    private CollectionReference colRef = FirebaseFirestore
+            .getInstance()
+            .collection("Event");
     BottomNavigationView navigationTabs;
     private ArrayList<String> eventNames = new ArrayList<>();
     private ArrayAdapter<String> eventArrayAdapter;
     private ListView listViewEvents;
 
     private void createSampleEvent() {
-        EventDatabaseControl edc = new EventDatabaseControl();
         // We're going to add a hardcoded ID for demonstration purposes
-        String newEventId = edc.createEvent();
-        edc.initEvent(newEventId, "Sample Event", "123 Main St", "City Center", "This is a sample event.", "April 10, 2024 8:00 PM");
-        eventNames.add("Sample Event");
-        eventArrayAdapter.notifyDataSetChanged();
+        colRef.document("00000000").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        EventDatabaseControl edc = new EventDatabaseControl();
+                        String eLastEventID = documentSnapshot.getString("eLastEventID");
+                        String eID = edc.strAddOne(eLastEventID);
+                        HashMap<String, String> data = new HashMap<>();
+                        data.put("eLastEventID", eID);
+                        colRef.document("00000000").set(data);
+                        edc.initEvent(eID, "Sample Event",
+                                "123 Main St",
+                                "City Center",
+                                "This is a sample event.",
+                                "April 10, 2024 8:00 PM");
+                        eventNames.add("Sample Event");
+                        eventArrayAdapter.notifyDataSetChanged();
+                    }
+                });
     }
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState){
