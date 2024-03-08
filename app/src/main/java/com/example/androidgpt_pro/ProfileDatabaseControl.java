@@ -62,7 +62,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a getter for a profile snapshot.
      * @return profileSnapshotGetTask
-     * profileSnapshotGetTask: A task for get the DocumentSnapshot.
+     * profileSnapshotGetTask: A task for getting profileDocumentSnapshot.
      */
     public Task<DocumentSnapshot> getProfileSnapshot() {
         return pDocRef.get();
