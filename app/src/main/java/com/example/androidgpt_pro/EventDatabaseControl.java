@@ -7,13 +7,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * This is a class that controls the interaction between event data and the database.
  */
-public class EventDatabaseControl {
+public class EventDatabaseControl implements Serializable {
 
     private FirebaseFirestore db;
     private CollectionReference eColRef;
