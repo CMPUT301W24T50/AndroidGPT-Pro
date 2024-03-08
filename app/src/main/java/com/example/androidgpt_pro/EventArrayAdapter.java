@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.bumptech.glide.Glide;
 import com.example.androidgpt_pro.R;
 import java.util.ArrayList;
 public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
@@ -20,7 +19,7 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if(convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.event_content_detail, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.event_content, parent, false);
         } else {
             view = convertView;
         }
