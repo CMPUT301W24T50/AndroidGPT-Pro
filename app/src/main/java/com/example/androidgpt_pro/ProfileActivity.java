@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -65,8 +64,9 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    // Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
-                    // startActivity(newIntent);
+                    Intent newIntent = new Intent(ProfileActivity.this, EventBrowseActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);

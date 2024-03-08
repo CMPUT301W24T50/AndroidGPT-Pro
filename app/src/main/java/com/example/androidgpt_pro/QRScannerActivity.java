@@ -28,13 +28,13 @@ public class QRScannerActivity extends ComponentActivity {
             Toast.makeText(QRScannerActivity.this, "Scanned: " + scannedData, Toast.LENGTH_LONG).show();
 
             // Determine if the QR code is for signup or check-in
-//            if (isSignupQRCode(scannedData)) {
-//                handleSignupQRCode(scannedData);
-//            } else if (isCheckInQRCode(scannedData)) {
-//                handleCheckInQRCode(scannedData);
-//            } else {
-//                Toast.makeText(QRScannerActivity.this, "Invalid QR Code", Toast.LENGTH_LONG).show();
-//            }
+            if (isSignupQRCode(scannedData)) {
+                handleSignupQRCode(scannedData);
+            } else if (isCheckInQRCode(scannedData)) {
+                handleCheckInQRCode(scannedData);
+            } else {
+                Toast.makeText(QRScannerActivity.this, "Invalid QR Code", Toast.LENGTH_LONG).show();
+            }
         }
     });
 
@@ -42,23 +42,21 @@ public class QRScannerActivity extends ComponentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
-
         Button btnScanQR = findViewById(R.id.btnScanQR);
         btnScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
-
         navigationTabs = findViewById(R.id.navigation);
         navigationTabs.setSelectedItemId(R.id.qr_scanner_tab);
-
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    // Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
-                    // startActivity(newIntent);
+                    Intent newIntent = new Intent(QRScannerActivity.this, EventBrowseActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
@@ -76,33 +74,28 @@ public class QRScannerActivity extends ComponentActivity {
     }
 
     private boolean isSignupQRCode(String data) {
-        // TBD - Determine if it's a signup QR code
-        return data.startsWith("SIGNUP_");
+        return data.startsWith("sign-up_");
     }
 
     private boolean isCheckInQRCode(String data) {
-        // TBD - Determine if it's a check-in QR code
-        return data.startsWith("CHECKIN_");
+        return data.startsWith("check-in_");
     }
 
-//    private void handleSignupQRCode(String data) {
-//        // TBD -  Handle a signup QR code
-//        String eventId = extractEventId(data);
-//        Intent intent = new Intent(QRScannerActivity.this, EventxxxActivity.class);
-//        intent.putExtra("EVENT_ID", eventId);
-//        startActivity(intent);
-//    }
-//
-//    private void handleCheckInQRCode(String data) {
-//        // TBD - Handle a check-in QR code
-//        String eventId = extractEventId(data);
-//        Intent intent = new Intent(QRScannerActivity.this, EventxxxActivity.class);
-//        intent.putExtra("EVENT_ID", eventId);
-//        startActivity(intent);
-//    }
-//
-//    private String extractEventId(String qrCodeData) {
-//        // TBD -  Extracting the event ID from the QR code data
-//        return qrCodeData.split("_")[1];
-//    }
+    private void handleSignupQRCode(String data) {/*  TBD
+        String eventId = extractEventId(data);
+        Intent intent = new Intent(QRScannerActivity.this, EventActivity(sign-up).class);
+        intent.putExtra("EVENT_ID", eventId);
+        startActivity(intent);
+    */}
+
+    private void handleCheckInQRCode(String data) {/*  TBD
+        String eventId = extractEventId(data);
+        Intent intent = new Intent(QRScannerActivity.this, EventActivity(check-in).class);
+        intent.putExtra("EVENT_ID", eventId);
+        startActivity(intent);
+    */}
+
+    private String extractEventId(String qrCodeData) {
+        return qrCodeData.substring(qrCodeData.indexOf("_") + 1);
+    }
 }

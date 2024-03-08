@@ -21,7 +21,6 @@ public class EventDatabaseControl {
     private FirebaseFirestore db;
     private CollectionReference eColRef;
     private String eLastEventID;
-
     private String eID;
     private String eName;
     private String eLocation;
