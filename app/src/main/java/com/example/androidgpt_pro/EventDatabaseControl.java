@@ -104,72 +104,6 @@ public class EventDatabaseControl {
 
 
     /**
-     * This is a getter for Event Name.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @return eventName
-     * eventName: An event's name.
-     */
-    public String getEventName(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eName;
-    }
-
-    /**
-     * This is a getter for Event Location.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @return eventLocation
-     * eventLocation: An event's location.
-     */
-    public String getEventLocation(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eLocation;
-    }
-
-    /**
-     * This is a getter for Event Simplified Location.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @return eventSimplifiedLocation
-     * eventSimplifiedLocation: An event's simplified location.
-     */
-    public String getEventSimplifiedLocation(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eSpfLocation;
-    }
-
-    /**
-     * This is a getter for Event Description.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @return eventDescription
-     * eventDescription: An event's description.
-     */
-    public String getEventDescription(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eDescription;
-    }
-
-    /**
-     * This is a getter for Event Time.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @return eventTime
-     * eventTime: An event's time.
-     */
-    public String getEventTime(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eTime;
-    }
-
-
-    /**
      * This is a setter for Event Name.
      * @param eventID
      * eventID: An ID of an event.
@@ -270,18 +204,5 @@ public class EventDatabaseControl {
         int intValue = Integer.parseInt(value);
         intValue++;
         return String.format("%08d", intValue);
-    }
-
-    private void downloadData() {
-        eColRef.document(eID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                eName = documentSnapshot.getString("eName");
-                eLocation = documentSnapshot.getString("eLocation");
-                eSpfLocation = documentSnapshot.getString("eSpfLocation");
-                eDescription = documentSnapshot.getString("eDescription");
-                eTime = documentSnapshot.getString("eTime");
-            }
-        });
     }
 }
