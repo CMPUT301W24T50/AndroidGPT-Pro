@@ -79,6 +79,51 @@ public class ProfileDatabaseControl {
 
 
     /**
+     * This is a getter for Profile Name.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileName
+     * profileName: A profile's name.
+     */
+    public String getProfileName(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pName");
+    }
+
+    /**
+     * This is a getter for Profile Phone Number.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profilePhoneNumber
+     * profilePhoneNumber: A profile's phone number.
+     */
+    public String getProfilePhoneNumber(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pPhoneNumber");
+    }
+
+    /**
+     * This is a getter for Profile Email.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileEmail
+     * profileEmail: A profile's email.
+     */
+    public String getProfileEmail(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pEmail");
+    }
+
+    /**
+     * This is a getter for Profile Geo-Location Tracking State.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileGLTState
+     * profileGLTState: A state of Geo-Location Tracking.
+     */
+    public Boolean getProfileGLTState(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getBoolean("pGLTState");
+    }
+
+
+    /**
      * This is a setter for Profile Name.
      * @param profileName
      * profileName: A profile's name.

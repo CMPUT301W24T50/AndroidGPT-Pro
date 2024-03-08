@@ -32,9 +32,9 @@ public class EventBrowseActivity extends AppCompatActivity {
         edc.getEventStat()
             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(DocumentSnapshot doc) {
+                public void onSuccess(DocumentSnapshot docSns) {
                     EventDatabaseControl edc = new EventDatabaseControl();
-                    String lastEventID = edc.getLastEventID(doc);
+                    String lastEventID = edc.getLastEventID(docSns);
                     eID = edc.calculateNextEventID(lastEventID);
                     edc.setEventStat(eID);
                     edc.initEvent(eID, "Sample Event",

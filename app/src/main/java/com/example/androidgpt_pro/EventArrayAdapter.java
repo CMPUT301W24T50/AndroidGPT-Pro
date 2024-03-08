@@ -46,12 +46,12 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
         edc.getEventSnapshot(eID)
             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(DocumentSnapshot eventDoc) {
-                    eventName.setText(edc.getEventName(eventDoc));
-                    eventLocationApt.setText(edc.getEventLocation(eventDoc));
-                    eventLocationCity.setText(edc.getEventSimplifiedLocation(eventDoc));
-                    eventDescription.setText(edc.getEventDescription(eventDoc));
-                    eventDate.setText(edc.getEventTime(eventDoc));
+                public void onSuccess(DocumentSnapshot docSns) {
+                    eventName.setText(edc.getEventName(docSns));
+                    eventLocationApt.setText(edc.getEventLocation(docSns));
+                    eventLocationCity.setText(edc.getEventSimplifiedLocation(docSns));
+                    eventDescription.setText(edc.getEventDescription(docSns));
+                    eventDate.setText(edc.getEventTime(docSns));
                 }
             });
         return view;

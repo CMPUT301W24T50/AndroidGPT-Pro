@@ -51,15 +51,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         pdc.getProfile().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value,
+            public void onEvent(@Nullable DocumentSnapshot docSns,
                                 @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
                     Log.e("Database", error.toString());
                 }
-                profileNameTextView.setText(value.getString("pName"));
-                phoneNumberTextView.setText(value.getString("pPhoneNumber"));
-                emailTextView.setText(value.getString("pEmail"));
-                geolocationToggle.setChecked(Boolean.TRUE.equals(value.getBoolean("pGLTState")));
+                profileNameTextView.setText(pdc.getProfileName(docSns));
+                phoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
+                emailTextView.setText(pdc.getProfileEmail(docSns));
+                geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
             }
         });
 
