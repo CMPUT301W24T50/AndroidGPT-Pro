@@ -28,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
             .getInstance()
             .collection("Profile");
 
+    private String userID;
+
     private TextView profileNameTextView;
     private TextView phoneNumberTextView;
     private TextView emailTextView;
@@ -42,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Get profile information from intent or database and display it
         // displayProfileInfo();
         Intent intent = getIntent();
-        String userID = intent.getStringExtra("userID");
+        userID = intent.getStringExtra("userID");
         ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
 //        test.setText(userID);
 
@@ -73,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });

@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    private String userID;
     private EditText editProfileNameEditText;
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
@@ -17,6 +19,9 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
 
         // Initialize views
         editProfileNameEditText = findViewById(R.id.edit_text_edit_profile_name);
@@ -50,9 +55,11 @@ public class EditProfileActivity extends AppCompatActivity {
         String updatedPhoneNumber = editPhoneNumberEditText.getText().toString();
         String updatedEmail = editEmailEditText.getText().toString();
 
-
         // replace this with firebase database update logic and update the profile information in firebase
-
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
+        pdc.setProfileName(updatedProfileName);
+        pdc.setProfilePhoneNumber(updatedPhoneNumber);
+        pdc.setProfileEmail(updatedEmail);
 
         // just display a toast message confirming the changes for now
         Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
