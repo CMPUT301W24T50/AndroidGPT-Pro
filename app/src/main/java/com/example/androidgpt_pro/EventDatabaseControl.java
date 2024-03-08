@@ -1,17 +1,13 @@
 package com.example.androidgpt_pro;
 
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * This is a class that controls the interaction between event data and the database.
@@ -39,26 +35,6 @@ public class EventDatabaseControl {
         eColRef = db.collection("Event");
     }
 
-
-    /**
-     * This is the event creator.
-     * @return eventID
-     * eventID: A unique ID of the new event.
-     */
-    public String createEvent() {
-        eColRef.document("00000000").get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                eLastEventID = documentSnapshot.getString("eLastEventID");
-                eID = strAddOne(eLastEventID);
-                HashMap<String, String> data = new HashMap<>();
-                data.put("eLastEventID", eID);
-                eColRef.document("00000000").set(data);
-            }
-        });
-        return eID;
-    }
 
     /**
      * This is the event deleter.
@@ -104,68 +80,111 @@ public class EventDatabaseControl {
 
 
     /**
-     * This is a getter for Event Name.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @return eventName
-     * eventName: An event's name.
+     * This is a getter for a snapshot of the EventStat.
+     * @return eventStatSnapshotGetTask
+     * eventStatSnapshotGetTask: A task for get the DocumentSnapshot.
      */
-    public String getEventName(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eName;
+    public Task<DocumentSnapshot> getEventStat() {
+        return eColRef.document("00000000").get();
+    }
+
+    /**
+     * This is a setter for the EventStat.
+     * @param eventLastEventID
+     * eventLastEventID: The ID of the last event.
+     */
+    public void setEventStat(String eventLastEventID) {
+        eColRef.document("00000000").update("eLastEventID", eventLastEventID);
+    }
+
+
+    /**
+     * This is a getter for a event snapshot.
+     * @param eventID
+     * eventID: An event's ID.
+     * @return eventSnapshotGetTask
+     * eventSnapshotGetTask: A task for getting eventDocumentSnapshot.
+     */
+    public Task<DocumentSnapshot> getEventSnapshot(String eventID) {
+        return eColRef.document(eventID).get();
+    }
+
+    /**
+     * This is a getter for a event.
+     * @param eventID
+     * eventID: An event's ID.
+     * @return event
+     * event: An event document.
+     */
+    public DocumentReference getEvent(String eventID) {
+        return eColRef.document(eventID);
+    }
+
+
+    /**
+     * This is a getter for Last Event ID.
+     * @param eventDocument
+     * eventDocument: An event document.
+     * @return eventLastEventID
+     * eventLastEventID: The ID of the last event.
+     */
+    public String getLastEventID(DocumentSnapshot eventDocument) {
+        return eventDocument.getString("eLastEventID");
+    }
+
+    /**
+     * This is a getter for Event Name.
+     * @param eventDocument
+     * eventDocument: An event document.
+     * @return eventName
+     * eventName: The name of the event.
+     */
+    public String getEventName(DocumentSnapshot eventDocument) {
+        return eventDocument.getString("eName");
     }
 
     /**
      * This is a getter for Event Location.
-     * @param eventID
-     * eventID: An ID of an event.
+     * @param eventDocument
+     * eventDocument: An event document.
      * @return eventLocation
-     * eventLocation: An event's location.
+     * eventLocation: The location of the event.
      */
-    public String getEventLocation(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eLocation;
+    public String getEventLocation(DocumentSnapshot eventDocument) {
+        return eventDocument.getString("eLocation");
     }
 
     /**
      * This is a getter for Event Simplified Location.
-     * @param eventID
-     * eventID: An ID of an event.
+     * @param eventDocument
+     * eventDocument: An event document.
      * @return eventSimplifiedLocation
-     * eventSimplifiedLocation: An event's simplified location.
+     * eventSimplifiedLocation: The simplified location of the event.
      */
-    public String getEventSimplifiedLocation(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eSpfLocation;
+    public String getEventSimplifiedLocation(DocumentSnapshot eventDocument) {
+        return eventDocument.getString("eSpfLocation");
     }
 
     /**
      * This is a getter for Event Description.
-     * @param eventID
-     * eventID: An ID of an event.
+     * @param eventDocument
+     * eventDocument: An event document.
      * @return eventDescription
-     * eventDescription: An event's description.
+     * eventDescription: The description of the event.
      */
-    public String getEventDescription(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eDescription;
+    public String getEventDescription(DocumentSnapshot eventDocument) {
+        return eventDocument.getString("eDescription");
     }
 
     /**
      * This is a getter for Event Time.
-     * @param eventID
-     * eventID: An ID of an event.
+     * @param eventDocument
+     * eventDocument: An event document.
      * @return eventTime
-     * eventTime: An event's time.
+     * eventTime: The time of the event.
      */
-    public String getEventTime(String eventID) {
-        eID = eventID;
-        downloadData();
-        return eTime;
+    public String getEventTime(DocumentSnapshot eventDocument) {
+        return eventDocument.getString("eTime");
     }
 
 
@@ -259,20 +278,14 @@ public class EventDatabaseControl {
     }
 
 
-    private void downloadData() {
-        eColRef.document(eID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                eName = documentSnapshot.getString("eName");
-                eLocation = documentSnapshot.getString("eLocation");
-                eSpfLocation = documentSnapshot.getString("eSpfLocation");
-                eDescription = documentSnapshot.getString("eDescription");
-                eTime = documentSnapshot.getString("eTime");
-            }
-        });
-    }
-
-    private String strAddOne(String value) {
+    /**
+     * This is a calculator to get the ID of the next event.
+     * @param value
+     * value: An 8 bits string number.
+     * @return valueAddOne
+     * valueAddOne: 8-digit number after adding 1.
+     */
+    public String calculateNextEventID(String value) {
         int intValue = Integer.parseInt(value);
         intValue++;
         return String.format("%08d", intValue);

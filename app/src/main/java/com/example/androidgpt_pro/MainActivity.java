@@ -3,30 +3,19 @@ package com.example.androidgpt_pro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.provider.Settings.Secure;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
-
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    private CollectionReference profilesRef;
+    private String uniqueID;
+
 
     /**
      * @param savedInstanceState If the activity is being re-initialized after
@@ -39,48 +28,25 @@ public class MainActivity extends AppCompatActivity {
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(uniqueID);
 
-        profilesRef = db.collection("Profile");
-
-        String uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        Intent intent;
-
-        if (checkIfUserExists(uniqueID)) {
-            intent = new Intent(MainActivity.this, ProfileActivity.class);
-        } else {
-            // Redirect to Opening Screen (Choose Role)
-            intent = new Intent(MainActivity.this, OpeningScreenActivity.class);
-        }
-        intent.putExtra("userID", uniqueID);
-
-
-        startActivity(intent);
-    }
-
-    /**
-     * Checks to see if the user exists in the database
-     * Ref: <a href="https://firebase.google.com/docs/firestore/query-data/get-data">...</a>
-     *
-     * @param userID the unique userID tied to the user's device
-     * @return true if user exists, false if not
-     */
-    private Boolean checkIfUserExists(String userID) {
-        DocumentReference docRef = profilesRef.document(userID);
-        final Boolean[] exists = {false};
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        pdc.getProfileSnapshot().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        exists[0] = true;
+                    DocumentSnapshot doc = task.getResult();
+                    Intent intent;
+                    if (doc.exists()) {
+                        intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    } else {
+                        // Redirect to Opening Screen (Choose Role)
+                        intent = new Intent(MainActivity.this, OpeningScreenActivity.class);
                     }
-                } else {
-                    Log.d("Firestore", "get failed with ", task.getException());
+                    intent.putExtra("userID", uniqueID);
+                    startActivity(intent);
                 }
             }
         });
-        return exists[0];
     }
 }

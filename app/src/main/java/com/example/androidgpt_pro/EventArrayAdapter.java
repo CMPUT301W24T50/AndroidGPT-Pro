@@ -9,10 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.androidgpt_pro.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
 public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
-    public EventArrayAdapter(Context context, ArrayList<EventDatabaseControl> events){
+
+    private String eID;
+
+    public EventArrayAdapter(Context context, ArrayList<EventDatabaseControl> events, String eventID){
         super(context,0,events);
+        eID = eventID;
     }
     @NonNull
     @Override
@@ -24,7 +34,7 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
             view = convertView;
         }
 
-        EventDatabaseControl event = getItem(position);
+        EventDatabaseControl edc = getItem(position);
         TextView eventName = view.findViewById(R.id.event_name);
         TextView eventDescription = view.findViewById(R.id.event_description);
         TextView eventDate = view.findViewById(R.id.event_date);
@@ -32,15 +42,18 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
         TextView eventLocationCity = view.findViewById(R.id.event_location2);
 //        ImageView eventImage = view.findViewById(R.id.event_image);
 
-        // not sure...
-        String eventID = event.createEvent();
 
-        eventName.setText(event.getEventName(eventID));
-        eventDate.setText(event.getEventTime(eventID));
-        eventLocationApt.setText(event.getEventLocation(eventID));
-        eventLocationCity.setText(event.getEventSimplifiedLocation(eventID));
-        eventDescription.setText(event.getEventDescription(eventID));
+        edc.getEventSnapshot(eID)
+            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot eventDoc) {
+                    eventName.setText(edc.getEventName(eventDoc));
+                    eventLocationApt.setText(edc.getEventLocation(eventDoc));
+                    eventLocationCity.setText(edc.getEventSimplifiedLocation(eventDoc));
+                    eventDescription.setText(edc.getEventDescription(eventDoc));
+                    eventDate.setText(edc.getEventTime(eventDoc));
+                }
+            });
         return view;
-
     }
 }

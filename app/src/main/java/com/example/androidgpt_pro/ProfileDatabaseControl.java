@@ -1,6 +1,6 @@
 package com.example.androidgpt_pro;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -60,43 +60,21 @@ public class ProfileDatabaseControl {
 
 
     /**
-     * This is a getter for Profile Name.
-     * @return profileName
-     * profileName: A profile's name.
+     * This is a getter for a profile snapshot.
+     * @return profileSnapshotGetTask
+     * profileSnapshotGetTask: A task for getting profileDocumentSnapshot.
      */
-    public String getProfileName() {
-        downloadData();
-        return pName;
+    public Task<DocumentSnapshot> getProfileSnapshot() {
+        return pDocRef.get();
     }
 
     /**
-     * This is a getter for Profile Phone Number.
-     * @return profilePhoneNumber
-     * profilePhoneNumber: A profile's phone number.
+     * This is a getter for a profile.
+     * @return profile
+     * profile: A profile document.
      */
-    public String getProfilePhoneNumber() {
-        downloadData();
-        return pPhoneNumber;
-    }
-
-    /**
-     * This is a getter for Profile Email.
-     * @return profileEmail
-     * profileEmail: A profile's email.
-     */
-    public String getProfileEmail() {
-        downloadData();
-        return pEmail;
-    }
-
-    /**
-     * This is a getter for Profile Geo-Location Tracking State.
-     * @return profileGLTState
-     * profileGLTState: A state of Geo-Location Tracking.
-     */
-    public Boolean getProfileGLTState() {
-        downloadData();
-        return pGLTState;
+    public DocumentReference getProfile() {
+        return pDocRef;
     }
 
 
@@ -163,18 +141,4 @@ public class ProfileDatabaseControl {
     public void addProfileCheckInEvent(String eventID) {
         pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
     }
-
-
-    private void downloadData() {
-        pDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                pName = documentSnapshot.getString("pName");
-                pPhoneNumber = documentSnapshot.getString("pPhoneNumber");
-                pEmail = documentSnapshot.getString("pEmail");
-                pGLTState = documentSnapshot.getBoolean("pGLTState");
-            }
-        });
-    }
 }
-
