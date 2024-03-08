@@ -22,9 +22,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 
+import java.lang.ref.Reference;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
+
+    private CollectionReference colRef = FirebaseFirestore
+            .getInstance()
+            .collection("Profile");
+
+    private String uniqueID;
+
 
     /**
      * @param savedInstanceState If the activity is being re-initialized after
@@ -37,18 +45,24 @@ public class MainActivity extends AppCompatActivity {
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        String uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        ProfileDatabaseControl pdc = new ProfileDatabaseControl(uniqueID);
-        Intent intent;
+        uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        if (pdc.getProfileExistence()) {
-            intent = new Intent(MainActivity.this, ProfileActivity.class);
-        } else {
-            // Redirect to Opening Screen (Choose Role)
-            intent = new Intent(MainActivity.this, OpeningScreenActivity.class);
-        }
-        intent.putExtra("userID", uniqueID);
-
-        startActivity(intent);
+        colRef.document(uniqueID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    Intent intent;
+                    if (doc.exists()) {
+                        intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    } else {
+                        // Redirect to Opening Screen (Choose Role)
+                        intent = new Intent(MainActivity.this, OpeningScreenActivity.class);
+                    }
+                    intent.putExtra("userID", uniqueID);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
