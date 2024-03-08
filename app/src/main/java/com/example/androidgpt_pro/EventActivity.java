@@ -30,6 +30,9 @@ public class EventActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_content);
 
+        // Retrieve the ID passed from
+        String objectID = getIntent().getStringExtra("EVENT_ID", -1);
+
         //Initialize views
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
