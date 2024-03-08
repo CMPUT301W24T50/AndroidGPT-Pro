@@ -15,7 +15,7 @@ import java.util.HashMap;
 /**
  * This is a class that controls the interaction between event data and the database.
  */
-public class EventDatabaseControl implements Serializable {
+public class EventDatabaseControl {
 
     private FirebaseFirestore db;
     private CollectionReference eColRef;
