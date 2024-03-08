@@ -1,21 +1,21 @@
 package com.example.androidgpt_pro;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.example.androidgpt_pro.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
+/**
+ * This class manages the array of events to be displayed in the EventBrowseActivity
+ */
 public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
 
     private String eID;

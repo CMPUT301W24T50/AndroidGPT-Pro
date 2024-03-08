@@ -24,6 +24,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+/**
+ * This class represents a single event. It includes the event
+ * information and the ability to sign in or check in
+ * to an event
+ */
 public class EventActivity extends AppCompatActivity{
     //TODO: this is the detail page of an event
 

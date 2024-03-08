@@ -12,6 +12,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+/**
+ * This class manages the opening of the app and determines whether the user
+ * profile needs to be created.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private String uniqueID;

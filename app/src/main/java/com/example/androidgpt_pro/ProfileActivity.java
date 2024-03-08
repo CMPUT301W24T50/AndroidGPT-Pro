@@ -20,6 +20,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+/**
+ * This class displays the users profile information on the screen
+ */
 public class ProfileActivity extends AppCompatActivity {
 
     private String userID;

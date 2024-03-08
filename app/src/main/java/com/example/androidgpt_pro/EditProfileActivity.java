@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This class allows the user to edit their profile information.
+ */
 public class EditProfileActivity extends AppCompatActivity {
 
     private String userID;
@@ -18,6 +21,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText editEmailEditText;
     private ImageButton backButton;
 
+    /**
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +72,9 @@ public class EditProfileActivity extends AppCompatActivity {
 //        editEmailEditText.setText(currentEmail);
 //    }
 
+    /**
+     * This method saves the changes to the profile
+     */
     private void saveProfileChanges() {
         // Retrieve edited profile information from EditText fields
         String updatedProfileName = editProfileNameEditText.getText().toString();

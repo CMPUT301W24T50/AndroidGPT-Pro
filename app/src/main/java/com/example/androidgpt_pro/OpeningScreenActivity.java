@@ -7,6 +7,10 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+/**
+ * This class allows a new user to decide whether they will be a regular
+ * user or an admin user and creates a new account
+ */
 public class OpeningScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
