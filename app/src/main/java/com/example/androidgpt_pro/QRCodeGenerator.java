@@ -8,7 +8,11 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 /**
- * Class responsible for generating QR codes for events.
+ * QRCodeGenerator is a utility class responsible for generating QR code bitmaps.
+ * It provides methods to create QR codes specific to event sign-up and check-in processes.
+ * These QR codes are generated as Bitmap images which can be displayed in the application.
+ *
+ * No outstanding issues are currently identified in this class.
  */
 public class QRCodeGenerator {
     /**
