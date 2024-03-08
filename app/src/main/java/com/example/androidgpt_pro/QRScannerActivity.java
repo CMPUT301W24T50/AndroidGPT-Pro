@@ -18,7 +18,14 @@ import androidx.annotation.NonNull;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 /**
- * Activity responsible for scanning QR codes.
+ * QRScannerActivity is an activity class responsible for handling QR code scanning.
+ * It integrates with a QR code scanning library to scan QR codes and processes the results
+ * to determine if they are related to event sign-up or check-in. Depending on the QR code content,
+ * the activity navigates to different parts of the application.
+ *
+ * Outstanding issues:
+ * - The actual activities for event sign-up and check-in (EventActivity for sign-up and check-in)
+ *   are yet to be implemented and integrated.
  */
 public class QRScannerActivity extends ComponentActivity {
 
