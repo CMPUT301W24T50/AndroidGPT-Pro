@@ -80,7 +80,7 @@ public class EventBrowseActivity extends AppCompatActivity {
 
         // this is navigation bar
         navigationTabs = findViewById(R.id.navigation);
-        navigationTabs.setSelectedItemId(R.id.profile_tab);
+        navigationTabs.setSelectedItemId(R.id.events_tab);
 
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
