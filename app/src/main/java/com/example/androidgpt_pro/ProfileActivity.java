@@ -1,22 +1,28 @@
 package com.example.androidgpt_pro;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView profileNameTextView;
     private TextView phoneNumberTextView;
     private TextView emailTextView;
-
     private ToggleButton geolocationToggle;
+    BottomNavigationView navigationTabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +34,19 @@ public class ProfileActivity extends AppCompatActivity {
         phoneNumberTextView = findViewById(R.id.text_phone_number);
         emailTextView = findViewById(R.id.text_email);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
+//        TextView test = findViewById(R.id.test_text);
 
         // Get profile information from intent or database and display it
         // displayProfileInfo();
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
+//        test.setText(userID);
 
-        ProfileDatabaseControl profile = new ProfileDatabaseControl(userID);
-        profileNameTextView.setText(profile.getProfileName());
-        phoneNumberTextView.setText(profile.getProfilePhoneNumber());
-        emailTextView.setText(profile.getProfileEmail());
-        geolocationToggle.setChecked(profile.getpGeoTracking());
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
+        profileNameTextView.setText(pdc.getProfileName());
+        phoneNumberTextView.setText(pdc.getProfilePhoneNumber());
+        emailTextView.setText(pdc.getProfileEmail());
+//        geolocationToggle.setChecked(profile.getpGeoTracking());
 
         // Handle click event for edit profile button
         Button editProfileButton = findViewById(R.id.btn_edit_profile);
@@ -49,17 +57,40 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        navigationTabs = findViewById(R.id.navigation);
+        navigationTabs.setSelectedItemId(R.id.profile_tab);
+        navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //  code here to start geolocation tracking
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.events_tab) {
+                    // Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
+                    // startActivity(newIntent);
+                } else if (itemId == R.id.qr_scanner_tab) {
+                    Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
+                } else if (itemId == R.id.profile_tab) {
+                    Intent newIntent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    startActivity(newIntent);
                 } else {
-                    // code here to stop geolocation tracking
+                    throw new IllegalArgumentException("menu item ID does not exist");
                 }
+                return false;
             }
         });
+//        geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    //  code here to start geolocation tracking
+//                } else {
+//                    // code here to stop geolocation tracking
+//                }
+//            }
+//        });
     }
     private void startGeolocationTracking() {
 

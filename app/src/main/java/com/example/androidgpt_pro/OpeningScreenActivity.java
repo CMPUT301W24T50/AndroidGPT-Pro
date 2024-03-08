@@ -19,10 +19,8 @@ public class OpeningScreenActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
 
-        ProfileDatabaseControl newProfile = new ProfileDatabaseControl(userID);
-        newProfile.setpGeoTracking(false);
-        newProfile.setProfileEmail("");
-        newProfile.setProfilePhoneNumber("");
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
+        pdc.initProfile("user");
 
         Intent newIntent = new Intent(OpeningScreenActivity.this, ProfileActivity.class);
         newIntent.putExtra("userID", userID);
@@ -30,7 +28,7 @@ public class OpeningScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Builds attendee profile and navigates to Profile activity
-                newProfile.initProfile("user");
+                pdc.initProfile("user");
                 startActivity(newIntent);
             }
         });
@@ -39,7 +37,7 @@ public class OpeningScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Builds admin profile and navigates to Profile activity
-                newProfile.initProfile("admin");
+                pdc.initProfile("admin");
                 startActivity(newIntent);
             }
         });
