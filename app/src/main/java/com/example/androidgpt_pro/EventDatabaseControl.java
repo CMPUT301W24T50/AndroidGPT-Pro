@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Array;
@@ -72,6 +73,8 @@ public class EventDatabaseControl {
         data.put("eSpfLocation", eventSimplifiedLocation);
         data.put("eDescription", eventDescription);
         data.put("eTime", eventTime);
+        data.put("eSignUpProfiles", eSignUpProfiles);
+        data.put("eCheckInProfiles", eCheckInProfiles);
         eColRef.document(eventID).set(data);
     }
 
@@ -128,21 +131,21 @@ public class EventDatabaseControl {
     }
 
 
-//    public void addEventSignUpProfile(String profileID) {
-//
-//    }
-//
-//    public void delEventSignUpProfile(String profileID) {
-//
-//    }
-//
-//    public void addEventCheckInProfile(String profileID) {
-//
-//    }
-//
-//    public void delEventCheckInProfile(String profileID) {
-//
-//    }
+    public void addEventSignUpProfile(String eventID, String profileID) {
+        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayUnion(eventID));
+    }
+
+    public void delEventSignUpProfile(String eventID, String profileID) {
+        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(eventID));
+    }
+
+    public void addEventCheckInProfile(String eventID, String profileID) {
+        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(eventID));
+    }
+
+    public void delEventCheckInProfile(String eventID, String profileID) {
+        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayRemove(eventID));
+    }
 
 
     private void downloadData() {
