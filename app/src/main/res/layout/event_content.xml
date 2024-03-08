@@ -4,6 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_arrow_icon"
+        android:id="@+id/back_button"
+        android:layout_margin="16dp">
+
+    </ImageButton>
+
     <TextView
         android:id="@+id/event_name"
         android:layout_width="wrap_content"
@@ -11,7 +20,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:text="Event Title"
-        android:textSize="34sp" />
+        android:textSize="34sp"
+        android:layout_below="@+id/back_button"/>
 
     <TextView
         android:id="@+id/event_date"
@@ -20,7 +30,8 @@
         android:layout_below="@id/event_name"
         android:layout_marginTop="10dp"
         android:text="Event Date"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginLeft="16dp"/>
 
     <TextView
         android:id="@+id/event_location1"
@@ -29,7 +40,8 @@
         android:text="Address1(apt/street name)"
         android:textSize="18sp"
         android:layout_below="@id/event_date"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"/>
 
     <TextView
         android:id="@+id/event_location2"
@@ -38,7 +50,8 @@
         android:text="Address2(city/province)"
         android:textSize="18sp"
         android:layout_below="@id/event_location1"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"/>
 
     <TextView
         android:id="@+id/event_description_title"
@@ -47,7 +60,8 @@
         android:text="Event Detail"
         android:textSize="18sp"
         android:layout_below="@id/event_location2"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"/>
 
     <TextView
         android:id="@+id/event_description"
@@ -57,7 +71,8 @@
         android:layout_marginTop="5dp"
         android:text="Event Detail Sample"
         android:textColor="#BFA3A3"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_marginLeft="16dp"/>
 
     <Button
         android:id="@+id/btn_sign_up_check"
@@ -66,7 +81,8 @@
         android:text="BTN"
         android:layout_below="@id/event_description"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp" />
+        android:layout_marginTop="62dp"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

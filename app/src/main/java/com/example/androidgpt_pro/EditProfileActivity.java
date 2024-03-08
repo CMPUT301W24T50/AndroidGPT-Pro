@@ -2,8 +2,10 @@ package com.example.androidgpt_pro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText editProfileNameEditText;
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,16 @@ public class EditProfileActivity extends AppCompatActivity {
         editProfileNameEditText = findViewById(R.id.edit_text_edit_profile_name);
         editPhoneNumberEditText = findViewById(R.id.edit_text_edit_phone_number);
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
+        backButton = findViewById(R.id.back_button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+                newIntent.putExtra("userID", userID);
+                startActivity(newIntent);
+            }
+        });
 
         // Get current profile information and pre-fill the EditText fields
         // displayCurrentProfileInfo();
