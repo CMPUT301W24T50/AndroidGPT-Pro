@@ -32,7 +32,7 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if(convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.event_content, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.event_content_simple, parent, false);
         } else {
             view = convertView;
         }

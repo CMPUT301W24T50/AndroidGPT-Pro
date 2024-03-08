@@ -18,8 +18,14 @@ import androidx.annotation.NonNull;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 /**
- * This class is used to scan QR codes and navigates the user
- * to the event page
+ * QRScannerActivity is an activity class responsible for handling QR code scanning.
+ * It integrates with a QR code scanning library to scan QR codes and processes the results
+ * to determine if they are related to event sign-up or check-in. Depending on the QR code content,
+ * the activity navigates to different parts of the application.
+ *
+ * Outstanding issues:
+ * - The actual activities for event sign-up and check-in (EventActivity for sign-up and check-in)
+ *   are yet to be implemented and integrated.
  */
 public class QRScannerActivity extends ComponentActivity {
 
@@ -46,12 +52,16 @@ public class QRScannerActivity extends ComponentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
+
+        // Setup scan button and bottom navigation view
         Button btnScanQR = findViewById(R.id.btnScanQR);
         btnScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
         navigationTabs = findViewById(R.id.navigation);
         navigationTabs.setSelectedItemId(R.id.qr_scanner_tab);
+
+        // Set listener for bottom navigation items
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -77,14 +87,34 @@ public class QRScannerActivity extends ComponentActivity {
         });
     }
 
+    /**
+     * Checks if the scanned data represents a sign-up QR code.
+     *
+     * @param data The scanned QR code data.
+     * @return true if it's a sign-up QR code; false otherwise.
+     */
     private boolean isSignupQRCode(String data) {
         return data.startsWith("sign-up_");
     }
 
+    /**
+     * Checks if the scanned data represents a check-in QR code.
+     *
+     * @param data The scanned QR code data.
+     * @return true if it's a check-in QR code; false otherwise.
+     */
     private boolean isCheckInQRCode(String data) {
         return data.startsWith("check-in_");
     }
 
+    /**
+     * This method is intended to handle the situation when a sign-up QR code is scanned.
+     * Currently, it is a placeholder pending the implementation of the corresponding activity.
+     * When completed, it should extract the event ID from the QR code, create an intent
+     * for the sign-up activity (EventActivity for sign-up), and start that activity.
+     *
+     * @param data The scanned QR code data, which should include the event ID for sign-up.
+     */
     private void handleSignupQRCode(String data) {/*  TBD
         String eventId = extractEventId(data);
         Intent intent = new Intent(QRScannerActivity.this, EventActivity(sign-up).class);
@@ -92,6 +122,15 @@ public class QRScannerActivity extends ComponentActivity {
         startActivity(intent);
     */}
 
+    /**
+     * This method is intended to handle the situation when a check-in QR code is scanned.
+     * Like the sign-up handler, this is a placeholder pending the implementation of the
+     * corresponding check-in activity. When implemented, it should extract the event ID
+     * from the QR code, create an intent for the check-in activity (EventActivity for check-in),
+     * and start that activity.
+     *
+     * @param data The scanned QR code data, which should include the event ID for check-in.
+     */
     private void handleCheckInQRCode(String data) {/*  TBD
         String eventId = extractEventId(data);
         Intent intent = new Intent(QRScannerActivity.this, EventActivity(check-in).class);
@@ -99,6 +138,12 @@ public class QRScannerActivity extends ComponentActivity {
         startActivity(intent);
     */}
 
+    /**
+     * Extracts the event ID from the QR code data.
+     *
+     * @param qrCodeData The complete QR code data string.
+     * @return The extracted event ID.
+     */
     private String extractEventId(String qrCodeData) {
         return qrCodeData.substring(qrCodeData.indexOf("_") + 1);
     }
