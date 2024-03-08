@@ -58,16 +58,6 @@ public class ProfileDatabaseControl {
         pDocRef.set(data);
     }
 
-    /**
-     * This is a function that returns whether the profile exists.
-     * @return isExisted
-     * isExisted: A boolean value about whether the profile exists.
-     */
-    public Boolean getProfileExistence() {
-        downloadData();
-        return (pName != null);
-    }
-
 
     /**
      * This is a getter for Profile Name.
