@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
@@ -18,6 +21,8 @@ public class EventBrowseActivity extends AppCompatActivity {
     BottomNavigationView navigationTabs;
     private ArrayList<String> eventNames = new ArrayList<>();
     private ArrayAdapter<String> eventArrayAdapter;
+    private ListView listViewEvents;
+
     private void createSampleEvent() {
         EventDatabaseControl edc = new EventDatabaseControl();
         // We're going to add a hardcoded ID for demonstration purposes
@@ -26,16 +31,36 @@ public class EventBrowseActivity extends AppCompatActivity {
         eventNames.add("Sample Event");
         eventArrayAdapter.notifyDataSetChanged();
     }
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
-        ListView listViewEvents = findViewById(R.id.event_list);
+
+        listViewEvents = findViewById(R.id.event_list_view);
         eventArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventNames);
         listViewEvents.setAdapter(eventArrayAdapter);
+
+        createSampleEvent();
+
+        // handle click action
+        listViewEvents.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // this is navigation bar
         navigationTabs = findViewById(R.id.navigation);
         navigationTabs.setSelectedItemId(R.id.profile_tab);
+
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -59,6 +84,5 @@ public class EventBrowseActivity extends AppCompatActivity {
                 return false;
             }
         });
-        createSampleEvent();
     }
 }
