@@ -45,15 +45,11 @@ public class EventBrowseActivity extends AppCompatActivity {
         createSampleEvent();
 
         // handle click action
-        listViewEvents.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(EventBrowseActivity.this, EventActivity.class);
+                startActivity(intent);
             }
         });
 
