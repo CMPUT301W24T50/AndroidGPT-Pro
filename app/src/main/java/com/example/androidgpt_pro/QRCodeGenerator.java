@@ -7,21 +7,46 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+/**
+ * Class responsible for generating QR codes for events.
+ */
 public class QRCodeGenerator {
-
+    /**
+     * Generates a QR code bitmap for event sign-up.
+     *
+     * @param eventId The unique ID of the event.
+     * @param width   The width of the QR code bitmap.
+     * @param height  The height of the QR code bitmap.
+     * @return Bitmap representing the QR code for sign-up.
+     */
     // Method to generate Sign-up QR Code Bitmap
     public static Bitmap generateSignUpQRCodeBitmap(String eventId, int width, int height) {
         String data = "sign-up_" + eventId;
         return generateQRCodeBitmap(data, width, height);
     }
 
+    /**
+     * Generates a QR code bitmap for event check-in.
+     *
+     * @param eventId The unique ID of the event.
+     * @param width   The width of the QR code bitmap.
+     * @param height  The height of the QR code bitmap.
+     * @return Bitmap representing the QR code for check-in.
+     */
     // Method to generate Check-in QR Code Bitmap
     public static Bitmap generateCheckInQRCodeBitmap(String eventId, int width, int height) {
         String data = "check-in_" + eventId;
         return generateQRCodeBitmap(data, width, height);
     }
 
-    // Private method to generate QR Code Bitmap from given data
+    /**
+     * Private method to generate a QR code bitmap.
+     *
+     * @param data   The data to be encoded in the QR code.
+     * @param width  The width of the QR code bitmap.
+     * @param height The height of the QR code bitmap.
+     * @return Bitmap of the generated QR code.
+     */
     private static Bitmap generateQRCodeBitmap(String data, int width, int height) {
         QRCodeWriter writer = new QRCodeWriter();
         try {
