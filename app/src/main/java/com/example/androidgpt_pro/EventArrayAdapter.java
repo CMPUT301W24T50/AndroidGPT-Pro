@@ -9,10 +9,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.androidgpt_pro.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
 public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
-    public EventArrayAdapter(Context context, ArrayList<EventDatabaseControl> events){
+
+    private CollectionReference colRef;
+    private String eID;
+
+    public EventArrayAdapter(Context context, ArrayList<EventDatabaseControl> events, String eventID){
         super(context,0,events);
+        eID = eventID;
     }
     @NonNull
     @Override
@@ -32,15 +43,18 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
         TextView eventLocationCity = view.findViewById(R.id.event_location2);
 //        ImageView eventImage = view.findViewById(R.id.event_image);
 
-        // not sure...
-        String eventID = event.createEvent();
 
-        eventName.setText(event.getEventName(eventID));
-        eventDate.setText(event.getEventTime(eventID));
-        eventLocationApt.setText(event.getEventLocation(eventID));
-        eventLocationCity.setText(event.getEventSimplifiedLocation(eventID));
-        eventDescription.setText(event.getEventDescription(eventID));
+        colRef.document(eID).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot doc) {
+                        eventName.setText(doc.getString("eName"));
+                        eventDate.setText(doc.getString("eTime"));
+                        eventLocationApt.setText(doc.getString("eLocation"));
+                        eventLocationCity.setText(doc.getString("eSpfLocation"));
+                        eventDescription.setText(doc.getString("eDescription"));
+                    }
+                });
         return view;
-
     }
 }
