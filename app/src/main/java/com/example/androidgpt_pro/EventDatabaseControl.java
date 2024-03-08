@@ -4,7 +4,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.lang.reflect.Array;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,68 +126,68 @@ public class EventDatabaseControl {
 
     /**
      * This is a getter for Last Event ID.
-     * @param eventDocument
-     * eventDocument: An event document.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
      * @return eventLastEventID
      * eventLastEventID: The ID of the last event.
      */
-    public String getLastEventID(DocumentSnapshot eventDocument) {
-        return eventDocument.getString("eLastEventID");
+    public String getLastEventID(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eLastEventID");
     }
 
     /**
      * This is a getter for Event Name.
-     * @param eventDocument
-     * eventDocument: An event document.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
      * @return eventName
      * eventName: The name of the event.
      */
-    public String getEventName(DocumentSnapshot eventDocument) {
-        return eventDocument.getString("eName");
+    public String getEventName(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eName");
     }
 
     /**
      * This is a getter for Event Location.
-     * @param eventDocument
-     * eventDocument: An event document.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
      * @return eventLocation
      * eventLocation: The location of the event.
      */
-    public String getEventLocation(DocumentSnapshot eventDocument) {
-        return eventDocument.getString("eLocation");
+    public String getEventLocation(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eLocation");
     }
 
     /**
      * This is a getter for Event Simplified Location.
-     * @param eventDocument
-     * eventDocument: An event document.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
      * @return eventSimplifiedLocation
      * eventSimplifiedLocation: The simplified location of the event.
      */
-    public String getEventSimplifiedLocation(DocumentSnapshot eventDocument) {
-        return eventDocument.getString("eSpfLocation");
+    public String getEventSimplifiedLocation(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eSpfLocation");
     }
 
     /**
      * This is a getter for Event Description.
-     * @param eventDocument
-     * eventDocument: An event document.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
      * @return eventDescription
      * eventDescription: The description of the event.
      */
-    public String getEventDescription(DocumentSnapshot eventDocument) {
-        return eventDocument.getString("eDescription");
+    public String getEventDescription(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eDescription");
     }
 
     /**
      * This is a getter for Event Time.
-     * @param eventDocument
-     * eventDocument: An event document.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
      * @return eventTime
      * eventTime: The time of the event.
      */
-    public String getEventTime(DocumentSnapshot eventDocument) {
-        return eventDocument.getString("eTime");
+    public String getEventTime(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eTime");
     }
 
 

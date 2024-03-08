@@ -41,6 +41,10 @@
             android:name=".EventBrowseActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".EventActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
