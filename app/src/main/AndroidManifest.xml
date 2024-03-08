@@ -29,6 +29,10 @@
             android:name=".ProfileActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".QRScannerActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
