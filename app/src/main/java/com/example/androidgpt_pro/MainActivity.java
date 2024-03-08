@@ -26,8 +26,6 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    private CollectionReference profilesRef;
-
     /**
      * @param savedInstanceState If the activity is being re-initialized after
      *                           previously being shut down then this Bundle contains the data it most
@@ -39,14 +37,11 @@ public class MainActivity extends AppCompatActivity {
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        profilesRef = db.collection("Profile");
-
         String uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(uniqueID);
         Intent intent;
 
-        if (checkIfUserExists(uniqueID)) {
+        if (pdc.getProfileExistence()) {
             intent = new Intent(MainActivity.this, ProfileActivity.class);
         } else {
             // Redirect to Opening Screen (Choose Role)
@@ -54,33 +49,6 @@ public class MainActivity extends AppCompatActivity {
         }
         intent.putExtra("userID", uniqueID);
 
-
         startActivity(intent);
-    }
-
-    /**
-     * Checks to see if the user exists in the database
-     * Ref: <a href="https://firebase.google.com/docs/firestore/query-data/get-data">...</a>
-     *
-     * @param userID the unique userID tied to the user's device
-     * @return true if user exists, false if not
-     */
-    private Boolean checkIfUserExists(String userID) {
-        DocumentReference docRef = profilesRef.document(userID);
-        final Boolean[] exists = {false};
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        exists[0] = true;
-                    }
-                } else {
-                    Log.d("Firestore", "get failed with ", task.getException());
-                }
-            }
-        });
-        return exists[0];
     }
 }
