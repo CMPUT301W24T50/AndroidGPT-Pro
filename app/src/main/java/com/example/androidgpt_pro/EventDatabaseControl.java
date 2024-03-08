@@ -259,6 +259,19 @@ public class EventDatabaseControl {
     }
 
 
+    /**
+     * This is a tool to add 1 to a string.
+     * @param value
+     * value: An 8 bits string number.
+     * @return "value + 1"
+     * "value + 1": 8-digit number after adding 1.
+     */
+    public String strAddOne(String value) {
+        int intValue = Integer.parseInt(value);
+        intValue++;
+        return String.format("%08d", intValue);
+    }
+
     private void downloadData() {
         eColRef.document(eID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -270,11 +283,5 @@ public class EventDatabaseControl {
                 eTime = documentSnapshot.getString("eTime");
             }
         });
-    }
-
-    private String strAddOne(String value) {
-        int intValue = Integer.parseInt(value);
-        intValue++;
-        return String.format("%08d", intValue);
     }
 }
