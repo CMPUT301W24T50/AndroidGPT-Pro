@@ -26,10 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class EventActivity extends AppCompatActivity{
     //TODO: this is the detail page of an event
 
-    private CollectionReference colRef = FirebaseFirestore
-            .getInstance()
-            .collection("Event");
-
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
@@ -55,17 +51,18 @@ public class EventActivity extends AppCompatActivity{
         eventLocationCityTextView = findViewById(R.id.event_location2);
         eventDescription = findViewById(R.id.event_description);
 
-        colRef.document(eventID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        edc.getEvent(eventID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+            public void onEvent(@Nullable DocumentSnapshot docSns,
+                                @Nullable FirebaseFirestoreException error) {
                 if(error != null){
                     Log.e("Database", error.toString());
                 }
-                eventNameTextView.setText(value.getString("eName"));
-                eventDateTextView.setText(value.getString("eTime"));
-                eventLocationAptTextView.setText(value.getString("eLocation"));
-                eventLocationCityTextView.setText(value.getString("eSpfLocation"));
-                eventDescription.setText(value.getString("eDescription"));
+                eventNameTextView.setText(edc.getEventName(docSns));
+                eventDateTextView.setText(edc.getEventTime(docSns));
+                eventLocationAptTextView.setText(edc.getEventLocation(docSns));
+                eventLocationCityTextView.setText(edc.getEventSimplifiedLocation(docSns));
+                eventDescription.setText(edc.getEventDescription(docSns));
             }
         });
 
