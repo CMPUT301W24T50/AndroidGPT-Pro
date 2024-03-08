@@ -1,6 +1,6 @@
 package com.example.androidgpt_pro;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -56,6 +56,25 @@ public class ProfileDatabaseControl {
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         pDocRef.set(data);
+    }
+
+
+    /**
+     * This is a getter for a profile snapshot.
+     * @return profileSnapshotGetTask
+     * profileSnapshotGetTask: A task for get the DocumentSnapshot.
+     */
+    public Task<DocumentSnapshot> getProfileSnapshot() {
+        return pDocRef.get();
+    }
+
+    /**
+     * This is a getter for a profile.
+     * @return profile
+     * profile: A profile document.
+     */
+    public DocumentReference getProfile() {
+        return pDocRef;
     }
 
 
