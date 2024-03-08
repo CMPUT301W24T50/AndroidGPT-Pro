@@ -48,11 +48,6 @@ public class EventActivity extends AppCompatActivity{
 //        eventDateTextView.setText(edc.getEventTime());
 //        eventLocationAptTextView.setText(edc.getEventLocation());
 //        eventLocationCityTextView.setText(edc.getEventSimplifiedLocation());
-
-
-
-
-
-
     }
+
 }

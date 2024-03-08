@@ -3,6 +3,7 @@ package com.example.androidgpt_pro;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -10,12 +11,24 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private CollectionReference colRef = FirebaseFirestore
+            .getInstance()
+            .collection("Profile");
+
+    private String userID;
 
     private TextView profileNameTextView;
     private TextView phoneNumberTextView;
@@ -28,6 +41,13 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // Get profile information from intent or database and display it
+        // displayProfileInfo();
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
+//        test.setText(userID);
+
         // Initialize views
         profileNameTextView = findViewById(R.id.text_profile_name);
         phoneNumberTextView = findViewById(R.id.text_phone_number);
@@ -35,17 +55,19 @@ public class ProfileActivity extends AppCompatActivity {
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
 //        TextView test = findViewById(R.id.test_text);
 
-        // Get profile information from intent or database and display it
-        // displayProfileInfo();
-        Intent intent = getIntent();
-        String userID = intent.getStringExtra("userID");
-//        test.setText(userID);
-
-        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
-        profileNameTextView.setText(pdc.getProfileName());
-        phoneNumberTextView.setText(pdc.getProfilePhoneNumber());
-        emailTextView.setText(pdc.getProfileEmail());
-//        geolocationToggle.setChecked(profile.getpGeoTracking());
+        colRef.document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value,
+                                @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Database", error.toString());
+                }
+                profileNameTextView.setText(value.getString("pName"));
+                phoneNumberTextView.setText(value.getString("pPhoneNumber"));
+                emailTextView.setText(value.getString("pEmail"));
+                geolocationToggle.setChecked(Boolean.TRUE.equals(value.getBoolean("pGLTState")));
+            }
+        });
 
         // Handle click event for edit profile button
         Button editProfileButton = findViewById(R.id.btn_edit_profile);
@@ -53,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });

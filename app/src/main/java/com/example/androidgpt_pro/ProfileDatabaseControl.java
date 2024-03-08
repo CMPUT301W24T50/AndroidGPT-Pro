@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This is a class that controls the interaction between user profile data and the database.
+ * This is a class that controls the interaction between profile data and the database.
  */
 public class ProfileDatabaseControl {
 
@@ -31,7 +31,7 @@ public class ProfileDatabaseControl {
      * This is the constructor of class ProfileDatabaseControl.
      * @param profileID
      * profileID: String
-     * A unique profile ID, which will index an entire user's profile.
+     * A unique profile ID, which will index an entire profile.
      */
     public ProfileDatabaseControl(String profileID) {
         pID = profileID;
@@ -41,9 +41,9 @@ public class ProfileDatabaseControl {
 
 
     /**
-     * This is the initializer of user's profile.
+     * This is the initializer of a profile.
      * @param profileRole
-     * profileRole: The role of the user, one of Administrator/Attendee/Organizer.
+     * profileRole: The role of the profile, one of Administrator/Attendee/Organizer.
      */
     public void initProfile(String profileRole) {
         pRole = profileRole;
@@ -62,7 +62,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a getter for Profile Name.
      * @return profileName
-     * profileName: A user's name.
+     * profileName: A profile's name.
      */
     public String getProfileName() {
         downloadData();
@@ -72,7 +72,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a getter for Profile Phone Number.
      * @return profilePhoneNumber
-     * profilePhoneNumber: A user's phone number.
+     * profilePhoneNumber: A profile's phone number.
      */
     public String getProfilePhoneNumber() {
         downloadData();
@@ -82,7 +82,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a getter for Profile Email.
      * @return profileEmail
-     * profileEmail: A user's email.
+     * profileEmail: A profile's email.
      */
     public String getProfileEmail() {
         downloadData();
@@ -103,7 +103,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a setter for Profile Name.
      * @param profileName
-     * profileName: A user's name.
+     * profileName: A profile's name.
      */
     public void setProfileName(String profileName) {
         pDocRef.update("pName", profileName);
@@ -112,7 +112,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a setter for Profile Phone Number.
      * @param profilePhoneNumber
-     * profilePhoneNumber: A user's phone number.
+     * profilePhoneNumber: A profile's phone number.
      */
     public void setProfilePhoneNumber(String profilePhoneNumber) {
         pDocRef.update("pPhoneNumber", profilePhoneNumber);
@@ -121,7 +121,7 @@ public class ProfileDatabaseControl {
     /**
      * This is a setter for Profile Email.
      * @param profileEmail
-     * profileEmail: A user's email.
+     * profileEmail: A profile's email.
      */
     public void setProfileEmail(String profileEmail) {
         pDocRef.update("pEmail", profileEmail);
@@ -138,7 +138,7 @@ public class ProfileDatabaseControl {
 
 
     /**
-     * This is an adder used to add the given event ID to the user profile sign up list.
+     * This is an adder used to add the given event ID to the profile sign up list.
      * @param eventID
      * eventID: The ID of the event that needs to be added.
      */
@@ -156,21 +156,12 @@ public class ProfileDatabaseControl {
     }
 
     /**
-     * This is an adder used to add the given event ID to the user profile check in list.
+     * This is an adder used to add the given event ID to the profile check in list.
      * @param eventID
      * eventID: The ID of the event that needs to be added.
      */
     public void addProfileCheckInEvent(String eventID) {
         pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
-    }
-
-    /**
-     * This is a deleter that can remove event that need to cancel check in.
-     * @param eventID
-     * eventID: The ID of the event that needs to be deleted.
-     */
-    public void delProfileCheckInEvent(String eventID) {
-        pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(eventID));
     }
 
 
@@ -186,4 +177,3 @@ public class ProfileDatabaseControl {
         });
     }
 }
-
