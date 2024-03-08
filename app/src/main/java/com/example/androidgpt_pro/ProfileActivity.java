@@ -16,17 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private CollectionReference colRef = FirebaseFirestore
-            .getInstance()
-            .collection("Profile");
 
     private String userID;
 
@@ -55,17 +49,17 @@ public class ProfileActivity extends AppCompatActivity {
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
 //        TextView test = findViewById(R.id.test_text);
 
-        colRef.document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        pdc.getProfile().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value,
+            public void onEvent(@Nullable DocumentSnapshot docSns,
                                 @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
                     Log.e("Database", error.toString());
                 }
-                profileNameTextView.setText(value.getString("pName"));
-                phoneNumberTextView.setText(value.getString("pPhoneNumber"));
-                emailTextView.setText(value.getString("pEmail"));
-                geolocationToggle.setChecked(Boolean.TRUE.equals(value.getBoolean("pGLTState")));
+                profileNameTextView.setText(pdc.getProfileName(docSns));
+                phoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
+                emailTextView.setText(pdc.getProfileEmail(docSns));
+                geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
             }
         });
 

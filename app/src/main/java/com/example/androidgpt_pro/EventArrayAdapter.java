@@ -18,7 +18,6 @@ import java.util.HashMap;
 
 public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
 
-    private CollectionReference colRef;
     private String eID;
 
     public EventArrayAdapter(Context context, ArrayList<EventDatabaseControl> events, String eventID){
@@ -35,7 +34,7 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
             view = convertView;
         }
 
-        EventDatabaseControl event = getItem(position);
+        EventDatabaseControl edc = getItem(position);
         TextView eventName = view.findViewById(R.id.event_name);
         TextView eventDescription = view.findViewById(R.id.event_description);
         TextView eventDate = view.findViewById(R.id.event_date);
@@ -44,17 +43,17 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
 //        ImageView eventImage = view.findViewById(R.id.event_image);
 
 
-        colRef.document(eID).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot doc) {
-                        eventName.setText(doc.getString("eName"));
-                        eventDate.setText(doc.getString("eTime"));
-                        eventLocationApt.setText(doc.getString("eLocation"));
-                        eventLocationCity.setText(doc.getString("eSpfLocation"));
-                        eventDescription.setText(doc.getString("eDescription"));
-                    }
-                });
+        edc.getEventSnapshot(eID)
+            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot docSns) {
+                    eventName.setText(edc.getEventName(docSns));
+                    eventLocationApt.setText(edc.getEventLocation(docSns));
+                    eventLocationCity.setText(edc.getEventSimplifiedLocation(docSns));
+                    eventDescription.setText(edc.getEventDescription(docSns));
+                    eventDate.setText(edc.getEventTime(docSns));
+                }
+            });
         return view;
     }
 }

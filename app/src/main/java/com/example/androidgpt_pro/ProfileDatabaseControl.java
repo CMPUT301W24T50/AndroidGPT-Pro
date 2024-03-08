@@ -1,6 +1,6 @@
 package com.example.androidgpt_pro;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -56,6 +56,70 @@ public class ProfileDatabaseControl {
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         pDocRef.set(data);
+    }
+
+
+    /**
+     * This is a getter for a profile snapshot.
+     * @return profileSnapshotGetTask
+     * profileSnapshotGetTask: A task for getting profileDocumentSnapshot.
+     */
+    public Task<DocumentSnapshot> getProfileSnapshot() {
+        return pDocRef.get();
+    }
+
+    /**
+     * This is a getter for a profile.
+     * @return profile
+     * profile: A profile document.
+     */
+    public DocumentReference getProfile() {
+        return pDocRef;
+    }
+
+
+    /**
+     * This is a getter for Profile Name.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileName
+     * profileName: A profile's name.
+     */
+    public String getProfileName(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pName");
+    }
+
+    /**
+     * This is a getter for Profile Phone Number.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profilePhoneNumber
+     * profilePhoneNumber: A profile's phone number.
+     */
+    public String getProfilePhoneNumber(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pPhoneNumber");
+    }
+
+    /**
+     * This is a getter for Profile Email.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileEmail
+     * profileEmail: A profile's email.
+     */
+    public String getProfileEmail(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pEmail");
+    }
+
+    /**
+     * This is a getter for Profile Geo-Location Tracking State.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileGLTState
+     * profileGLTState: A state of Geo-Location Tracking.
+     */
+    public Boolean getProfileGLTState(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getBoolean("pGLTState");
     }
 
 
