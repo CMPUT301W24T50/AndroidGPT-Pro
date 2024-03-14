@@ -16,6 +16,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 
 /**
@@ -25,8 +28,7 @@ import java.util.ArrayList;
 public class EventBrowseActivity extends AppCompatActivity {
     // TODO: when the user click the event button in the Navigation bar, it jumps to this page with all events listed.
     BottomNavigationView navigationTabs;
-    private ArrayList<String> eventNames = new ArrayList<>();
-    private ArrayAdapter<String> eventArrayAdapter;
+    private CardAdapter adapter;
     private ListView listViewEvents;
     // private ArrayList<EventDatabaseControl> eventList;
     private String eID;
@@ -44,8 +46,9 @@ public class EventBrowseActivity extends AppCompatActivity {
                     edc.setEventStat(eID);
                     edc.initEvent(eID, "Sample Event",
                             "123 Main St",
-                            "City Center",
+                            "Edmonton, AB",
                             "This is a sample event.",
+<<<<<<< HEAD
                             "April 10, 2024 8:00 PM");
 //                    eventList = new ArrayList<EventDatabaseControl>();
 //                    eventList.add(edc.initEvent(eID, "Sample Event",
@@ -55,6 +58,13 @@ public class EventBrowseActivity extends AppCompatActivity {
 //                            "April 10, 2024 8:00 PM"));
                     eventNames.add("Sample Event");
                     eventArrayAdapter.notifyDataSetChanged();
+=======
+                            "8:00 PM",
+                            "April 10, 2024");
+                    EventCard card = new EventCard("Sample Event", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1);
+                    adapter.add(card);
+                    adapter.notifyDataSetChanged();
+>>>>>>> bfc81c4 (Added Cards to Event ListView)
                 }
             });
     }
@@ -65,11 +75,20 @@ public class EventBrowseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
 
+<<<<<<< HEAD
         listViewEvents = findViewById(R.id.event_list_view);
         // eventArrayAdapter = new EventArrayAdapter<>(this, )
         eventArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventNames);
         listViewEvents.setAdapter(eventArrayAdapter);
+=======
+        listViewEvents = (ListView) findViewById(R.id.event_list_view);
+        adapter = new CardAdapter(this);
+        listViewEvents.setAdapter(adapter);
+>>>>>>> bfc81c4 (Added Cards to Event ListView)
 
+//        EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1);
+//        adapter.add(card);
+//        adapter.notifyDataSetChanged();
         createSampleEvent();
 
         // handle click action
