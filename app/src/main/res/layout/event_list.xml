@@ -8,15 +8,19 @@
         android:id="@+id/event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="16dp"
         android:text="Events"
-        android:textSize="48sp" />
+        android:layout_marginTop="36dp"
+        android:textSize="36sp" />
 
     <ListView
         android:id="@+id/event_list_view"
+        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_title"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="0dp"
+        android:divider="#00000000"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

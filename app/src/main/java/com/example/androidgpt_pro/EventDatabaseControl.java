@@ -24,6 +24,7 @@ public class EventDatabaseControl {
     private String eSpfLocation;
     private String eDescription;
     private String eTime;
+    private String eDate;
     private ArrayList<String> eSignUpProfiles;
     private ArrayList<String> eCheckInProfiles;
 
@@ -61,19 +62,23 @@ public class EventDatabaseControl {
      * eventDescription: An event's description.
      * @param eventTime
      * eventTime: An event's time.
+     * @param eventDate
+     * eventDate: An event's date.
      */
     public void initEvent(String eventID,
                           String eventName,
                           String eventLocation,
                           String eventSimplifiedLocation,
                           String eventDescription,
-                          String eventTime) {
+                          String eventTime,
+                          String eventDate) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("eName", eventName);
         data.put("eLocation", eventLocation);
         data.put("eSpfLocation", eventSimplifiedLocation);
         data.put("eDescription", eventDescription);
         data.put("eTime", eventTime);
+        data.put("eDate", eventDate);
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         eColRef.document(eventID).set(data);
@@ -188,6 +193,16 @@ public class EventDatabaseControl {
         return eventDocumentSnapshot.getString("eTime");
     }
 
+    /**
+     * This is a getter for Event Date.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventDate
+     * eventDate: The date of the event.
+     */
+    public String getEventDate(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eDate");
+    }
 
     /**
      * This is a setter for Event Name.
@@ -244,6 +259,16 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eTime", eventTime);
     }
 
+    /**
+     * This is a setter for Event Date.
+     * @param eventID
+     * eventID: An ID of an event.
+     * @param eventDate
+     * eventTime: An event's date.
+     */
+    public void setEventDate(String eventID, String eventDate) {
+        eColRef.document(eventID).update("eDate", eventDate);
+    }
 
     /**
      * This is an adder used to add the given profile ID to the event sign up list.
