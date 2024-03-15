@@ -48,23 +48,11 @@ public class EventBrowseActivity extends AppCompatActivity {
                             "123 Main St",
                             "Edmonton, AB",
                             "This is a sample event.",
-<<<<<<< HEAD
-                            "April 10, 2024 8:00 PM");
-//                    eventList = new ArrayList<EventDatabaseControl>();
-//                    eventList.add(edc.initEvent(eID, "Sample Event",
-//                            "123 Main St",
-//                            "City Center",
-//                            "This is a sample event.",
-//                            "April 10, 2024 8:00 PM"));
-                    eventNames.add("Sample Event");
-                    eventArrayAdapter.notifyDataSetChanged();
-=======
                             "8:00 PM",
                             "April 10, 2024");
                     EventCard card = new EventCard("Sample Event", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1);
                     adapter.add(card);
                     adapter.notifyDataSetChanged();
->>>>>>> bfc81c4 (Added Cards to Event ListView)
                 }
             });
     }
@@ -75,16 +63,9 @@ public class EventBrowseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
 
-<<<<<<< HEAD
-        listViewEvents = findViewById(R.id.event_list_view);
-        // eventArrayAdapter = new EventArrayAdapter<>(this, )
-        eventArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventNames);
-        listViewEvents.setAdapter(eventArrayAdapter);
-=======
         listViewEvents = (ListView) findViewById(R.id.event_list_view);
         adapter = new CardAdapter(this);
         listViewEvents.setAdapter(adapter);
->>>>>>> bfc81c4 (Added Cards to Event ListView)
 
 //        EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1);
 //        adapter.add(card);
