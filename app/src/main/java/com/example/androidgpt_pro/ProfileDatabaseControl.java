@@ -38,6 +38,7 @@ public class ProfileDatabaseControl {
         pID = profileID;
         db = FirebaseFirestore.getInstance();
         pDocRef = db.collection("Profile").document(pID);
+        ds = new DatabaseSynchronization();
     }
 
 
@@ -91,6 +92,16 @@ public class ProfileDatabaseControl {
     }
 
     /**
+     * This is a setter for Profile Name.
+     * @param profileName
+     * profileName: A profile's name.
+     */
+    public void setProfileName(String profileName) {
+        pDocRef.update("pName", profileName);
+    }
+
+
+    /**
      * This is a getter for Profile Phone Number.
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.
@@ -100,6 +111,16 @@ public class ProfileDatabaseControl {
     public String getProfilePhoneNumber(DocumentSnapshot profileDocumentSnapshot) {
         return profileDocumentSnapshot.getString("pPhoneNumber");
     }
+
+    /**
+     * This is a setter for Profile Phone Number.
+     * @param profilePhoneNumber
+     * profilePhoneNumber: A profile's phone number.
+     */
+    public void setProfilePhoneNumber(String profilePhoneNumber) {
+        pDocRef.update("pPhoneNumber", profilePhoneNumber);
+    }
+
 
     /**
      * This is a getter for Profile Email.
@@ -113,6 +134,16 @@ public class ProfileDatabaseControl {
     }
 
     /**
+     * This is a setter for Profile Email.
+     * @param profileEmail
+     * profileEmail: A profile's email.
+     */
+    public void setProfileEmail(String profileEmail) {
+        pDocRef.update("pEmail", profileEmail);
+    }
+
+
+    /**
      * This is a getter for Profile Geo-Location Tracking State.
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.
@@ -121,34 +152,6 @@ public class ProfileDatabaseControl {
      */
     public Boolean getProfileGLTState(DocumentSnapshot profileDocumentSnapshot) {
         return profileDocumentSnapshot.getBoolean("pGLTState");
-    }
-
-
-    /**
-     * This is a setter for Profile Name.
-     * @param profileName
-     * profileName: A profile's name.
-     */
-    public void setProfileName(String profileName) {
-        pDocRef.update("pName", profileName);
-    }
-
-    /**
-     * This is a setter for Profile Phone Number.
-     * @param profilePhoneNumber
-     * profilePhoneNumber: A profile's phone number.
-     */
-    public void setProfilePhoneNumber(String profilePhoneNumber) {
-        pDocRef.update("pPhoneNumber", profilePhoneNumber);
-    }
-
-    /**
-     * This is a setter for Profile Email.
-     * @param profileEmail
-     * profileEmail: A profile's email.
-     */
-    public void setProfileEmail(String profileEmail) {
-        pDocRef.update("pEmail", profileEmail);
     }
 
     /**
@@ -160,6 +163,17 @@ public class ProfileDatabaseControl {
         pDocRef.update("pGLTState", profileGLTState);
     }
 
+
+    /**
+     * This is a getter for Profile SignUp Events.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileSignUpEvents
+     * profileSignUpEvents: A list of eventID.
+     */
+    public ArrayList<String> getProfileAllSignUpEvents(DocumentSnapshot profileDocumentSnapshot) {
+        return (ArrayList<String>) profileDocumentSnapshot.get("pSignUpEvents");
+    }
 
     /**
      * This is an adder used to add the given event ID to the profile sign up list.
@@ -181,12 +195,12 @@ public class ProfileDatabaseControl {
         ds.delSignUpEventProfile(eventID, pID);
     }
 
-    /**
-     * This is an adder used to add the given event ID to the profile check in list.
-     * @param eventID
-     * eventID: The ID of the event that needs to be added.
-     */
-    public void addProfileCheckInEvent(String eventID) {
+
+//    public String getProfileCheckInEvent(String eventID) {
+//
+//    }
+    public void addProfileCheckInEvent(String eventID, String count) {
         pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
+        ds.addCheckInEventProfile(eventID, pID, count);
     }
 }
