@@ -16,6 +16,7 @@ public class ProfileDatabaseControl {
 
     private FirebaseFirestore db;
     private DocumentReference pDocRef;
+    private DatabaseSynchronization ds;
 
     private String pID;
     private String pName;
@@ -167,6 +168,7 @@ public class ProfileDatabaseControl {
      */
     public void addProfileSignUpEvent(String eventID) {
         pDocRef.update("pSignUpEvents", FieldValue.arrayUnion(eventID));
+        ds.addSignUpEventProfile(eventID, pID);
     }
 
     /**
@@ -176,6 +178,7 @@ public class ProfileDatabaseControl {
      */
     public void delProfileSignUpEvent(String eventID) {
         pDocRef.update("pSignUpEvents", FieldValue.arrayRemove(eventID));
+        ds.delSignUpEventProfile(eventID, pID);
     }
 
     /**
