@@ -287,7 +287,7 @@ public class EventDatabaseControl {
      * @return eventSignUpProfiles
      * eventSignUpProfiles: A list of profileID.
      */
-    public ArrayList<String> getEventSignUpProfiles(DocumentSnapshot eventDocumentSnapshot) {
+    public ArrayList<String> getEventAllSignUpProfiles(DocumentSnapshot eventDocumentSnapshot) {
         return (ArrayList<String>) eventDocumentSnapshot.get("eSignUpProfiles");
     }
 
@@ -316,13 +316,13 @@ public class EventDatabaseControl {
     }
 
 
-//    public String getEventCheckInProfile(String eventID, String profileID) {
-//        return eColRef.document(eventID).get()
+//    public ArrayList<HashMap<String, String>> getEventAllCheckInProfile(DocumentSnapshot eventDocumentSnapshot) {
+//        return (ArrayList<HashMap<String, String>>) eventDocumentSnapshot.get("eCheckInProfiles");
 //    }
-    public void addEventCheckInProfile(String eventID, String profileID, String count) {
-        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(profileID));
-        ds.addCheckInProfileEvent(profileID, eventID, count);
-    }
+//    public void addEventCheckInProfile(String eventID, String profileID, String count) {
+//        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(profileID));
+//        ds.addCheckInProfileEvent(profileID, eventID, count);
+//    }
 
 
     /**

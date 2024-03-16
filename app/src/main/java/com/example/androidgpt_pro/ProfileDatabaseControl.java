@@ -196,11 +196,11 @@ public class ProfileDatabaseControl {
     }
 
 
-//    public String getProfileCheckInEvent(String eventID) {
-//
+//    public ArrayList<HashMap<String, String>> getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
+//        return (ArrayList<HashMap<String, String>>) profileDocumentSnapshot.get("pCheckInEvents");
 //    }
-    public void addProfileCheckInEvent(String eventID, String count) {
-        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
-        ds.addCheckInEventProfile(eventID, pID, count);
-    }
+//    public void addProfileCheckInEvent(String eventID, String count) {
+//        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
+//        ds.addCheckInEventProfile(eventID, pID, count);
+//    }
 }
