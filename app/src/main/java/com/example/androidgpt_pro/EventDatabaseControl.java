@@ -280,7 +280,7 @@ public class EventDatabaseControl {
      * profileID: An ID of a profile.
      */
     public void addEventSignUpProfile(String eventID, String profileID) {
-        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayUnion(eventID));
+        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayUnion(profileID));
         ds.addSignUpProfileEvent(profileID, eventID);
     }
 
@@ -292,7 +292,7 @@ public class EventDatabaseControl {
      * profileID: An ID of a profile.
      */
     public void delEventSignUpProfile(String eventID, String profileID) {
-        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(eventID));
+        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(profileID));
         ds.delSignUpProfileEvent(profileID, eventID);
     }
 
@@ -304,7 +304,7 @@ public class EventDatabaseControl {
      * profileID: An ID of a profile.
      */
     public void addEventCheckInProfile(String eventID, String profileID) {
-        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(eventID));
+        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(profileID));
     }
 
 

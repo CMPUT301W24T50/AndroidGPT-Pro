@@ -24,10 +24,10 @@ public class DatabaseSynchronization {
         pColRef.document(profileID).update("pSignUpEvents", FieldValue.arrayRemove(eventID));
     }
     public void addSignUpEventProfile(String eventID, String profileID) {
-        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayUnion(eventID));
+        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayUnion(profileID));
     }
     public void delSignUpEventProfile(String eventID, String profileID) {
-        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(eventID));
+        eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(profileID));
     }
 
 //    public void addCheckInProfileEvent(String profileID, String eventID) {
