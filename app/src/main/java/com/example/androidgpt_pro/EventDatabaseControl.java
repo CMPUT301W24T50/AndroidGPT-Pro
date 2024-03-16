@@ -37,6 +37,7 @@ public class EventDatabaseControl {
     public EventDatabaseControl() {
         db = FirebaseFirestore.getInstance();
         eColRef = db.collection("Event");
+        ds = new DatabaseSynchronization();
     }
 
 
@@ -140,6 +141,7 @@ public class EventDatabaseControl {
         return eventDocumentSnapshot.getString("eLastEventID");
     }
 
+
     /**
      * This is a getter for Event Name.
      * @param eventDocumentSnapshot
@@ -149,61 +151,6 @@ public class EventDatabaseControl {
      */
     public String getEventName(DocumentSnapshot eventDocumentSnapshot) {
         return eventDocumentSnapshot.getString("eName");
-    }
-
-    /**
-     * This is a getter for Event Location.
-     * @param eventDocumentSnapshot
-     * eventDocumentSnapshot: An event document snapshot.
-     * @return eventLocation
-     * eventLocation: The location of the event.
-     */
-    public String getEventLocation(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eLocation");
-    }
-
-    /**
-     * This is a getter for Event Simplified Location.
-     * @param eventDocumentSnapshot
-     * eventDocumentSnapshot: An event document snapshot.
-     * @return eventSimplifiedLocation
-     * eventSimplifiedLocation: The simplified location of the event.
-     */
-    public String getEventSimplifiedLocation(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eSpfLocation");
-    }
-
-    /**
-     * This is a getter for Event Description.
-     * @param eventDocumentSnapshot
-     * eventDocumentSnapshot: An event document snapshot.
-     * @return eventDescription
-     * eventDescription: The description of the event.
-     */
-    public String getEventDescription(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eDescription");
-    }
-
-    /**
-     * This is a getter for Event Time.
-     * @param eventDocumentSnapshot
-     * eventDocumentSnapshot: An event document snapshot.
-     * @return eventTime
-     * eventTime: The time of the event.
-     */
-    public String getEventTime(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eTime");
-    }
-
-    /**
-     * This is a getter for Event Date.
-     * @param eventDocumentSnapshot
-     * eventDocumentSnapshot: An event document snapshot.
-     * @return eventDate
-     * eventDate: The date of the event.
-     */
-    public String getEventDate(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eDate");
     }
 
     /**
@@ -217,6 +164,18 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eName", eventName);
     }
 
+
+    /**
+     * This is a getter for Event Location.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventLocation
+     * eventLocation: The location of the event.
+     */
+    public String getEventLocation(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eLocation");
+    }
+
     /**
      * This is a setter for Event Location.
      * @param eventID
@@ -226,6 +185,18 @@ public class EventDatabaseControl {
      */
     public void setEventLocation(String eventID, String eventLocation) {
         eColRef.document(eventID).update("eLocation", eventLocation);
+    }
+
+
+    /**
+     * This is a getter for Event Simplified Location.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventSimplifiedLocation
+     * eventSimplifiedLocation: The simplified location of the event.
+     */
+    public String getEventSimplifiedLocation(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eSpfLocation");
     }
 
     /**
@@ -239,6 +210,18 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eSpfLocation", eventSimplifiedLocation);
     }
 
+
+    /**
+     * This is a getter for Event Description.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventDescription
+     * eventDescription: The description of the event.
+     */
+    public String getEventDescription(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eDescription");
+    }
+
     /**
      * This is a setter for Event Description.
      * @param eventID
@@ -248,6 +231,18 @@ public class EventDatabaseControl {
      */
     public void setEventDescription(String eventID, String eventDescription) {
         eColRef.document(eventID).update("eDescription", eventDescription);
+    }
+
+
+    /**
+     * This is a getter for Event Time.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventTime
+     * eventTime: The time of the event.
+     */
+    public String getEventTime(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eTime");
     }
 
     /**
@@ -261,6 +256,18 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eTime", eventTime);
     }
 
+
+    /**
+     * This is a getter for Event Date.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventDate
+     * eventDate: The date of the event.
+     */
+    public String getEventDate(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eDate");
+    }
+
     /**
      * This is a setter for Event Date.
      * @param eventID
@@ -270,6 +277,18 @@ public class EventDatabaseControl {
      */
     public void setEventDate(String eventID, String eventDate) {
         eColRef.document(eventID).update("eDate", eventDate);
+    }
+
+
+    /**
+     * This is a getter for Event SignUp Profiles.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventSignUpProfiles
+     * eventSignUpProfiles: A list of profileID.
+     */
+    public ArrayList<String> getEventSignUpProfiles(DocumentSnapshot eventDocumentSnapshot) {
+        return (ArrayList<String>) eventDocumentSnapshot.get("eSignUpProfiles");
     }
 
     /**
@@ -296,15 +315,13 @@ public class EventDatabaseControl {
         ds.delSignUpProfileEvent(profileID, eventID);
     }
 
-    /**
-     * This is an adder used to add the given profile ID to the event check in list.
-     * @param eventID
-     * eventID: An ID of an event.
-     * @param profileID
-     * profileID: An ID of a profile.
-     */
-    public void addEventCheckInProfile(String eventID, String profileID) {
+
+//    public String getEventCheckInProfile(String eventID, String profileID) {
+//        return eColRef.document(eventID).get()
+//    }
+    public void addEventCheckInProfile(String eventID, String profileID, String count) {
         eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(profileID));
+        ds.addCheckInProfileEvent(profileID, eventID, count);
     }
 
 

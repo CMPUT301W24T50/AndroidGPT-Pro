@@ -50,7 +50,11 @@ public class EventBrowseActivity extends AppCompatActivity {
                             "This is a sample event.",
                             "8:00 PM",
                             "April 10, 2024");
-                    EventCard card = new EventCard("Sample Event", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1);
+                    EventCard card = new EventCard("Sample Event",
+                            "8:00 PM",
+                            "April 10, 2024",
+                            "Edmonton, AB",
+                            R.drawable.partyimage1);
                     adapter.add(card);
                     adapter.notifyDataSetChanged();
                 }
