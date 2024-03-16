@@ -17,6 +17,8 @@ public class EventDatabaseControl {
 
     private FirebaseFirestore db;
     private CollectionReference eColRef;
+    private DatabaseSynchronization ds;
+
     private String eLastEventID;
     private String eID;
     private String eName;
@@ -279,6 +281,7 @@ public class EventDatabaseControl {
      */
     public void addEventSignUpProfile(String eventID, String profileID) {
         eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayUnion(eventID));
+        ds.addSignUpProfileEvent(profileID, eventID);
     }
 
     /**
@@ -290,6 +293,7 @@ public class EventDatabaseControl {
      */
     public void delEventSignUpProfile(String eventID, String profileID) {
         eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(eventID));
+        ds.delSignUpProfileEvent(profileID, eventID);
     }
 
     /**
