@@ -2,6 +2,7 @@ package com.example.androidgpt_pro;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This is a class that controls the interaction between event data and the database.
@@ -42,16 +44,6 @@ public class EventDatabaseControl {
         eColRef = db.collection("Event");
         ds = new DatabaseSynchronization();
         dt = new DatabaseTools();
-    }
-
-
-    /**
-     * This is the event deleter.
-     * @param eventID
-     * eventID: An ID of an event.
-     */
-    public void removeEvent(String eventID) {
-        eColRef.document(eventID).delete();
     }
 
 
@@ -89,6 +81,16 @@ public class EventDatabaseControl {
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         eColRef.document(eventID).set(data);
+    }
+
+
+    /**
+     * This is the event deleter.
+     * @param eventID
+     * eventID: An ID of an event.
+     */
+    public void removeEvent(String eventID) {
+        eColRef.document(eventID).delete();
     }
 
 
@@ -329,9 +331,14 @@ public class EventDatabaseControl {
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
      * @return eventCheckInProfiles
-     * eventCheckInProfiles: A "2D Array" list of profileID and count, null if no profile.
+     * eventCheckInProfiles: A "2D Array" list of profileID and count, list[0][0] == "-1" if no profiles.
      */
     public String[][] getEventAllCheckInProfiles(DocumentSnapshot eventDocumentSnapshot) {
+        if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null) {
+            String[][] data = new String[0][];
+            data[0][0] = "-1";
+            return data;
+        }
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         String[][] lst = new String[data.size()][];
         for (int i = 0; i < data.size(); i++) {
@@ -340,21 +347,47 @@ public class EventDatabaseControl {
         return lst;
     }
 
+    private String getEventCheckInProfileCount(DocumentSnapshot eventDocumentSnapshot,
+                                             String profileID) {
+        Log.d("Testo", eventDocumentSnapshot.get("eCheckInProfiles").toString());
+        if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null) {
+            return "-1";
+        }
+        ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
+        for (int i = 0; i < data.size(); i++) {
+            if (Objects.equals(data.get(i).split("#")[0], profileID)) {
+                return data.get(i).split("#")[1];
+            }
+        }
+        return null;
+    }
+
     /**
-     * This is an adder used to add the given profileID to the event check in list.
+     * This is an adder used to add or update the given profileID to the event check in list.
      * @param eventID
      * eventID: An event's ID.
      * @param profileID
      * profileID: An profile's ID.
-     * @param count
-     * count: The number of times a given profile has been checked in.
      */
-    public void addEventCheckInProfile(String eventID, String profileID, String count) {
-        String data = dt.constructIDCountString(profileID, count);
-        String nextCount = dt.calculateAddOne(count);
-        String nextData = dt.constructIDCountString(profileID, nextCount);
-        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayRemove(data));
-        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
-        ds.addCheckInProfileEvent(profileID, eventID, count, nextCount);
+    public void addEventCheckInProfile(String eventID, String profileID) {
+        getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String count = getEventCheckInProfileCount(docSns, profileID);
+                if (Objects.equals(count, "-1")) {
+                    count = "00000001";
+                    String data = dt.constructIDCountString(profileID, count);
+                    eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(data));
+                    ds.newCheckInProfileEvent(profileID, eventID, count);
+                } else {
+                    String data = dt.constructIDCountString(profileID, count);
+                    String nextCount = dt.calculateAddOne(count);
+                    String nextData = dt.constructIDCountString(profileID, nextCount);
+                    eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayRemove(data));
+                    eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
+                    ds.addCheckInProfileEvent(profileID, eventID, count, nextCount);
+                }
+            }
+        });
     }
 }
