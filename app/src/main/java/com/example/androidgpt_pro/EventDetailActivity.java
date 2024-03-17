@@ -109,15 +109,15 @@ public class EventDetailActivity extends AppCompatActivity{
         // TODO: check if signup & check in to hide specific button
 
         // handle the sign up events when clicking signUp button
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pdc.addProfileSignUpEvent(eventID);
-                signUpButton.setVisibility(View.GONE);
-                withdrawButton.setVisibility(View.VISIBLE);
-                signUpSuccess();
-            }
-        });
+//        signUpButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                pdc.addProfileSignUpEvent(eventID);
+//                signUpButton.setVisibility(View.GONE);
+//                withdrawButton.setVisibility(View.VISIBLE);
+//                signUpSuccess();
+//            }
+//        });
 
         // handle the withdraw events when clicking withdraw button
         withdrawButton.setOnClickListener(new View.OnClickListener() {
@@ -132,25 +132,25 @@ public class EventDetailActivity extends AppCompatActivity{
 
     }
 
-    public void signUpSuccess() {
-        dialog = new Dialog(EventDetailActivity.this);
-        dialog.setContentView(R.layout.sign_up_success_content);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
-        dialog.setCancelable(false);
-        backToBrowse = dialog.findViewById(R.id.back_list_button);
-
-        backToBrowse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(EventDetailActivity.this, EventActivity.class);
-                newIntent.putExtra("userID", userID);
-                newIntent.putExtra("eventID", eventID);
-                startActivity(newIntent);
-            }
-        });
-        dialog.show();
-    }
+//    public void signUpSuccess() {
+//        dialog = new Dialog(EventDetailActivity.this);
+//        dialog.setContentView(R.layout.sign_up_success_content);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
+//        dialog.setCancelable(false);
+//        backToBrowse = dialog.findViewById(R.id.back_list_button);
+//
+//        backToBrowse.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent newIntent = new Intent(EventDetailActivity.this, EventActivity.class);
+//                newIntent.putExtra("userID", userID);
+//                newIntent.putExtra("eventID", eventID);
+//                startActivity(newIntent);
+//            }
+//        });
+//        dialog.show();
+//    }
 
     public void withdrawSuccess() {
         dialog = new Dialog(EventDetailActivity.this);
