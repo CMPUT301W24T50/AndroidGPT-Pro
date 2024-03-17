@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -8,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This is a class that controls the interaction between profile data and the database.
@@ -203,7 +205,7 @@ public class ProfileDatabaseControl {
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.
      * @return profileCheckInEvents
-     * profileCheckInEvents: A "2D Array" list of eventID and count, null if no profile.
+     * profileCheckInEvents: A "2D Array" list of eventID and count, null if no event.
      */
     public String[][] getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
@@ -214,19 +216,44 @@ public class ProfileDatabaseControl {
         return lst;
     }
 
+    private String getProfileCheckInEventCount(DocumentSnapshot profileDocumentSnapshot,
+                                               String eventID) {
+        if ((ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents") == null) {
+            return "-1";
+        }
+        ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
+        for (int i = 0; i < data.size(); i++) {
+            if (Objects.equals(data.get(i).split("#")[0], eventID)) {
+                return data.get(i).split("#")[1];
+            }
+        }
+        return null;
+    }
+
     /**
-     * This is an adder used to add the given eventID to the profile check in list.
+     * This is an adder used to add or update the given eventID to the profile check in list.
      * @param eventID
      * eventID: An event's ID.
-     * @param count
-     * count: The number of times a given profile has been checked in.
      */
-    public void addProfileCheckInEvent(String eventID, String count) {
-        String data = dt.constructIDCountString(eventID, count);
-        String nextCount = dt.calculateAddOne(count);
-        String nextData = dt.constructIDCountString(eventID, nextCount);
-        pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
-        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
-        ds.addCheckInEventProfile(eventID, pID, count, nextCount);
+    public void addProfileCheckInEvent(String eventID) {
+        getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String count = getProfileCheckInEventCount(docSns, eventID);
+                if (Objects.equals(count, "-1")) {
+                    count = "00000001";
+                    String data = dt.constructIDCountString(eventID, count);
+                    pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(data));
+                    ds.newCheckInEventProfile(eventID, pID, count);
+                } else {
+                    String data = dt.constructIDCountString(eventID, count);
+                    String nextCount = dt.calculateAddOne(count);
+                    String nextData = dt.constructIDCountString(eventID, nextCount);
+                    pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
+                    pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
+                    ds.addCheckInEventProfile(eventID, pID, count, nextCount);
+                }
+            }
+        });
     }
 }
