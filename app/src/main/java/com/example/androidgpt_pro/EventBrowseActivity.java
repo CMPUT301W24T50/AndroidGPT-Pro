@@ -40,7 +40,6 @@ public class EventBrowseActivity extends AppCompatActivity {
             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot docSns) {
-                    EventDatabaseControl edc = new EventDatabaseControl();
                     String lastEventID = edc.getLastEventID(docSns);
                     eID = edc.updateEventStat(lastEventID);
                     edc.initEvent(eID, "Sample Event",
@@ -81,11 +80,12 @@ public class EventBrowseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(EventBrowseActivity.this, EventActivity.class);
                 intent.putExtra("eventID",eID);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
 
-        // this is navigation bar
+        // navigation bar
         navigationTabs = findViewById(R.id.navigation);
         navigationTabs.setSelectedItemId(R.id.events_tab);
 

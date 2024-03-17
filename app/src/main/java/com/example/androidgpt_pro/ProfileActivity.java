@@ -120,6 +120,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+
 //    private void displayProfileInfo() {
 //        // retrieve the profile information from a database or intent
 //        //
