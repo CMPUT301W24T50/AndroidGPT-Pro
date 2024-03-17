@@ -17,6 +17,7 @@ public class ProfileDatabaseControl {
     private FirebaseFirestore db;
     private DocumentReference pDocRef;
     private DatabaseSynchronization ds;
+    private DatabaseTools dt;
 
     private String pID;
     private String pName;
@@ -39,6 +40,7 @@ public class ProfileDatabaseControl {
         db = FirebaseFirestore.getInstance();
         pDocRef = db.collection("Profile").document(pID);
         ds = new DatabaseSynchronization();
+        dt = new DatabaseTools();
     }
 
 
@@ -196,11 +198,35 @@ public class ProfileDatabaseControl {
     }
 
 
-//    public ArrayList<HashMap<String, String>> getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
-//        return (ArrayList<HashMap<String, String>>) profileDocumentSnapshot.get("pCheckInEvents");
-//    }
-//    public void addProfileCheckInEvent(String eventID, String count) {
-//        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
-//        ds.addCheckInEventProfile(eventID, pID, count);
-//    }
+    /**
+     * This is a getter for Profile CheckIn Events.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileCheckInEvents
+     * profileCheckInEvents: A "2D Array" list of eventID and count, null if no profile.
+     */
+    public String[][] getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
+        ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
+        String[][] lst = new String[data.size()][];
+        for (int i = 0; i < data.size(); i++) {
+            lst[i] = data.get(i).split("#");
+        }
+        return lst;
+    }
+
+    /**
+     * This is an adder used to add the given eventID to the profile check in list.
+     * @param eventID
+     * eventID: An event's ID.
+     * @param count
+     * count: The number of times a given profile has been checked in.
+     */
+    public void addProfileCheckInEvent(String eventID, String count) {
+        String data = dt.constructIDCountString(eventID, count);
+        String nextCount = dt.calculateAddOne(count);
+        String nextData = dt.constructIDCountString(eventID, nextCount);
+        pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
+        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
+        ds.addCheckInEventProfile(eventID, pID, count, nextCount);
+    }
 }

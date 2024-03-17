@@ -1,5 +1,7 @@
 package com.example.androidgpt_pro;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -18,6 +20,7 @@ public class EventDatabaseControl {
     private FirebaseFirestore db;
     private CollectionReference eColRef;
     private DatabaseSynchronization ds;
+    private DatabaseTools dt;
 
     private String eLastEventID;
     private String eID;
@@ -38,6 +41,7 @@ public class EventDatabaseControl {
         db = FirebaseFirestore.getInstance();
         eColRef = db.collection("Event");
         ds = new DatabaseSynchronization();
+        dt = new DatabaseTools();
     }
 
 
@@ -98,12 +102,16 @@ public class EventDatabaseControl {
     }
 
     /**
-     * This is a setter for the EventStat.
+     * This is a updater for the EventStat.
      * @param eventLastEventID
      * eventLastEventID: The ID of the last event.
+     * @return eventID
+     * eventID: The ID of the current event.
      */
-    public void setEventStat(String eventLastEventID) {
-        eColRef.document("00000000").update("eLastEventID", eventLastEventID);
+    public String updateEventStat(String eventLastEventID) {
+        String eventID = dt.calculateAddOne(eventLastEventID);
+        eColRef.document("00000000").update("eLastEventID", eventID);
+        return eventID;
     }
 
 
@@ -285,7 +293,7 @@ public class EventDatabaseControl {
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
      * @return eventSignUpProfiles
-     * eventSignUpProfiles: A list of profileID.
+     * eventSignUpProfiles: A list of profileID, null if no profile.
      */
     public ArrayList<String> getEventAllSignUpProfiles(DocumentSnapshot eventDocumentSnapshot) {
         return (ArrayList<String>) eventDocumentSnapshot.get("eSignUpProfiles");
@@ -316,25 +324,37 @@ public class EventDatabaseControl {
     }
 
 
-//    public ArrayList<HashMap<String, String>> getEventAllCheckInProfile(DocumentSnapshot eventDocumentSnapshot) {
-//        return (ArrayList<HashMap<String, String>>) eventDocumentSnapshot.get("eCheckInProfiles");
-//    }
-//    public void addEventCheckInProfile(String eventID, String profileID, String count) {
-//        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(profileID));
-//        ds.addCheckInProfileEvent(profileID, eventID, count);
-//    }
-
+    /**
+     * This is a getter for Event CheckIn Profiles.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventCheckInProfiles
+     * eventCheckInProfiles: A "2D Array" list of profileID and count, null if no profile.
+     */
+    public String[][] getEventAllCheckInProfiles(DocumentSnapshot eventDocumentSnapshot) {
+        ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
+        String[][] lst = new String[data.size()][];
+        for (int i = 0; i < data.size(); i++) {
+            lst[i] = data.get(i).split("#");
+        }
+        return lst;
+    }
 
     /**
-     * This is a calculator to get the ID of the next event.
-     * @param value
-     * value: An 8 bits string number.
-     * @return valueAddOne
-     * valueAddOne: 8-digit number after adding 1.
+     * This is an adder used to add the given profileID to the event check in list.
+     * @param eventID
+     * eventID: An event's ID.
+     * @param profileID
+     * profileID: An profile's ID.
+     * @param count
+     * count: The number of times a given profile has been checked in.
      */
-    public String calculateNextEventID(String value) {
-        int intValue = Integer.parseInt(value);
-        intValue++;
-        return String.format("%08d", intValue);
+    public void addEventCheckInProfile(String eventID, String profileID, String count) {
+        String data = dt.constructIDCountString(profileID, count);
+        String nextCount = dt.calculateAddOne(count);
+        String nextData = dt.constructIDCountString(profileID, nextCount);
+        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayRemove(data));
+        eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
+        ds.addCheckInProfileEvent(profileID, eventID, count, nextCount);
     }
 }
