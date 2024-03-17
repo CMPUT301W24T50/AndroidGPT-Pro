@@ -84,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this, EventBrowseActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
                     startActivity(newIntent);
                 } else if (itemId == R.id.qr_scanner_tab) {
@@ -119,6 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void stopGeolocationTracking() {
 
     }
+
 
 //    private void displayProfileInfo() {
 //        // retrieve the profile information from a database or intent

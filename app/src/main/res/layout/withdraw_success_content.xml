@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/withdraw_success_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/success_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Withdrawn!"
+            android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/success_description"
+            android:layout_width="wrap_content"
+            android:layout_height="57dp"
+            android:layout_below="@+id/success_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="You Have Withdrawn the Event!" />
+        <Button
+            android:id="@+id/back_QR_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/success_description"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="Back to Events"/>
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
