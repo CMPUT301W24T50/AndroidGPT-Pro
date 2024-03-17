@@ -11,11 +11,13 @@ public class DatabaseSynchronization {
     private FirebaseFirestore db;
     private CollectionReference pColRef;
     private CollectionReference eColRef;
+    private DatabaseTools dt;
 
     public DatabaseSynchronization() {
         db = FirebaseFirestore.getInstance();
         pColRef = db.collection("Profile");
         eColRef = db.collection("Event");
+        dt = new DatabaseTools();
     }
 
     public void addSignUpProfileEvent(String profileID, String eventID) {
@@ -31,14 +33,26 @@ public class DatabaseSynchronization {
         eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(profileID));
     }
 
-    public void addCheckInProfileEvent(String profileID, String eventID, String count) {
-        HashMap<String, String> data = new HashMap<>();
-        data.put(eventID, count);
-        pColRef.document(profileID).update("pCheckInEvents", data);
+    public void addCheckInProfileEvent(String profileID,
+                                       String eventID,
+                                       String count,
+                                       String nextCount) {
+        String data = dt.constructIDCountString(eventID, count);
+        pColRef.document(profileID)
+                .update("pCheckInEvents", FieldValue.arrayRemove(data));
+        String nextData = dt.constructIDCountString(eventID, nextCount);
+        pColRef.document(profileID)
+                .update("pCheckInEvents", FieldValue.arrayUnion(nextData));
     }
-    public void addCheckInEventProfile(String eventID, String profileID, String count) {
-        HashMap<String, String> data = new HashMap<>();
-        data.put(profileID, count);
-        eColRef.document(eventID).update("eCheckInProfiles", data);
+    public void addCheckInEventProfile(String eventID,
+                                       String profileID,
+                                       String count,
+                                       String nextCount) {
+        String data = dt.constructIDCountString(profileID, count);
+        eColRef.document(eventID)
+                .update("eCheckInProfiles", FieldValue.arrayRemove(data));
+        String nextData = dt.constructIDCountString(profileID, nextCount);
+        eColRef.document(eventID)
+                .update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
     }
 }

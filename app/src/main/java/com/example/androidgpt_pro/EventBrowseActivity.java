@@ -42,8 +42,7 @@ public class EventBrowseActivity extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot docSns) {
                     EventDatabaseControl edc = new EventDatabaseControl();
                     String lastEventID = edc.getLastEventID(docSns);
-                    eID = edc.calculateNextEventID(lastEventID);
-                    edc.setEventStat(eID);
+                    eID = edc.updateEventStat(lastEventID);
                     edc.initEvent(eID, "Sample Event",
                             "123 Main St",
                             "Edmonton, AB",
