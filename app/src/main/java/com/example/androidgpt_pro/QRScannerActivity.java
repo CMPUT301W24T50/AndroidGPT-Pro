@@ -15,8 +15,6 @@ import com.journeyapps.barcodescanner.ScanContract;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 
-import com.journeyapps.barcodescanner.ScanOptions;
-
 /**
  * QRScannerActivity is an activity class responsible for handling QR code scanning.
  * It integrates with a QR code scanning library to scan QR codes and processes the results
@@ -68,7 +66,7 @@ public class QRScannerActivity extends ComponentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(QRScannerActivity.this, EventBrowseActivity.class);
+                    Intent newIntent = new Intent(QRScannerActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
                     startActivity(newIntent);
                 } else if (itemId == R.id.qr_scanner_tab) {
