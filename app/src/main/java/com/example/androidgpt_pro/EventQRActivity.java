@@ -92,8 +92,12 @@ public class EventQRActivity extends AppCompatActivity {
         });
 
     }
-
+    /**
+     * After scan the sign up qr code, the code leads user to signup page
+     */
     public void eventSignUp() {
+
+        // check if the user has sign up the event
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
@@ -111,8 +115,8 @@ public class EventQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pdc.addProfileSignUpEvent(eventID);
-                signUpButton.setVisibility(View.GONE);
                 withdrawButton.setVisibility(View.VISIBLE);
+                signUpButton.setVisibility(View.GONE);
                 signUpSuccess();
             }
         });
@@ -122,19 +126,23 @@ public class EventQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pdc.delProfileSignUpEvent(userID);
-                withdrawButton.setVisibility(View.GONE);
                 signUpButton.setVisibility(View.VISIBLE);
+                withdrawButton.setVisibility(View.GONE);
                 withdrawSuccess();
             }
         });
     }
-
+    /**
+     * After scan the check in qr code, the code leads user to check in page
+     */
     public void eventCheckIn() {
         checkInButton.setVisibility(View.VISIBLE);
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pdc.addProfileCheckInEvent(eventID);
+                withdrawButton.setVisibility(View.VISIBLE);
+                checkInSuccess();
 
             }
         });
@@ -179,4 +187,25 @@ public class EventQRActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
+    private void checkInSuccess(){
+        dialog = new Dialog(EventQRActivity.this);
+        dialog.setContentView(R.layout.check_in_success_content);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
+        dialog.setCancelable(false);
+        backToQRScanner = dialog.findViewById(R.id.back_QR_button);
+
+        backToQRScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(EventQRActivity.this, QRScannerActivity.class);
+                newIntent.putExtra("userID", userID);
+                newIntent.putExtra("eventID", eventID);
+                startActivity(newIntent);
+            }
+        });
+        dialog.show();
+    }
 }
+
