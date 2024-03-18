@@ -171,7 +171,4 @@ public class EventDetailActivity extends AppCompatActivity{
         });
         dialog.show();
     }
-    public void eventCheckin() {
-
-    }
 }
