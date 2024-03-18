@@ -20,12 +20,14 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class EventQRActivity extends AppCompatActivity {
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     private String eventID;
     private String userID;
+    private String userOp;
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
@@ -50,6 +52,7 @@ public class EventQRActivity extends AppCompatActivity {
         Intent intent = getIntent();
         eventID = intent.getStringExtra("eventID");
         userID = intent.getStringExtra("userID");
+        userOp = intent.getStringExtra("userOp");
         EventDatabaseControl edc = new EventDatabaseControl();
         ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
 
@@ -59,6 +62,7 @@ public class EventQRActivity extends AppCompatActivity {
         eventLocationAptTextView = findViewById(R.id.event_location1);
         eventLocationCityTextView = findViewById(R.id.event_location2);
         eventDescription = findViewById(R.id.event_description);
+
         signUpButton = findViewById(R.id.btn_sign_up);
         signUpButton.setVisibility(View.GONE);
         withdrawButton = findViewById(R.id.btn_withdraw);
@@ -83,7 +87,6 @@ public class EventQRActivity extends AppCompatActivity {
 
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +94,11 @@ public class EventQRActivity extends AppCompatActivity {
             }
         });
 
+        if (Objects.equals(userOp, "SignUp")) {
+            eventSignUp();
+        } else {
+            eventCheckIn();
+        }
     }
     /**
      * After scan the sign up qr code, the code leads user to signup page
