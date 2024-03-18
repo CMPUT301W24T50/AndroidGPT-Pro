@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 /**
  * This class allows the user to edit their profile information.
  */
-public class EditProfileActivity extends AppCompatActivity {
+public class ProfileEditActivity extends AppCompatActivity {
 
     private String userID;
     private EditText editProfileNameEditText;
@@ -45,7 +45,7 @@ public class EditProfileActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+                Intent newIntent = new Intent(ProfileEditActivity.this, ProfileActivity.class);
                 newIntent.putExtra("userID", userID);
                 startActivity(newIntent);
             }
