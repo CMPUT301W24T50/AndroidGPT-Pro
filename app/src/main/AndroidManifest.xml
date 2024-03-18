@@ -30,7 +30,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".ProfileEditActivity"
             android:exported="true">
         </activity>
         <activity
