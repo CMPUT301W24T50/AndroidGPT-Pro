@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, ProfileEditActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
