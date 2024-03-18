@@ -1,11 +1,15 @@
 package com.example.androidgpt_pro;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,6 +148,45 @@ public class ProfileDatabaseControl {
      */
     public void setProfileEmail(String profileEmail) {
         pDocRef.update("pEmail", profileEmail);
+    }
+
+
+    /**
+     * This is a getter for Profile Picture URL.
+     * @param profileDocumentSnapshot A profile document snapshot.
+     * @return profilePictureUrl A profile's picture URL.
+     */
+    public String getProfilePictureUrl(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pPictureUrl");
+    }
+
+    /**
+     * This is a setter for Profile Picture URL.
+     * @param profilePictureUrl A profile's picture URL.
+     */
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        pDocRef.update("pPictureUrl", profilePictureUrl)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure to update profile picture URL
+                    }
+                });
+    }
+    /**
+     * This is a method to update profile picture URL with an option to merge existing data.
+     * @param profilePictureUrl A profile's picture URL.
+     */
+    public void updateProfilePictureUrl(String profilePictureUrl) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("pPictureUrl", profilePictureUrl);
+        pDocRef.set(data, SetOptions.merge())
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure to update profile picture URL
+                    }
+                });
     }
 
 
