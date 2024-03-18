@@ -138,7 +138,7 @@ Agenda:
 
 Discussion:
 - QR Code -> Kells
-- Profile -> Luke, Edward
+- Activities (database) 
 - Events -> Paul, Yanze, Arturia
 
 Action Items:
@@ -149,5 +149,40 @@ TA Questions:
 
 Next Meeting:
 - Tuesday March 4, 2024
+- Weekly TA/Client Meeting
+/*********************************/
+
+/*********************************/
+Internal Meeting - Monday Mar 18, 2024
+
+Meeting Attendees:
+- Luke
+- Edward
+- Arturia
+- Kells
+- Paul
+
+Agenda:
+- Discuss Project Part 4
+- Assign roles/responsibilities for upcoming deliverables
+- Prepare any questions for TA meeting tomorrow
+
+Discussion:
+- Event Creation -> Paul, Yanze
+- QR (After Event Creation) -> Kells
+- Unit Testing -> Edward, Luke
+- Database -> Arturia
+
+Action Items:
+- Finish Activity files
+- Create Events
+- Build tests
+
+TA Questions:
+- Does someone need to sign up to check in?
+- Testing QR code scanner
+
+Next Meeting:
+- Tuesday March 19, 2024
 - Weekly TA/Client Meeting
 /*********************************/
