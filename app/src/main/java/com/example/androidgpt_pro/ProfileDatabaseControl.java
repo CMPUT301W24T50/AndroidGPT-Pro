@@ -1,13 +1,19 @@
 package com.example.androidgpt_pro;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This is a class that controls the interaction between profile data and the database.
@@ -16,6 +22,8 @@ public class ProfileDatabaseControl {
 
     private FirebaseFirestore db;
     private DocumentReference pDocRef;
+    private DatabaseSynchronization ds;
+    private DatabaseTools dt;
 
     private String pID;
     private String pName;
@@ -37,6 +45,8 @@ public class ProfileDatabaseControl {
         pID = profileID;
         db = FirebaseFirestore.getInstance();
         pDocRef = db.collection("Profile").document(pID);
+        ds = new DatabaseSynchronization();
+        dt = new DatabaseTools();
     }
 
 
@@ -90,6 +100,16 @@ public class ProfileDatabaseControl {
     }
 
     /**
+     * This is a setter for Profile Name.
+     * @param profileName
+     * profileName: A profile's name.
+     */
+    public void setProfileName(String profileName) {
+        pDocRef.update("pName", profileName);
+    }
+
+
+    /**
      * This is a getter for Profile Phone Number.
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.
@@ -99,6 +119,16 @@ public class ProfileDatabaseControl {
     public String getProfilePhoneNumber(DocumentSnapshot profileDocumentSnapshot) {
         return profileDocumentSnapshot.getString("pPhoneNumber");
     }
+
+    /**
+     * This is a setter for Profile Phone Number.
+     * @param profilePhoneNumber
+     * profilePhoneNumber: A profile's phone number.
+     */
+    public void setProfilePhoneNumber(String profilePhoneNumber) {
+        pDocRef.update("pPhoneNumber", profilePhoneNumber);
+    }
+
 
     /**
      * This is a getter for Profile Email.
@@ -112,6 +142,55 @@ public class ProfileDatabaseControl {
     }
 
     /**
+     * This is a setter for Profile Email.
+     * @param profileEmail
+     * profileEmail: A profile's email.
+     */
+    public void setProfileEmail(String profileEmail) {
+        pDocRef.update("pEmail", profileEmail);
+    }
+
+
+    /**
+     * This is a getter for Profile Picture URL.
+     * @param profileDocumentSnapshot A profile document snapshot.
+     * @return profilePictureUrl A profile's picture URL.
+     */
+    public String getProfilePictureUrl(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pPictureUrl");
+    }
+
+    /**
+     * This is a setter for Profile Picture URL.
+     * @param profilePictureUrl A profile's picture URL.
+     */
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        pDocRef.update("pPictureUrl", profilePictureUrl)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure to update profile picture URL
+                    }
+                });
+    }
+    /**
+     * This is a method to update profile picture URL with an option to merge existing data.
+     * @param profilePictureUrl A profile's picture URL.
+     */
+    public void updateProfilePictureUrl(String profilePictureUrl) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("pPictureUrl", profilePictureUrl);
+        pDocRef.set(data, SetOptions.merge())
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure to update profile picture URL
+                    }
+                });
+    }
+
+
+    /**
      * This is a getter for Profile Geo-Location Tracking State.
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.
@@ -120,34 +199,6 @@ public class ProfileDatabaseControl {
      */
     public Boolean getProfileGLTState(DocumentSnapshot profileDocumentSnapshot) {
         return profileDocumentSnapshot.getBoolean("pGLTState");
-    }
-
-
-    /**
-     * This is a setter for Profile Name.
-     * @param profileName
-     * profileName: A profile's name.
-     */
-    public void setProfileName(String profileName) {
-        pDocRef.update("pName", profileName);
-    }
-
-    /**
-     * This is a setter for Profile Phone Number.
-     * @param profilePhoneNumber
-     * profilePhoneNumber: A profile's phone number.
-     */
-    public void setProfilePhoneNumber(String profilePhoneNumber) {
-        pDocRef.update("pPhoneNumber", profilePhoneNumber);
-    }
-
-    /**
-     * This is a setter for Profile Email.
-     * @param profileEmail
-     * profileEmail: A profile's email.
-     */
-    public void setProfileEmail(String profileEmail) {
-        pDocRef.update("pEmail", profileEmail);
     }
 
     /**
@@ -161,12 +212,24 @@ public class ProfileDatabaseControl {
 
 
     /**
+     * This is a getter for Profile SignUp Events.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileSignUpEvents
+     * profileSignUpEvents: A list of eventID.
+     */
+    public ArrayList<String> getProfileAllSignUpEvents(DocumentSnapshot profileDocumentSnapshot) {
+        return (ArrayList<String>) profileDocumentSnapshot.get("pSignUpEvents");
+    }
+
+    /**
      * This is an adder used to add the given event ID to the profile sign up list.
      * @param eventID
      * eventID: The ID of the event that needs to be added.
      */
     public void addProfileSignUpEvent(String eventID) {
         pDocRef.update("pSignUpEvents", FieldValue.arrayUnion(eventID));
+        ds.addSignUpEventProfile(eventID, pID);
     }
 
     /**
@@ -176,14 +239,64 @@ public class ProfileDatabaseControl {
      */
     public void delProfileSignUpEvent(String eventID) {
         pDocRef.update("pSignUpEvents", FieldValue.arrayRemove(eventID));
+        ds.delSignUpEventProfile(eventID, pID);
+    }
+
+
+    /**
+     * This is a getter for Profile CheckIn Events.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileCheckInEvents
+     * profileCheckInEvents: A "2D Array" list of eventID and count, null if no event.
+     */
+    public String[][] getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
+        ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
+        String[][] lst = new String[data.size()][];
+        for (int i = 0; i < data.size(); i++) {
+            lst[i] = data.get(i).split("#");
+        }
+        return lst;
+    }
+
+    private String getProfileCheckInEventCount(DocumentSnapshot profileDocumentSnapshot,
+                                               String eventID) {
+        if ((ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents") == null) {
+            return "-1";
+        }
+        ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
+        for (int i = 0; i < data.size(); i++) {
+            if (Objects.equals(data.get(i).split("#")[0], eventID)) {
+                return data.get(i).split("#")[1];
+            }
+        }
+        return null;
     }
 
     /**
-     * This is an adder used to add the given event ID to the profile check in list.
+     * This is an adder used to add or update the given eventID to the profile check in list.
      * @param eventID
-     * eventID: The ID of the event that needs to be added.
+     * eventID: An event's ID.
      */
     public void addProfileCheckInEvent(String eventID) {
-        pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(eventID));
+        getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String count = getProfileCheckInEventCount(docSns, eventID);
+                if (Objects.equals(count, "-1")) {
+                    count = "00000001";
+                    String data = dt.constructIDCountString(eventID, count);
+                    pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(data));
+                    ds.newCheckInEventProfile(eventID, pID, count);
+                } else {
+                    String data = dt.constructIDCountString(eventID, count);
+                    String nextCount = dt.calculateAddOne(count);
+                    String nextData = dt.constructIDCountString(eventID, nextCount);
+                    pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
+                    pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
+                    ds.addCheckInEventProfile(eventID, pID, count, nextCount);
+                }
+            }
+        });
     }
 }

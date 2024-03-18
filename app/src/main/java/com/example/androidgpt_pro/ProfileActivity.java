@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -19,6 +20,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
 
 /**
  * This class displays the users profile information on the screen
@@ -32,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView emailTextView;
     private ToggleButton geolocationToggle;
     BottomNavigationView navigationTabs;
+    private ImageView profileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         emailTextView = findViewById(R.id.text_email);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
 //        TextView test = findViewById(R.id.test_text);
-
+        profileImageView = findViewById(R.id.image_profile_picture);
         pdc.getProfile().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot docSns,
@@ -63,6 +66,14 @@ public class ProfileActivity extends AppCompatActivity {
                 phoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 emailTextView.setText(pdc.getProfileEmail(docSns));
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
+
+                // Load profile picture if available
+                String profilePictureUrl = pdc.getProfilePictureUrl(docSns);
+                if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
+                    Picasso.get().load(profilePictureUrl).into(profileImageView);
+                } else {
+                    profileImageView.setImageResource(android.R.drawable.sym_def_app_icon);
+                }
             }
         });
 
@@ -84,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this, EventBrowseActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
                     startActivity(newIntent);
                 } else if (itemId == R.id.qr_scanner_tab) {
@@ -119,6 +130,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void stopGeolocationTracking() {
 
     }
+
 
 //    private void displayProfileInfo() {
 //        // retrieve the profile information from a database or intent

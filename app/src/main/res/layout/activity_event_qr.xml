@@ -74,7 +74,7 @@
         android:textSize="14sp"
         android:layout_marginLeft="16dp"/>
 
-    <Button
+        <Button
         android:id="@+id/btn_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,15 +92,16 @@
         android:layout_marginBottom="300dp"
         android:text="Withdraw"
         />
-<!--    <Button-->
-<!--        android:id="@+id/btn_checkin"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginBottom="300dp"-->
-<!--        android:text="Check In"-->
-<!--        />-->
+
+        <Button
+        android:id="@+id/btn_check_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="300dp"
+        android:text="Check In"
+        />
 
 
 
