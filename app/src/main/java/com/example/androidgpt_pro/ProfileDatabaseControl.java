@@ -35,7 +35,6 @@ public class ProfileDatabaseControl {
     private String pPhoneNumber;
     private String pEmail;
     private Boolean pGLTState = Boolean.TRUE;
-    private Uri pImageUri = Uri.parse("-");
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
 
@@ -51,7 +50,7 @@ public class ProfileDatabaseControl {
         db = FirebaseFirestore.getInstance();
         pDocRef = db.collection("Profile").document(pID);
         st = FirebaseStorage.getInstance();
-        pStgRef = st.getReference();
+        pStgRef = st.getReference().child("Profile");
         ds = new DatabaseSynchronization();
         dt = new DatabaseTools();
     }
@@ -73,7 +72,6 @@ public class ProfileDatabaseControl {
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         pDocRef.set(data);
-        setProfileImage(pImageUri);
     }
 
 
@@ -181,19 +179,17 @@ public class ProfileDatabaseControl {
 
 
     public Task<Uri> getProfileImage() {
-        String pathname = "Profile/" + pID + ".jpg";
         File localFile = null;
         try {
-            localFile = File.createTempFile("PI", "jpg");
+            localFile = File.createTempFile("Image", "jpg");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return pStgRef.child(pathname).getDownloadUrl();
+        return pStgRef.child(pID).getDownloadUrl();
     }
 
-    public void setProfileImage(Uri uri) {
-        String pathname = "Profile/" + pID + ".jpg";
-        pStgRef.child(pathname).putFile(uri);
+    public void setProfileImage(Uri profileImageURL) {
+        pStgRef.child(pID).putFile(profileImageURL);
     }
 
 
