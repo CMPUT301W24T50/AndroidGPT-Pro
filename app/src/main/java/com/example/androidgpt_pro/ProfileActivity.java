@@ -2,6 +2,7 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,11 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FileDownloadTask;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -68,12 +71,16 @@ public class ProfileActivity extends AppCompatActivity {
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
 
                 // Load profile picture if available
-                String profilePictureUrl = pdc.getProfilePictureUrl(docSns);
-                if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
-                    Picasso.get().load(profilePictureUrl).into(profileImageView);
-                } else {
-                    profileImageView.setImageResource(android.R.drawable.sym_def_app_icon);
-                }
+                pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+//                        if (uri != null) {
+//                            Picasso.get().load(uri).into(profileImageView);
+//                        } else {
+//                            profileImageView.setImageResource(android.R.drawable.sym_def_app_icon);
+//                        }
+                    }
+                });
             }
         });
 

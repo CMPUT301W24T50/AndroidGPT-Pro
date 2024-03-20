@@ -1,16 +1,18 @@
 package com.example.androidgpt_pro;
 
-import android.support.annotation.NonNull;
+import android.net.Uri;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -21,16 +23,19 @@ import java.util.Objects;
 public class ProfileDatabaseControl {
 
     private FirebaseFirestore db;
+    private FirebaseStorage st;
     private DocumentReference pDocRef;
+    private StorageReference pStgRef;
     private DatabaseSynchronization ds;
     private DatabaseTools dt;
 
     private String pID;
-    private String pName;
     private String pRole;
+    private String pName;
     private String pPhoneNumber;
     private String pEmail;
     private Boolean pGLTState = Boolean.TRUE;
+    private Uri pImageUri = Uri.parse("-");
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
 
@@ -45,6 +50,8 @@ public class ProfileDatabaseControl {
         pID = profileID;
         db = FirebaseFirestore.getInstance();
         pDocRef = db.collection("Profile").document(pID);
+        st = FirebaseStorage.getInstance();
+        pStgRef = st.getReference();
         ds = new DatabaseSynchronization();
         dt = new DatabaseTools();
     }
@@ -66,6 +73,7 @@ public class ProfileDatabaseControl {
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         pDocRef.set(data);
+        setProfileImage(pImageUri);
     }
 
 
@@ -152,45 +160,6 @@ public class ProfileDatabaseControl {
 
 
     /**
-     * This is a getter for Profile Picture URL.
-     * @param profileDocumentSnapshot A profile document snapshot.
-     * @return profilePictureUrl A profile's picture URL.
-     */
-    public String getProfilePictureUrl(DocumentSnapshot profileDocumentSnapshot) {
-        return profileDocumentSnapshot.getString("pPictureUrl");
-    }
-
-    /**
-     * This is a setter for Profile Picture URL.
-     * @param profilePictureUrl A profile's picture URL.
-     */
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        pDocRef.update("pPictureUrl", profilePictureUrl)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure to update profile picture URL
-                    }
-                });
-    }
-    /**
-     * This is a method to update profile picture URL with an option to merge existing data.
-     * @param profilePictureUrl A profile's picture URL.
-     */
-    public void updateProfilePictureUrl(String profilePictureUrl) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("pPictureUrl", profilePictureUrl);
-        pDocRef.set(data, SetOptions.merge())
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure to update profile picture URL
-                    }
-                });
-    }
-
-
-    /**
      * This is a getter for Profile Geo-Location Tracking State.
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.
@@ -208,6 +177,23 @@ public class ProfileDatabaseControl {
      */
     public void setProfileGLTState(Boolean profileGLTState) {
         pDocRef.update("pGLTState", profileGLTState);
+    }
+
+
+    public Task<Uri> getProfileImage() {
+        String pathname = "Profile/" + pID + ".jpg";
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("PI", "jpg");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return pStgRef.child(pathname).getDownloadUrl();
+    }
+
+    public void setProfileImage(Uri uri) {
+        String pathname = "Profile/" + pID + ".jpg";
+        pStgRef.child(pathname).putFile(uri);
     }
 
 

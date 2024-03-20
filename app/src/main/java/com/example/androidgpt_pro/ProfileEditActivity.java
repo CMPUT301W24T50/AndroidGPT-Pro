@@ -87,7 +87,10 @@ public class ProfileEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
             // Store the selected image URI
             imageUri = data.getData();
             // Set the selected image to the profile image view
@@ -109,7 +112,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         pdc.setProfileName(updatedProfileName);
         pdc.setProfilePhoneNumber(updatedPhoneNumber);
         pdc.setProfileEmail(updatedEmail);
-
+        pdc.setProfileImage(imageUri);
 
         // just display a toast message confirming the changes for now
         Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
