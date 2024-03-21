@@ -178,18 +178,28 @@ public class ProfileDatabaseControl {
     }
 
 
+    /**
+     * This is a getter for Profile Image.
+     * @return profileImageGetTask
+     * profileImageGetTask: A task for getting profileImage.
+     */
     public Task<Uri> getProfileImage() {
         File localFile = null;
         try {
-            localFile = File.createTempFile("Image", "jpg");
+            localFile = File.createTempFile("P" + pID, "jpg");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return pStgRef.child(pID).getDownloadUrl();
     }
 
-    public void setProfileImage(Uri profileImageURL) {
-        pStgRef.child(pID).putFile(profileImageURL);
+    /**
+     * This is a setter for Profile Image.
+     * @param profileImageURI
+     * profileImageURI: The URI of an image.
+     */
+    public void setProfileImage(Uri profileImageURI) {
+        pStgRef.child(pID).putFile(profileImageURI);
     }
 
 
