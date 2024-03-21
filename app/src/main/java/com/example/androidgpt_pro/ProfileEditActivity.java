@@ -13,18 +13,26 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
+
 /**
  * This class allows the user to edit their profile information.
  */
 public class ProfileEditActivity extends AppCompatActivity {
 
     private String userID;
+    private ProfileDatabaseControl pdc;
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private Boolean imageUpdate = Boolean.FALSE;
     private Uri imageUri;
 
     private ImageButton backButton;
-    private ImageView profileImageView;
+    private ImageView editProfileImageView;
     private EditText editProfileNameEditText;
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
@@ -33,11 +41,12 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     private void initViews() {
         // Initialize views.
-        profileImageView = findViewById(R.id.image_edit_profile_picture);
+        backButton = findViewById(R.id.back_button);
+        editProfileImageView = findViewById(R.id.image_edit_profile_picture);
         editProfileNameEditText = findViewById(R.id.edit_text_edit_profile_name);
         editPhoneNumberEditText = findViewById(R.id.edit_text_edit_phone_number);
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
-        backButton = findViewById(R.id.back_button);
+        saveButton = findViewById(R.id.button_save_profile);
     }
 
 
@@ -54,9 +63,33 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
 
+    private void fetchOriginalProfile() {
+        pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                if (uri != null) {
+                    Picasso.get().load(uri).into(editProfileImageView);
+                } else {
+                    editProfileImageView.setImageResource(android.R.drawable.sym_def_app_icon);
+                }
+            }
+        });
+
+        pdc.getProfile().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot docSns,
+                                @Nullable FirebaseFirestoreException error) {
+                // Load profile picture if available.
+                editProfileNameEditText.setText(pdc.getProfileName(docSns));
+                editPhoneNumberEditText.setText(pdc.getProfilePhoneNumber(docSns));
+                editEmailEditText.setText(pdc.getProfileEmail(docSns));
+            }
+        });
+    }
+
     private void setupProfileImageEditor() {
         // Set click listener for profile image.
-        profileImageView.setOnClickListener(new View.OnClickListener() {
+        editProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
@@ -93,14 +126,14 @@ public class ProfileEditActivity extends AppCompatActivity {
             // Store the selected image URI.
             imageUri = data.getData();
             // Set the selected image to the profile image view.
-            profileImageView.setImageURI(imageUri);
+            editProfileImageView.setImageURI(imageUri);
+            imageUpdate = Boolean.TRUE;
         }
     }
 
 
     private void setupSaveButton() {
         // Handle save button click event.
-        saveButton = findViewById(R.id.button_save_profile);
         saveButton.setOnClickListener(view -> saveProfileChanges());
     }
 
@@ -114,8 +147,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         String updatedEmail = editEmailEditText.getText().toString();
 
         //update the profile information in firebase.
-        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
-        pdc.setProfileImage(imageUri);
+        if (imageUpdate)
+            pdc.setProfileImage(imageUri);
         pdc.setProfileName(updatedProfileName);
         pdc.setProfilePhoneNumber(updatedPhoneNumber);
         pdc.setProfileEmail(updatedEmail);
@@ -136,13 +169,15 @@ public class ProfileEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
+        setContentView(R.layout.activity_profile_edit);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
+        pdc = new ProfileDatabaseControl(userID);
 
         initViews();
         setupBackButton();
+        fetchOriginalProfile();
         setupProfileImageEditor();
         setupSaveButton();
     }
