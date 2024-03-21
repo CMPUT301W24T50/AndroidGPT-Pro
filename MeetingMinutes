@@ -186,3 +186,38 @@ Next Meeting:
 - Tuesday March 19, 2024
 - Weekly TA/Client Meeting
 /*********************************/
+Internal Meeting - Sunday March 19, 2024
+
+Meeting Attendees:
+- Luke
+- Arturia
+- Paul
+- Yanze
+- Edward
+
+Agenda:
+Discuss Project Part 4, talking about the progress and questions 
+
+Discussion:
+Storing image in database
+QR code generation question 
+Sign in and check in
+
+TA Questions:
+- check in without sharing location
+- No need to sign up to check in
+- No need to generate a new qr code after creating the event
+- The qr codes have to be unique 
+- same string always makes the same qr code
+- The attendee can browsing all future events in the event list
+- Two places attendees can check notifications, inside app and notification bar
+- Attendees’ GeoLocation is not necessary to join any event, even if the organizer asks.
+- Validating the date when creating the event.
+
+
+
+
+Next Meeting:
+- Tuesday March 25, 2024
+- Weekly TA/Client Meeting
+/*********************************/
