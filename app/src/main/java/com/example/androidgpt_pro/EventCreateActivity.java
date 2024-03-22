@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,15 +20,17 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eTime;
     private String eDate;
     private String eDescription;
+    private Uri eImageURI;
 
 
     public void setupEvent(String eventName,
                            String eventLocationStreet,
                            String eventLocationCity,
                            String eventLocationProvince,
-                           String eventDescription,
                            String eventTime,
-                           String eventDate) {
+                           String eventDate,
+                           String eventDescription,
+                           Uri eventImageURI) {
         eName = eventName;
         eLocStreet = eventLocationStreet;
         eLocCity = eventLocationCity;
@@ -35,6 +38,7 @@ public class EventCreateActivity extends AppCompatActivity {
         eTime = eventTime;
         eDate = eventDate;
         eDescription = eventDescription;
+        eImageURI = eventImageURI;
     }
 
     public void newEvent() {
@@ -44,8 +48,8 @@ public class EventCreateActivity extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot docSns) {
                     String lastEventID = edc.getLastEventID(docSns);
                     eID = edc.updateEventStat(lastEventID);
-                    edc.initEvent(eID, eName, eLocStreet, eLocCity,
-                            eLocProvince, eTime, eDate, eDescription);
+                    edc.initEvent(eID, eName, eLocStreet, eLocCity, eLocProvince,
+                            eTime, eDate, eDescription, eImageURI);
                 }
             });
     }

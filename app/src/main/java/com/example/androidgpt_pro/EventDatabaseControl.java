@@ -74,7 +74,8 @@ public class EventDatabaseControl {
                           String eventLocationProvince,
                           String eventTime,
                           String eventDate,
-                          String eventDescription) {
+                          String eventDescription,
+                          Uri eventImageUri) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("eName", eventName);
         data.put("eLocStreet", eventLocationStreet);
@@ -86,6 +87,7 @@ public class EventDatabaseControl {
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         eColRef.document(eventID).set(data);
+        setEventImage(eventID, eventImageUri);
     }
 
 
@@ -317,7 +319,7 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eDescription", eventDescription);
     }
 
-    
+
     /**
      * This is a getter for Event Image.
      * @param eventID
@@ -339,11 +341,11 @@ public class EventDatabaseControl {
      * This is a setter for Event Image.
      * @param eventID
      * eventID: An ID of an event.
-     * @param eventImageUri
-     * eventImageUri: The URI of an image.
+     * @param eventImageURI
+     * eventImageURI: The URI of an image.
      */
-    public void setEventImage(String eventID, Uri eventImageUri) {
-        eStgRef.child(eventID).putFile(eventImageUri);
+    public void setEventImage(String eventID, Uri eventImageURI) {
+        eStgRef.child(eventID).putFile(eventImageURI);
     }
 
 
