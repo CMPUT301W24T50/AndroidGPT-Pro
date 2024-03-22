@@ -24,14 +24,6 @@ public class EventDatabaseControl {
     private DatabaseSynchronization ds;
     private DatabaseTools dt;
 
-    private String eLastEventID;
-    private String eID;
-    private String eName;
-    private String eLocation;
-    private String eSpfLocation;
-    private String eDescription;
-    private String eTime;
-    private String eDate;
     private ArrayList<String> eSignUpProfiles;
     private ArrayList<String> eCheckInProfiles;
 
@@ -53,31 +45,35 @@ public class EventDatabaseControl {
      * eventID: An ID of an event.
      * @param eventName
      * eventName: An event's name.
-     * @param eventLocation
-     * eventLocation: An event's location.
-     * @param eventSimplifiedLocation
-     * eventSimplifiedLocation: An event's simplified location.
-     * @param eventDescription
-     * eventDescription: An event's description.
+     * @param eventLocationStreet
+     * eventLocationStreet: An event's street location.
+     * @param eventLocationCity
+     * eventLocationCity: An event's city location.
+     * @param eventLocationProvince
+     * eventLocationProvince: An event's province location.
      * @param eventTime
      * eventTime: An event's time.
      * @param eventDate
      * eventDate: An event's date.
+     * @param eventDescription
+     * eventDescription: An event's description.
      */
     public void initEvent(String eventID,
                           String eventName,
-                          String eventLocation,
-                          String eventSimplifiedLocation,
-                          String eventDescription,
+                          String eventLocationStreet,
+                          String eventLocationCity,
+                          String eventLocationProvince,
                           String eventTime,
-                          String eventDate) {
+                          String eventDate,
+                          String eventDescription) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("eName", eventName);
-        data.put("eLocation", eventLocation);
-        data.put("eSpfLocation", eventSimplifiedLocation);
-        data.put("eDescription", eventDescription);
+        data.put("eLocStreet", eventLocationStreet);
+        data.put("eLocCity", eventLocationCity);
+        data.put("eLocProvince", eventLocationProvince);
         data.put("eTime", eventTime);
         data.put("eDate", eventDate);
+        data.put("eDescription", eventDescription);
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         eColRef.document(eventID).set(data);
@@ -176,71 +172,71 @@ public class EventDatabaseControl {
 
 
     /**
-     * This is a getter for Event Location.
+     * This is a getter for Event Street Location.
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
-     * @return eventLocation
-     * eventLocation: The location of the event.
+     * @return eventLocationStreet
+     * eventLocationStreet: The street location of the event.
      */
-    public String getEventLocation(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eLocation");
+    public String getEventLocationStreet(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eLocStreet");
     }
 
     /**
-     * This is a setter for Event Location.
+     * This is a setter for Event Street Location.
      * @param eventID
      * eventID: An ID of an event.
-     * @param eventLocation
-     * eventLocation: An event's location.
+     * @param eventLocationStreet
+     * eventLocationStreet: An event's street location.
      */
-    public void setEventLocation(String eventID, String eventLocation) {
-        eColRef.document(eventID).update("eLocation", eventLocation);
+    public void setEventLocationStreet(String eventID, String eventLocationStreet) {
+        eColRef.document(eventID).update("eLocStreet", eventLocationStreet);
     }
 
 
     /**
-     * This is a getter for Event Simplified Location.
+     * This is a getter for Event City Location.
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
-     * @return eventSimplifiedLocation
-     * eventSimplifiedLocation: The simplified location of the event.
+     * @return eventLocationCity
+     * eventLocationCity: The city location of the event.
      */
-    public String getEventSimplifiedLocation(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eSpfLocation");
+    public String getEventLocationCity(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eLocCity");
     }
 
     /**
-     * This is a setter for Event Simplified Location.
+     * This is a setter for Event City Location.
      * @param eventID
      * eventID: An ID of an event.
-     * @param eventSimplifiedLocation
-     * eventSimplifiedLocation: An event's simplified location.
+     * @param eventLocationCity
+     * eventLocationCity: An event's city location.
      */
-    public void setEventSimplifiedLocation(String eventID, String eventSimplifiedLocation) {
-        eColRef.document(eventID).update("eSpfLocation", eventSimplifiedLocation);
+    public void setEventLocationCity(String eventID, String eventLocationCity) {
+        eColRef.document(eventID).update("eLocCity", eventLocationCity);
     }
 
 
     /**
-     * This is a getter for Event Description.
+     * This is a getter for Event Province Location.
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
-     * @return eventDescription
-     * eventDescription: The description of the event.
+     * @return eventLocationProvince
+     * eventLocationProvince: The province location of the event.
      */
-    public String getEventDescription(DocumentSnapshot eventDocumentSnapshot) {
-        return eventDocumentSnapshot.getString("eDescription");
+    public String getEventLocationProvince(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eLocProvince");
     }
 
     /**
-     * This is a setter for Event Description.
+     * This is a setter for Event Province Location.
      * @param eventID
      * eventID: An ID of an event.
-     * @param eventDescription
-     * eventDescription: An event's description.
+     * @param eventLocationProvince
+     * eventLocationProvince: An event's province location.
      */
-    public void setEventDescription(String eventID, String eventDescription) {
-        eColRef.document(eventID).update("eDescription", eventDescription);
+    public void setEventLocationProvince(String eventID, String eventLocationProvince) {
+        eColRef.document(eventID).update("eLocProvince", eventLocationProvince);
     }
 
 
@@ -287,6 +283,29 @@ public class EventDatabaseControl {
      */
     public void setEventDate(String eventID, String eventDate) {
         eColRef.document(eventID).update("eDate", eventDate);
+    }
+
+
+    /**
+     * This is a getter for Event Description.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventDescription
+     * eventDescription: The description of the event.
+     */
+    public String getEventDescription(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eDescription");
+    }
+
+    /**
+     * This is a setter for Event Description.
+     * @param eventID
+     * eventID: An ID of an event.
+     * @param eventDescription
+     * eventDescription: An event's description.
+     */
+    public void setEventDescription(String eventID, String eventDescription) {
+        eColRef.document(eventID).update("eDescription", eventDescription);
     }
 
 

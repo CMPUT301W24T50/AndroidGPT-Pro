@@ -12,13 +12,30 @@ public class EventCreateActivity extends AppCompatActivity {
     private EventDatabaseControl edc;
 
     private String eID;
-    private String eventName;
-    private String eventLocation;
-    private String eventSimplifiedLocation;
-    private String eventDescription;
-    private String eventTime;
-    private String eventDate;
+    private String eName;
+    private String eLocStreet;
+    private String eLocCity;
+    private String eLocProvince;
+    private String eTime;
+    private String eDate;
+    private String eDescription;
 
+
+    public void setupEvent(String eventName,
+                           String eventLocationStreet,
+                           String eventLocationCity,
+                           String eventLocationProvince,
+                           String eventDescription,
+                           String eventTime,
+                           String eventDate) {
+        eName = eventName;
+        eLocStreet = eventLocationStreet;
+        eLocCity = eventLocationCity;
+        eLocProvince = eventLocationProvince;
+        eTime = eventTime;
+        eDate = eventDate;
+        eDescription = eventDescription;
+    }
 
     public void newEvent() {
         edc.getEventStat()
@@ -27,8 +44,8 @@ public class EventCreateActivity extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot docSns) {
                     String lastEventID = edc.getLastEventID(docSns);
                     eID = edc.updateEventStat(lastEventID);
-                    edc.initEvent(eID, eventName, eventLocation, eventSimplifiedLocation,
-                            eventDescription, eventTime, eventDate);
+                    edc.initEvent(eID, eName, eLocStreet, eLocCity,
+                            eLocProvince, eTime, eDate, eDescription);
                 }
             });
     }

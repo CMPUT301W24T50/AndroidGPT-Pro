@@ -39,7 +39,8 @@ public class EventActivity extends AppCompatActivity {
                     eID = edc.updateEventStat(lastEventID);
                     edc.initEvent(eID, "Sample Event",
                             "123 Main St",
-                            "Edmonton, AB",
+                            "Edmonton",
+                            "AB",
                             "This is a sample event.",
                             "8:00 PM",
                             "April 10, 2024");
