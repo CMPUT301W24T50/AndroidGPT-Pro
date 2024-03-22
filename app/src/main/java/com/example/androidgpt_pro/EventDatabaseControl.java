@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -9,7 +10,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -20,7 +25,9 @@ import java.util.Objects;
 public class EventDatabaseControl {
 
     private FirebaseFirestore db;
+    private FirebaseStorage st;
     private CollectionReference eColRef;
+    private StorageReference eStgRef;
     private DatabaseSynchronization ds;
     private DatabaseTools dt;
 
@@ -34,6 +41,8 @@ public class EventDatabaseControl {
     public EventDatabaseControl() {
         db = FirebaseFirestore.getInstance();
         eColRef = db.collection("Event");
+        st = FirebaseStorage.getInstance();
+        eStgRef = st.getReference().child("Event");
         ds = new DatabaseSynchronization();
         dt = new DatabaseTools();
     }
@@ -93,7 +102,7 @@ public class EventDatabaseControl {
     /**
      * This is a getter for a snapshot of the EventStat.
      * @return eventStatSnapshotGetTask
-     * eventStatSnapshotGetTask: A task for get the DocumentSnapshot.
+     * eventStatSnapshotGetTask: A task for getting eventStatSnapshot.
      */
     public Task<DocumentSnapshot> getEventStat() {
         return eColRef.document("00000000").get();
@@ -308,6 +317,35 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eDescription", eventDescription);
     }
 
+    
+    /**
+     * This is a getter for Event Image.
+     * @param eventID
+     * eventID: An ID of an event.
+     * @return eventImageGetTask
+     * eventImageGetTask: A task for getting eventImage.
+     */
+    public Task<Uri> getEventImage(String eventID) {
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("E" + eventID, "jpg");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return eStgRef.child(eventID).getDownloadUrl();
+    }
+
+    /**
+     * This is a setter for Event Image.
+     * @param eventID
+     * eventID: An ID of an event.
+     * @param eventImageUri
+     * eventImageUri: The URI of an image.
+     */
+    public void setEventImage(String eventID, Uri eventImageUri) {
+        eStgRef.child(eventID).putFile(eventImageUri);
+    }
+
 
     /**
      * This is a getter for Event SignUp Profiles.
@@ -350,7 +388,8 @@ public class EventDatabaseControl {
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
      * @return eventCheckInProfiles
-     * eventCheckInProfiles: A "2D Array" list of profileID and count, list[0][0] == "-1" if no profiles.
+     * eventCheckInProfiles: A "2D Array" list of profileID and count,
+     * list[0][0] == "-1" if no profiles.
      */
     public String[][] getEventAllCheckInProfiles(DocumentSnapshot eventDocumentSnapshot) {
         if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null) {
@@ -396,14 +435,17 @@ public class EventDatabaseControl {
                 if (Objects.equals(count, "-1")) {
                     count = "00000001";
                     String data = dt.constructIDCountString(profileID, count);
-                    eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(data));
+                    eColRef.document(eventID).update("eCheckInProfiles",
+                            FieldValue.arrayUnion(data));
                     ds.newCheckInProfileEvent(profileID, eventID, count);
                 } else {
                     String data = dt.constructIDCountString(profileID, count);
                     String nextCount = dt.calculateAddOne(count);
                     String nextData = dt.constructIDCountString(profileID, nextCount);
-                    eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayRemove(data));
-                    eColRef.document(eventID).update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
+                    eColRef.document(eventID).update("eCheckInProfiles",
+                            FieldValue.arrayRemove(data));
+                    eColRef.document(eventID).update("eCheckInProfiles",
+                            FieldValue.arrayUnion(nextData));
                     ds.addCheckInProfileEvent(profileID, eventID, count, nextCount);
                 }
             }
