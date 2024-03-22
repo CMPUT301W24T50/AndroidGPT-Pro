@@ -29,29 +29,30 @@ public class EventActivity extends AppCompatActivity {
     private String eID;
 
     private void createSampleEvent() {
-        EventDatabaseControl edc = new EventDatabaseControl();
-        // We're going to add a hardcoded ID for demonstration purposes
-        edc.getEventStat()
-            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot docSns) {
-                    String lastEventID = edc.getLastEventID(docSns);
-                    eID = edc.updateEventStat(lastEventID);
-                    edc.initEvent(eID, "Sample Event",
-                            "123 Main St",
-                            "Edmonton, AB",
-                            "This is a sample event.",
-                            "8:00 PM",
-                            "April 10, 2024");
-                    EventCard card = new EventCard("Sample Event",
-                            "8:00 PM",
-                            "April 10, 2024",
-                            "Edmonton, AB",
-                            R.drawable.partyimage1);
-                    adapter.add(card);
-                    adapter.notifyDataSetChanged();
-                }
-            });
+//        EventDatabaseControl edc = new EventDatabaseControl();
+//        // We're going to add a hardcoded ID for demonstration purposes
+//        edc.getEventStat()
+//            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                @Override
+//                public void onSuccess(DocumentSnapshot docSns) {
+//                    String lastEventID = edc.getLastEventID(docSns);
+//                    eID = edc.updateEventStat(lastEventID);
+//                    edc.initEvent(eID, "Sample Event",
+//                            "123 Main St",
+//                            "Edmonton",
+//                            "AB",
+//                            "This is a sample event.",
+//                            "8:00 PM",
+//                            "April 10, 2024");
+//                    EventCard card = new EventCard("Sample Event",
+//                            "8:00 PM",
+//                            "April 10, 2024",
+//                            "Edmonton, AB",
+//                            R.drawable.partyimage1);
+//                    adapter.add(card);
+//                    adapter.notifyDataSetChanged();
+//                }
+//            });
     }
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState){
