@@ -48,8 +48,9 @@ public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
                 @Override
                 public void onSuccess(DocumentSnapshot docSns) {
                     eventName.setText(edc.getEventName(docSns));
-                    eventLocationApt.setText(edc.getEventLocation(docSns));
-                    eventLocationCity.setText(edc.getEventSimplifiedLocation(docSns));
+                    eventLocationApt.setText(edc.getEventLocationStreet(docSns));
+                    eventLocationCity.setText(edc.getEventLocationCity(docSns)
+                            + ", " + edc.getEventLocationProvince(docSns));
                     eventDescription.setText(edc.getEventDescription(docSns));
                     eventDate.setText(edc.getEventTime(docSns));
                 }

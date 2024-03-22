@@ -78,8 +78,9 @@ public class EventDetailActivity extends AppCompatActivity{
                 }
                 eventNameTextView.setText(edc.getEventName(docSns));
                 eventDateTextView.setText(edc.getEventTime(docSns));
-                eventLocationAptTextView.setText(edc.getEventLocation(docSns));
-                eventLocationCityTextView.setText(edc.getEventSimplifiedLocation(docSns));
+                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
+                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns)
+                        + ", " + edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
             }
         });
