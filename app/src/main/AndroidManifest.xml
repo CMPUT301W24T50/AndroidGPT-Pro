@@ -22,10 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OpeningScreenActivity"
-            android:exported="true">
-        </activity>
-        <activity
             android:name=".ProfileActivity"
             android:exported="true">
         </activity>

@@ -13,6 +13,7 @@ public class EventCard {
     private String eventDate;
     private String eventLocation;
     private int imageId;
+    private Boolean signedUp;
 
     /**
      * Constructor for the EventCard class
@@ -26,13 +27,16 @@ public class EventCard {
      * String location of the event
      * @param imageId
      * int ID of the image to be used as the poster
+     * @param signedUp
+     * Boolean true if user has signed up for the event
      */
-    public EventCard(String eventName, String eventTime, String eventDate, String eventLocation, int imageId) {
+    public EventCard(String eventName, String eventTime, String eventDate, String eventLocation, int imageId, Boolean signedUp) {
         this.eventName = eventName;
         this.eventTime = eventTime;
         this.eventDate = eventDate;
         this.eventLocation = eventLocation;
         this.imageId = imageId;
+        this.signedUp = signedUp;
     }
 
     /**
@@ -118,5 +122,22 @@ public class EventCard {
      */
     public void setImageId(int imageId) {
         this.imageId = imageId;
+    }
+
+    /**
+     * Getter for user sign up status
+     * @return Boolean signedUp
+     */
+    public Boolean getSignedUp() {
+        return signedUp;
+    }
+
+    /**
+     * Setter for signedUp value
+     * @param signedUp
+     * Boolean value if user has signed up for this event
+     */
+    public void setSignedUp(Boolean signedUp) {
+        this.signedUp = signedUp;
     }
 }

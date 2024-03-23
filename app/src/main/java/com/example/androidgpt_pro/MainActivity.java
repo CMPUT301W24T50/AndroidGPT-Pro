@@ -41,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot doc = task.getResult();
                     Intent intent;
-                    if (doc.exists()) {
-                        intent = new Intent(MainActivity.this, ProfileActivity.class);
-                    } else {
-                        // Redirect to Opening Screen (Choose Role)
-                        intent = new Intent(MainActivity.this, OpeningScreenActivity.class);
+                    if (!doc.exists()){
+                        pdc.initProfile("user");
                     }
+                    intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra("userID", uniqueID);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                 }
             }
         });
