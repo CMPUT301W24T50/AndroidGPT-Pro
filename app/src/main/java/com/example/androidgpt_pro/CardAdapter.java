@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,6 +66,10 @@ public class CardAdapter extends ArrayAdapter<EventCard> {
         holder.eventTime.setText(card.getEventTime());
         holder.eventDate.setText(card.getEventDate());
         holder.eventLocation.setText(card.getEventLocation());
+        if (!card.getSignedUp()) {
+            holder.signedUpCheck.setVisibility(View.INVISIBLE);
+            holder.signedUpText.setVisibility(View.INVISIBLE);
+        }
 
         return convertView;
     }
@@ -78,6 +83,8 @@ public class CardAdapter extends ArrayAdapter<EventCard> {
         TextView eventTime;
         TextView eventDate;
         TextView eventLocation;
+        CheckBox signedUpCheck;
+        TextView signedUpText;
 
         /**
          * Constructor for the ViewHolder class
@@ -90,6 +97,8 @@ public class CardAdapter extends ArrayAdapter<EventCard> {
             eventTime = view.findViewById(R.id.event_time);
             eventDate = view.findViewById(R.id.event_date);
             eventLocation = view.findViewById(R.id.event_location);
+            signedUpCheck = view.findViewById(R.id.signed_up_check);
+            signedUpText = view.findViewById(R.id.signed_up_text);
         }
     }
 }

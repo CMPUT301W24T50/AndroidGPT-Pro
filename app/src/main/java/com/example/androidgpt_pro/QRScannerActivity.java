@@ -70,15 +70,21 @@ public class QRScannerActivity extends ComponentActivity {
                 if (itemId == R.id.events_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else {
                     throw new IllegalArgumentException("menu item ID does not exist");
                 }
