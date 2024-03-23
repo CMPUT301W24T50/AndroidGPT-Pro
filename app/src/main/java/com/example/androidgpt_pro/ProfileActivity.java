@@ -89,7 +89,9 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this,
                         ProfileEditActivity.class);
                 intent.putExtra("userID", userID);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
     }
@@ -129,17 +131,23 @@ public class ProfileActivity extends AppCompatActivity {
                     Intent newIntent = new Intent(ProfileActivity.this,
                                                   EventActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(ProfileActivity.this,
                                                   QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
                     Intent newIntent = new Intent(ProfileActivity.this,
                                                   ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else {
                     throw new IllegalArgumentException("menu item ID does not exist");
                 }

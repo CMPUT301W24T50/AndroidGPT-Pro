@@ -57,7 +57,9 @@ public class ProfileEditActivity extends AppCompatActivity {
                 Intent newIntent = new Intent(ProfileEditActivity.this,
                                               ProfileActivity.class);
                 newIntent.putExtra("userID", userID);
+                newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(newIntent);
+                overridePendingTransition(0,0);
             }
         });
     }

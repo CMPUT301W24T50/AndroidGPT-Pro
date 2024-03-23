@@ -48,7 +48,8 @@ public class EventActivity extends AppCompatActivity {
 //                            "8:00 PM",
 //                            "April 10, 2024",
 //                            "Edmonton, AB",
-//                            R.drawable.partyimage1);
+//                            R.drawable.partyimage1,
+//                            false);
 //                    adapter.add(card);
 //                    adapter.notifyDataSetChanged();
 //                }
@@ -60,14 +61,19 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.event_list);
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
 
         listViewEvents = (ListView) findViewById(R.id.event_list_view);
         adapter = new CardAdapter(this);
         listViewEvents.setAdapter(adapter);
 
-//        EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1);
-//        adapter.add(card);
-//        adapter.notifyDataSetChanged();
+        // Sample cards made by Luke just for testing. Not communicating with db
+        EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,false);
+        adapter.add(card);
+        EventCard card2 = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,true);
+        adapter.add(card2);
+        
+        adapter.notifyDataSetChanged();
         createSampleEvent();
 
         // handle click action
@@ -93,15 +99,21 @@ public class EventActivity extends AppCompatActivity {
                 if (itemId == R.id.events_tab) {
                     Intent newIntent = new Intent(EventActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(EventActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
                     Intent newIntent = new Intent(EventActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else {
                     throw new IllegalArgumentException("menu item ID does not exist");
                 }
