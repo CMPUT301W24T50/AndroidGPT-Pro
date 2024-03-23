@@ -1,7 +1,13 @@
 package com.example.androidgpt_pro;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +27,16 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eDate;
     private String eDescription;
     private Uri eImageURI;
+    private EditText eventNameEditText;
+    private EditText eventDateEditText;
+    private EditText eventLocationAddressEditText;
+    private EditText eventLocationCityEditText;
+    private EditText eventLocationProvinceEditText;
+    private Button eventSelectTime;
+    private Switch geoLcationTracking;
+    private Button eventSelectPicButton;
+    private Button eventConfirm;
+    private ImageButton backButton;
 
 
     public void setupEvent(String eventName,
@@ -41,6 +57,29 @@ public class EventCreateActivity extends AppCompatActivity {
         eImageURI = eventImageURI;
     }
 
+    private void setupBackButton() {
+        backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+        });
+    }
+
+    private void initViews(){
+        // Initialize views.
+        eventNameEditText = findViewById(R.id.edit_event_name);
+        eventDateEditText = findViewById(R.id.edit_event_date);
+        eventLocationAddressEditText = findViewById(R.id.edit_street_address);
+        eventLocationCityEditText = findViewById(R.id.edit_city_address);
+        eventLocationProvinceEditText = findViewById(R.id.edit_province_address);
+        eventSelectTime = findViewById(R.id.edit_event_time);
+        eventSelectPicButton = findViewById(R.id.select_pic);
+        eventConfirm = findViewById(R.id.confirm_create_event);
+        backButton = findViewById(R.id.back_button);
+
+    }
+
     public void newEvent() {
         edc.getEventStat()
             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -57,7 +96,8 @@ public class EventCreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_create_event);
         edc = new EventDatabaseControl();
+        initViews();
     }
 }
