@@ -161,37 +161,37 @@
                     android:textSize="16sp"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-                <TextView
-                    android:id="@+id/qr_code_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/geo_location_switch"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:checked="false"
-                    android:text="QR Code"
-                    android:textSize="16sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/qr_code_title"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/geo_location_switch"-->
+<!--                    android:layout_alignParentStart="true"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:checked="false"-->
+<!--                    android:text="QR Code"-->
+<!--                    android:textSize="16sp" />-->
 
-                <ImageView
-                    android:id="@+id/qr_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/qr_code_title"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:padding="30dp"
-                    android:src="@drawable/qr_scan_icon" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/qr_code"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/qr_code_title"-->
+<!--                    android:layout_alignParentStart="true"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:padding="30dp"-->
+<!--                    android:src="@drawable/qr_scan_icon" />-->
 
                 <TextView
                     android:id="@+id/poster_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/qr_code"
+                    android:layout_below="@id/geo_location_switch"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"

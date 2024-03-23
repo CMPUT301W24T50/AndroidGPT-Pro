@@ -32,6 +32,7 @@ public class EventQRActivity extends AppCompatActivity {
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
     private TextView eventLocationCityTextView;
+    private TextView eventLocationProvinceTextView;
     private TextView eventDescription;
     private ImageButton backButton;
     private Button signUpButton;
@@ -59,10 +60,11 @@ public class EventQRActivity extends AppCompatActivity {
         //Initialize views
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
-        eventLocationAptTextView = findViewById(R.id.event_location1);
-        eventLocationCityTextView = findViewById(R.id.event_location2);
+        eventLocationAptTextView = findViewById(R.id.event_location_street_name);
+        eventLocationCityTextView = findViewById(R.id.event_location_city);
+        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         eventDescription = findViewById(R.id.event_description);
-
+        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         signUpButton = findViewById(R.id.btn_sign_up);
         signUpButton.setVisibility(View.GONE);
         withdrawButton = findViewById(R.id.btn_withdraw);
@@ -80,8 +82,8 @@ public class EventQRActivity extends AppCompatActivity {
                 eventNameTextView.setText(edc.getEventName(docSns));
                 eventDateTextView.setText(edc.getEventTime(docSns));
                 eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
-                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns)
-                        + ", " + edc.getEventLocationProvince(docSns));
+                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
+                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
             }
         });
