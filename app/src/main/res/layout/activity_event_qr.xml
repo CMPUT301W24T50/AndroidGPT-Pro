@@ -34,24 +34,35 @@
         android:layout_marginLeft="16dp"/>
 
     <TextView
-        android:id="@+id/event_location1"
+        android:id="@+id/event_location_street_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address1(apt/street name)"
+        android:text="Address(street name)"
         android:textSize="18sp"
         android:layout_below="@id/event_date"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="16dp"/>
 
     <TextView
-        android:id="@+id/event_location2"
+        android:id="@+id/event_location_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address2(city/province)"
+        android:text="Address2(city)"
         android:textSize="18sp"
-        android:layout_below="@id/event_location1"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/event_location_street_name"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="16dp"/>
+
+    <TextView
+        android:id="@+id/event_location_province"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address2(province)"
+        android:textSize="18sp"
+        android:layout_below="@id/event_location_city"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="16dp"/>
+
 
     <TextView
         android:id="@+id/event_description_title"
@@ -59,7 +70,7 @@
         android:layout_height="wrap_content"
         android:text="Event Detail"
         android:textSize="18sp"
-        android:layout_below="@id/event_location2"
+        android:layout_below="@id/event_location_province"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="16dp"/>
 

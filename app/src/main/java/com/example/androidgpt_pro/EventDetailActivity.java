@@ -32,6 +32,7 @@ public class EventDetailActivity extends AppCompatActivity{
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
     private TextView eventLocationCityTextView;
+    private TextView eventLocationProvinceTextView;
     private TextView eventDescription;
     private String eventID;
     private String userID;
@@ -59,8 +60,9 @@ public class EventDetailActivity extends AppCompatActivity{
         //Initialize views
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
-        eventLocationAptTextView = findViewById(R.id.event_location1);
-        eventLocationCityTextView = findViewById(R.id.event_location2);
+        eventLocationAptTextView = findViewById(R.id.event_location_street_name);
+        eventLocationCityTextView = findViewById(R.id.event_location_city);
+        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         eventDescription = findViewById(R.id.event_description);
         signUpButton = findViewById(R.id.btn_sign_up);
         signUpButton.setVisibility(View.GONE);
@@ -79,8 +81,8 @@ public class EventDetailActivity extends AppCompatActivity{
                 eventNameTextView.setText(edc.getEventName(docSns));
                 eventDateTextView.setText(edc.getEventTime(docSns));
                 eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
-                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns)
-                        + ", " + edc.getEventLocationProvince(docSns));
+                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
+                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
             }
         });
