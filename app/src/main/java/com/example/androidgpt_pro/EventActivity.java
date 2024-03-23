@@ -67,10 +67,12 @@ public class EventActivity extends AppCompatActivity {
         adapter = new CardAdapter(this);
         listViewEvents.setAdapter(adapter);
 
+        // Sample cards made by Luke just for testing. Not communicating with db
         EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,false);
         adapter.add(card);
         EventCard card2 = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,true);
         adapter.add(card2);
+        
         adapter.notifyDataSetChanged();
         createSampleEvent();
 
