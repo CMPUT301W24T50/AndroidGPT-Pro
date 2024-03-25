@@ -12,6 +12,7 @@
         android:layout_margin="16dp">
     </ImageButton>
 
+    <!-- Reference: https://stackoverflow.com/a/35287222 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_edit_profile_image"
         android:layout_width="120dp"
