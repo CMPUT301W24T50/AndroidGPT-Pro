@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageView editProfileImageView;
+    private TextView editProfileImageText;
     private EditText editProfileNameEditText;
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
@@ -42,7 +44,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void initViews() {
         // Initialize views.
         backButton = findViewById(R.id.back_button);
-        editProfileImageView = findViewById(R.id.image_edit_profile_picture);
+        editProfileImageView = findViewById(R.id.iv_edit_profile_image);
+        editProfileImageText = findViewById(R.id.tv_edit_profile_image);
         editProfileNameEditText = findViewById(R.id.edit_text_edit_profile_name);
         editPhoneNumberEditText = findViewById(R.id.edit_text_edit_phone_number);
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
@@ -92,6 +95,12 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void setupProfileImageEditor() {
         // Set click listener for profile image.
         editProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+        editProfileImageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
