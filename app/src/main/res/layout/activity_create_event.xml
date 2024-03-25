@@ -216,7 +216,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Select Posters" />
+                    android:text="Select a Poster" />
 
                 <TextView
                     android:id="@+id/selected_pic"
@@ -226,23 +226,23 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="4sp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/upload_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/selected_pic"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:enabled="false"
-                    android:text="Upload Posters" />
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/upload_pic"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/select_pic"-->
+<!--                    android:layout_alignParentStart="true"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:enabled="false"-->
+<!--                    android:text="Upload a Poster" />-->
 
                 <TextView
                     android:id="@+id/event_description_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/upload_pic"
+                    android:layout_below="@id/selected_pic"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
