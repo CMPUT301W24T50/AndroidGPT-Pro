@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -44,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initViews() {
         // Initialize views.
-        pImageView = findViewById(R.id.image_profile_picture);
+        pImageView = findViewById(R.id.iv_profile_image);
         pNameTextView = findViewById(R.id.text_profile_name);
         pPhoneNumberTextView = findViewById(R.id.text_phone_number);
         pEmailTextView = findViewById(R.id.text_email);
@@ -56,11 +57,12 @@ public class ProfileActivity extends AppCompatActivity {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                if (uri != null) {
-                    Picasso.get().load(uri).into(pImageView);
-                } else {
-                    pImageView.setImageResource(android.R.drawable.sym_def_app_icon);
-                }
+                Picasso.get().load(uri).into(pImageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                pImageView.setImageResource(android.R.drawable.sym_def_app_icon);
             }
         });
     }
