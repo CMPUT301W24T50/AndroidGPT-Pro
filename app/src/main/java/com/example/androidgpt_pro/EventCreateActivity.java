@@ -94,7 +94,7 @@ public class EventCreateActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        int style = AlertDialog.THEME_HOLO_LIGHT;
+        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -156,7 +156,7 @@ public class EventCreateActivity extends AppCompatActivity {
             }
         };
 
-        int style = AlertDialog.THEME_HOLO_DARK;
+        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour, minute, true);
 
