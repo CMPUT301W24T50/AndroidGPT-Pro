@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -14,8 +15,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,9 +59,11 @@ public class EventCreateActivity extends AppCompatActivity {
     private EditText eventDescriptionEditText;
     private Switch geoLcationTracking;
     private Button eventSelectPicButton;
-    private Button eventConfirm;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private TextView selectedPicHint;
     private ImageButton backButton;
     private DatePickerDialog datePickerDialog;
+    private Button eventConfirm;
 
     private void initViews() {
         // Initialize views.
@@ -64,10 +74,10 @@ public class EventCreateActivity extends AppCompatActivity {
         eventLocationProvinceEditText = findViewById(R.id.edit_province_address);
         eventTimeEditButton = findViewById(R.id.edit_event_time);
         eventSelectPicButton = findViewById(R.id.select_pic);
-        eventConfirm = findViewById(R.id.confirm_create_event);
+        selectedPicHint = findViewById(R.id.selected_pic);
         backButton = findViewById(R.id.back_button);
         eventDescriptionEditText = findViewById(R.id.edit_event_description);
-
+        eventConfirm = findViewById(R.id.confirm_create_event);
     }
 
     private void setupBackButton() {
@@ -164,6 +174,41 @@ public class EventCreateActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+//                PICK_IMAGE_REQUEST);
+    }
+
+    /**
+     * This is a method to handle the result of image selection.
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
+            // Store the selected image URI.
+            eImageURI = data.getData();
+            // Set the selected image to the profile image view.
+            eventSelectPicButton.setText("Change Poster");
+            selectedPicHint.setText("You Have Uploaded a Poster!");
+        }
+    }
+
+
 
     public void setupEvent() {
         eName = eventNameEditText.getText().toString();
@@ -183,9 +228,15 @@ public class EventCreateActivity extends AppCompatActivity {
         // handel eventDescription
         eDescription = eventDescriptionEditText.getText().toString();
 
-//        eImageURI = eventImageURI;
-    }
+        // handel eventPoster
+        eventSelectPicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
 
+        });
+    }
 
     public void newEvent() {
         edc.getEventStat()
@@ -205,7 +256,20 @@ public class EventCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
         edc = new EventDatabaseControl();
-
         initViews();
+        setupEvent();
+
+        eventConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create a new event
+                newEvent();
+
+                // jump to next page
+                Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
+                newIntent.putExtra("eventID", eID);
+                startActivity(newIntent);
+            }
+        });
     }
 }
