@@ -31,7 +31,6 @@ import com.squareup.picasso.Picasso;
 public class ProfileActivity extends AppCompatActivity {
 
     private String userID;
-
     private ProfileDatabaseControl pdc;
 
     BottomNavigationView navigationTabs;
@@ -58,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(pImageView);
+                pdc.resetProfileImageUpdatedState();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -77,10 +77,8 @@ public class ProfileActivity extends AppCompatActivity {
                 pPhoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
-                if (pdc.getProfileImageUpdatedState(docSns)) {
+                if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
-                    pdc.resetProfileImageUpdatedState();
-                }
             }
         });
     }
@@ -95,9 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this,
                         ProfileEditActivity.class);
                 intent.putExtra("userID", userID);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-                overridePendingTransition(0,0);
             }
         });
     }
