@@ -77,6 +77,10 @@ public class ProfileActivity extends AppCompatActivity {
                 pPhoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
+                if (pdc.getProfileImageUpdatedState(docSns)) {
+                    displayProfileImage();
+                    pdc.resetProfileImageUpdatedState();
+                }
             }
         });
     }

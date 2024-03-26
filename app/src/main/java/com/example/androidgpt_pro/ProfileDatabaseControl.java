@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +72,7 @@ public class ProfileDatabaseControl {
         data.put("pGLTState", pGLTState);
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
+        data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
     }
 
@@ -179,6 +181,24 @@ public class ProfileDatabaseControl {
 
 
     /**
+     * This is a getter for Profile Image Updated State.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileImageUpdatedState
+     * profileImageUpdatedState: A state of Image Updated.
+     */
+    public Boolean getProfileImageUpdatedState(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getBoolean("pImageUpdated");
+    }
+
+    /**
+     * This is a reset function for Profile Image Updated State.
+     */
+    public void resetProfileImageUpdatedState() {
+        pDocRef.update("pImageUpdated", Boolean.FALSE);
+    }
+
+    /**
      * This is a getter for Profile Image.
      * @return profileImageGetTask
      * profileImageGetTask: A task for getting profileImage.
@@ -199,7 +219,14 @@ public class ProfileDatabaseControl {
      * profileImageURI: The URI of an image.
      */
     public void setProfileImage(Uri profileImageURI) {
-        pStgRef.child(pID).putFile(profileImageURI);
+        pStgRef.child(pID)
+                .putFile(profileImageURI)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                pDocRef.update("pImageUpdated", Boolean.TRUE);
+            }
+        });
     }
 
 
