@@ -20,16 +20,19 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class EventQRActivity extends AppCompatActivity {
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     private String eventID;
     private String userID;
+    private String userOp;
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
     private TextView eventLocationCityTextView;
+    private TextView eventLocationProvinceTextView;
     private TextView eventDescription;
     private ImageButton backButton;
     private Button signUpButton;
@@ -50,15 +53,18 @@ public class EventQRActivity extends AppCompatActivity {
         Intent intent = getIntent();
         eventID = intent.getStringExtra("eventID");
         userID = intent.getStringExtra("userID");
+        userOp = intent.getStringExtra("userOp");
         EventDatabaseControl edc = new EventDatabaseControl();
         ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
 
         //Initialize views
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
-        eventLocationAptTextView = findViewById(R.id.event_location1);
-        eventLocationCityTextView = findViewById(R.id.event_location2);
+        eventLocationAptTextView = findViewById(R.id.event_location_street_name);
+        eventLocationCityTextView = findViewById(R.id.event_location_city);
+        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         eventDescription = findViewById(R.id.event_description);
+        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         signUpButton = findViewById(R.id.btn_sign_up);
         signUpButton.setVisibility(View.GONE);
         withdrawButton = findViewById(R.id.btn_withdraw);
@@ -75,15 +81,15 @@ public class EventQRActivity extends AppCompatActivity {
                 }
                 eventNameTextView.setText(edc.getEventName(docSns));
                 eventDateTextView.setText(edc.getEventTime(docSns));
-                eventLocationAptTextView.setText(edc.getEventLocation(docSns));
-                eventLocationCityTextView.setText(edc.getEventSimplifiedLocation(docSns));
+                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
+                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
+                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
             }
         });
 
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,9 +97,18 @@ public class EventQRActivity extends AppCompatActivity {
             }
         });
 
+        if (Objects.equals(userOp, "SignUp")) {
+            eventSignUp();
+        } else {
+            eventCheckIn();
+        }
     }
-
+    /**
+     * After scan the sign up qr code, the code leads user to signup page
+     */
     public void eventSignUp() {
+
+        // check if the user has sign up the event
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
@@ -111,8 +126,8 @@ public class EventQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pdc.addProfileSignUpEvent(eventID);
-                signUpButton.setVisibility(View.GONE);
                 withdrawButton.setVisibility(View.VISIBLE);
+                signUpButton.setVisibility(View.GONE);
                 signUpSuccess();
             }
         });
@@ -122,19 +137,23 @@ public class EventQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pdc.delProfileSignUpEvent(userID);
-                withdrawButton.setVisibility(View.GONE);
                 signUpButton.setVisibility(View.VISIBLE);
+                withdrawButton.setVisibility(View.GONE);
                 withdrawSuccess();
             }
         });
     }
-
+    /**
+     * After scan the check in qr code, the code leads user to check in page
+     */
     public void eventCheckIn() {
         checkInButton.setVisibility(View.VISIBLE);
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pdc.addProfileCheckInEvent(eventID);
+                withdrawButton.setVisibility(View.VISIBLE);
+                checkInSuccess();
 
             }
         });
@@ -163,6 +182,26 @@ public class EventQRActivity extends AppCompatActivity {
     private void withdrawSuccess() {
         dialog = new Dialog(EventQRActivity.this);
         dialog.setContentView(R.layout.withdraw_success_content);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
+        dialog.setCancelable(false);
+        backToQRScanner = dialog.findViewById(R.id.back_QR_button);
+
+        backToQRScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(EventQRActivity.this, QRScannerActivity.class);
+                newIntent.putExtra("userID", userID);
+                newIntent.putExtra("eventID", eventID);
+                startActivity(newIntent);
+            }
+        });
+        dialog.show();
+    }
+
+    private void checkInSuccess(){
+        dialog = new Dialog(EventQRActivity.this);
+        dialog.setContentView(R.layout.check_in_success_content);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
         dialog.setCancelable(false);

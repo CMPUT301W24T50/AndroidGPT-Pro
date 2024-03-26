@@ -1,7 +1,7 @@
 package com.example.androidgpt_pro;
 
 /**
- *
+ * This is a class that contains database tools.
  */
 public class DatabaseTools {
 
