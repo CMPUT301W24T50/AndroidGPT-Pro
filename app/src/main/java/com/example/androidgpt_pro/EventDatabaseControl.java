@@ -410,9 +410,8 @@ public class EventDatabaseControl {
     private String getEventCheckInProfileCount(DocumentSnapshot eventDocumentSnapshot,
                                              String profileID) {
         Log.d("Testo", eventDocumentSnapshot.get("eCheckInProfiles").toString());
-        if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null) {
+        if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null)
             return "-1";
-        }
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         for (int i = 0; i < data.size(); i++) {
             if (Objects.equals(data.get(i).split("#")[0], profileID)) {

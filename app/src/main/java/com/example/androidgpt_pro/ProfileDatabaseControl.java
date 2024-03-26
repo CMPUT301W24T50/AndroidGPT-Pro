@@ -280,9 +280,8 @@ public class ProfileDatabaseControl {
 
     private String getProfileCheckInEventCount(DocumentSnapshot profileDocumentSnapshot,
                                                String eventID) {
-        if ((ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents") == null) {
+        if ((ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents") == null)
             return "-1";
-        }
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         for (int i = 0; i < data.size(); i++) {
             if (Objects.equals(data.get(i).split("#")[0], eventID)) {
