@@ -21,7 +21,6 @@ import java.util.ArrayList;
  * The user can select an event to see the event details and sign up.
  */
 public class EventActivity extends AppCompatActivity {
-    // TODO: when the user click the event button in the Navigation bar, it jumps to this page with all events listed.
 
     private String userID;
     private ProfileDatabaseControl pdc;
@@ -54,8 +53,16 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
-    private void setupNavigationTabs() {
-        navigationTabs = findViewById(R.id.navigation);
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_event);
+
+        Intent intent = getIntent();
+        String userID = intent.getStringExtra("userID");
+        pdc = new ProfileDatabaseControl(userID);
+
+        navigationTabs = findViewById(R.id.nav_event);
         navigationTabs.setSelectedItemId(R.id.events_tab);
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
@@ -63,22 +70,15 @@ public class EventActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(EventActivity.this,
-                            EventActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    assert Boolean.TRUE;
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(EventActivity.this,
-                            QRScannerActivity.class);
+                    Intent newIntent = new Intent(EventActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
-                    Intent newIntent = new Intent(EventActivity.this,
-                            ProfileActivity.class);
+                    Intent newIntent = new Intent(EventActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
@@ -89,19 +89,7 @@ public class EventActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_list);
-
-        Intent intent = getIntent();
-        String userID = intent.getStringExtra("userID");
-        pdc = new ProfileDatabaseControl(userID);
-
-        setupNavigationTabs();
         initViews();
         setupEventsListView();
 

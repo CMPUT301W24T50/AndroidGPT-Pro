@@ -121,8 +121,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void setupNavigationTabs() {
-        navigationTabs = findViewById(R.id.navigation);
+    private void initNavigationTabs() {
+        navigationTabs = findViewById(R.id.nav_profile);
         navigationTabs.setSelectedItemId(R.id.profile_tab);
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
@@ -130,26 +130,19 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this,
-                                                  EventActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this,
-                                                  QRScannerActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this,
-                                                  ProfileActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    assert Boolean.TRUE;
                 } else {
                     throw new IllegalArgumentException("menu item ID does not exist");
                 }
@@ -169,7 +162,7 @@ public class ProfileActivity extends AppCompatActivity {
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
 
-        setupNavigationTabs();
+        initNavigationTabs();
         initViews();
         displayProfileImage();
         displayProfileInfo();
