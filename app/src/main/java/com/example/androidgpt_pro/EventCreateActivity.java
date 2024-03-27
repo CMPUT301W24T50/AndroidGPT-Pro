@@ -228,15 +228,10 @@ public class EventCreateActivity extends AppCompatActivity {
         eLocStreet = eventLocationAddressEditText.getText().toString();
         eLocCity = eventLocationCityEditText.getText().toString();
         eLocProvince = eventLocationProvinceEditText.getText().toString();
-
-        // handel day picker
-        initEventDatePicker();
-        eventDateEditButton.setText(getTodaysDate());
         eDate = eventDateEditButton.getText().toString();
 
         // handel time picker
-        String eventTime = hour + ":" + minute;
-        eTime = eventTime.toString();
+        eTime = hour + ":" + minute;
 
         // handel eventDescription
         eDescription = eventDescriptionEditText.getText().toString();
@@ -263,6 +258,10 @@ public class EventCreateActivity extends AppCompatActivity {
 
         initViews();
         setupEventImageSelector();
+
+        // handel day picker
+        initEventDatePicker();
+        eventDateEditButton.setText(getTodaysDate());
 
         Calendar calendar = Calendar.getInstance();
         int currentMinute = calendar.get(Calendar.MINUTE);
