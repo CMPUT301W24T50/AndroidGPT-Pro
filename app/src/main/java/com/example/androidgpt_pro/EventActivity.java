@@ -8,10 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class EventActivity extends AppCompatActivity {
 
     BottomNavigationView navigationTabs;
     private ListView eventsListView;
+    private FloatingActionButton createEventBtn;
     private CardAdapter adapter;
 
     private ArrayList<String> eventIDs;
@@ -34,6 +37,7 @@ public class EventActivity extends AppCompatActivity {
 
     private void initViews() {
         eventsListView = findViewById(R.id.event_list_view);
+        createEventBtn = findViewById(R.id.event_create_btn);
         adapter = new CardAdapter(this);
         eventsListView.setAdapter(adapter);
     }
@@ -92,6 +96,17 @@ public class EventActivity extends AppCompatActivity {
 
         initViews();
         setupEventsListView();
+
+
+        // handle click event to open the creatingEvent
+        createEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventActivity.this, EventCreateActivity.class);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
 
         // Sample cards made by Luke just for testing. Not communicating with db
         EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,false);

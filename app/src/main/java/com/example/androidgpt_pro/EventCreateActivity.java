@@ -104,9 +104,9 @@ public class EventCreateActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
+//        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
 
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, year, month, day);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
 
@@ -166,9 +166,9 @@ public class EventCreateActivity extends AppCompatActivity {
             }
         };
 
-        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
+//        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour, minute, true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
 
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
@@ -178,8 +178,8 @@ public class EventCreateActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-//                PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                PICK_IMAGE_REQUEST);
     }
 
     /**
@@ -219,7 +219,7 @@ public class EventCreateActivity extends AppCompatActivity {
         // handel day picker
         initEventDatePicker();
         eventDateEditButton.setText(getTodaysDate());
-        eTime = eventDateEditButton.getText().toString();
+        eDate = eventDateEditButton.getText().toString();
 
         // handel time picker
         String eventTime = hour + ":" + minute;
@@ -259,16 +259,44 @@ public class EventCreateActivity extends AppCompatActivity {
         initViews();
         setupEvent();
 
+        Calendar calendar = Calendar.getInstance();
+        int currentMinute = calendar.get(Calendar.MINUTE);
+        //12 hour format
+        int currentHour = calendar.get(Calendar.HOUR);
+        //24 hour format
+
         eventConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // create a new event
-                newEvent();
+                if(eName != null
+                    && eLocStreet != null
+                    && eLocCity != null
+                    && eLocProvince != null
+                    && eDate != null
+                    && eTime != null
+                    && eDescription != null
+                    && eImageURI != null) {
+                    newEvent();
+                    // jump to next page
+                    Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
+                    newIntent.putExtra("eventID", eID);
+                    startActivity(newIntent);
+                }
+                else if(currentMinute <= minute && currentHour <= hour){
+                    CharSequence text = "Please Select a Valid Time";
+                    int duration = Toast.LENGTH_SHORT;
 
-                // jump to next page
-                Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
-                newIntent.putExtra("eventID", eID);
-                startActivity(newIntent);
+                    Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
+                    toast.show();
+                }
+                else {
+                    CharSequence text = "Please Fill up all Messages";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
+                    toast.show();
+                }
             }
         });
     }
