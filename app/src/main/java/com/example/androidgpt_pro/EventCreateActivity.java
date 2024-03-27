@@ -230,8 +230,6 @@ public class EventCreateActivity extends AppCompatActivity {
         eLocProvince = eventLocationProvinceEditText.getText().toString();
 
         // handel day picker
-        initEventDatePicker();
-        eventDateEditButton.setText(getTodaysDate());
         eDate = eventDateEditButton.getText().toString();
 
         // handel time picker
@@ -269,6 +267,8 @@ public class EventCreateActivity extends AppCompatActivity {
         //12 hour format
         int currentHour = calendar.get(Calendar.HOUR);
         //24 hour format
+        initEventDatePicker();
+        eventDateEditButton.setText(getTodaysDate());
 
         eventConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
