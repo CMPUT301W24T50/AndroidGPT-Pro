@@ -57,13 +57,14 @@ public class EventCreateActivity extends AppCompatActivity {
     private Button eventTimeEditButton;
     private int hour, minute;
     private EditText eventDescriptionEditText;
-    private Switch geoLcationTracking;
+    private Switch geoLocationTracking;
     private Button eventSelectPicButton;
     private static final int PICK_IMAGE_REQUEST = 1;
     private TextView selectedPicHint;
     private ImageButton backButton;
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
+
 
     private void initViews() {
         // Initialize views.
@@ -88,6 +89,7 @@ public class EventCreateActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void initEventDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -152,6 +154,7 @@ public class EventCreateActivity extends AppCompatActivity {
         return makeDateString(day, month, year);
     }
 
+
     public void openEventDatePicker(View view) {
         datePickerDialog.show();
     }
@@ -172,6 +175,17 @@ public class EventCreateActivity extends AppCompatActivity {
 
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
+    }
+
+
+    private void setupEventImageSelector() {
+        // handel eventPoster
+        eventSelectPicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
     }
 
     private void openGallery() {
@@ -209,8 +223,7 @@ public class EventCreateActivity extends AppCompatActivity {
     }
 
 
-
-    public void setupEvent() {
+    public void setEvent() {
         eName = eventNameEditText.getText().toString();
         eLocStreet = eventLocationAddressEditText.getText().toString();
         eLocCity = eventLocationCityEditText.getText().toString();
@@ -227,18 +240,9 @@ public class EventCreateActivity extends AppCompatActivity {
 
         // handel eventDescription
         eDescription = eventDescriptionEditText.getText().toString();
-
-        // handel eventPoster
-        eventSelectPicButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-
-        });
     }
 
-    public void newEvent() {
+    public void applyNewEvent() {
         edc.getEventStat()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -256,8 +260,9 @@ public class EventCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
         edc = new EventDatabaseControl();
+
         initViews();
-        setupEvent();
+        setupEventImageSelector();
 
         Calendar calendar = Calendar.getInstance();
         int currentMinute = calendar.get(Calendar.MINUTE);
@@ -268,6 +273,7 @@ public class EventCreateActivity extends AppCompatActivity {
         eventConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEvent();
                 // create a new event
                 if(eName != null
                     && eLocStreet != null
@@ -277,7 +283,7 @@ public class EventCreateActivity extends AppCompatActivity {
                     && eTime != null
                     && eDescription != null
                     && eImageURI != null) {
-                    newEvent();
+                    applyNewEvent();
                     // jump to next page
                     Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
                     newIntent.putExtra("eventID", eID);
