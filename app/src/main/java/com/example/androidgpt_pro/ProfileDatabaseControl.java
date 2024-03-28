@@ -249,7 +249,13 @@ public class ProfileDatabaseControl {
      * eventID: The ID of the event that needs to be deleted.
      */
     public void delProfileOrganizedEvents(String eventID) {
-        pDocRef.update("pOrganizedEvents", FieldValue.arrayRemove(eventID));
+        pDocRef.update("pOrganizedEvents", FieldValue.arrayRemove(eventID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        ds.delOrganizedEvent(eventID);
+                    }
+                });
     }
 
 

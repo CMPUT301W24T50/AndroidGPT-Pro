@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +49,15 @@ public class DatabaseSynchronization {
     public void delOrganizedProfileEvent(String profileID, String eventID) {
         pColRef.document(profileID)
                 .update("pOrganizedEvents", FieldValue.arrayRemove(eventID));
+    }
+
+    /**
+     * This is a deleter to synchronize the event database for organized records.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delOrganizedEvent(String eventID) {
+        eColRef.document(eventID).delete();
     }
 
 
