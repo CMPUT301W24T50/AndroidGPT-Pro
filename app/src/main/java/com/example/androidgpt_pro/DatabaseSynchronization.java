@@ -27,6 +27,31 @@ public class DatabaseSynchronization {
 
 
     /**
+     * This is an adder to synchronize the profile database for organized records.
+     * @param profileID
+     * profileID: A profile's ID.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void addOrganizedProfileEvent(String profileID, String eventID) {
+        pColRef.document(profileID)
+                .update("pOrganizedEvents", FieldValue.arrayUnion(eventID));
+    }
+
+    /**
+     * This is a deleter to synchronize the profile database for organized records.
+     * @param profileID
+     * profileID: A profile's ID.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delOrganizedProfileEvent(String profileID, String eventID) {
+        pColRef.document(profileID)
+                .update("pOrganizedEvents", FieldValue.arrayRemove(eventID));
+    }
+
+
+    /**
      * This is an adder to synchronize the profile database for sign up records.
      * @param profileID
      * profileID: A profile's ID.
