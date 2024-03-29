@@ -59,8 +59,8 @@ public class EventActivity extends AppCompatActivity {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                ArrayList<String> organizedEvents = pdc.getProfileOrganizedEvents(docSns);
-                getEventInfo(organizedEvents);
+                if (pdc.getProfileOrganizedEvents(docSns) != null)
+                    getEventInfo(pdc.getProfileOrganizedEvents(docSns));
             }
         });
     }
@@ -128,7 +128,7 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         Intent intent = getIntent();
-        String userID = intent.getStringExtra("userID");
+        userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
         edc = new EventDatabaseControl();
 
