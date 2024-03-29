@@ -2,18 +2,20 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -26,20 +28,70 @@ public class EventActivity extends AppCompatActivity {
 
     private String userID;
     private ProfileDatabaseControl pdc;
+    private EventDatabaseControl edc;
 
     BottomNavigationView navigationTabs;
-    private ListView eventsListView;
     private FloatingActionButton createEventBtn;
-    private CardAdapter adapter;
 
-    private ArrayList<String> eventIDs;
+    private ListView eventsListView;
 
+    private ArrayList<Event> events;
+    private EventArrayAdapter eventArrayAdapter;
+
+
+    private void initEvents() {
+        events = new ArrayList<>();
+    }
 
     private void initViews() {
-        eventsListView = findViewById(R.id.event_list_view);
         createEventBtn = findViewById(R.id.event_create_btn);
-        adapter = new CardAdapter(this);
-        eventsListView.setAdapter(adapter);
+        eventsListView = findViewById(R.id.event_list_view);
+        eventArrayAdapter = new EventArrayAdapter(this, events);
+        eventsListView.setAdapter(eventArrayAdapter);
+    }
+
+
+    private void getEvents() {
+        getEventIDsFromProfile();
+    }
+
+    private void getEventIDsFromProfile() {
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                ArrayList<String> organizedEvents = pdc.getProfileOrganizedEvents(docSns);
+                getEventInfo(organizedEvents);
+            }
+        });
+    }
+
+    private void getEventInfo(ArrayList<String> organizedEvents) {
+        for (int i = 0; i < organizedEvents.size(); i++) {
+            String eventID = organizedEvents.get(i);
+            edc.getEventSnapshot(eventID)
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot docSns) {
+                    getEventImage(eventID, docSns);
+                }
+            });
+        }
+    }
+
+    private void getEventImage(String eventID, DocumentSnapshot documentSnapshot) {
+        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                events.add(new Event(eventID,
+                    edc.getEventName(documentSnapshot),
+                    edc.getEventLocationCity(documentSnapshot),
+                    edc.getEventLocationProvince(documentSnapshot),
+                    edc.getEventTime(documentSnapshot),
+                    edc.getEventDate(documentSnapshot),
+                    uri));
+                eventArrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -49,7 +101,20 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(EventActivity.this, EventDetailActivity.class);
-                intent.putExtra("eventID", eventIDs.get(position));
+                intent.putExtra("eventID", events.get(position).getEventID());
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    private void setupCreateEventButton() {
+        // handle click event to open the creatingEvent
+        createEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventActivity.this, EventCreateActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
@@ -65,6 +130,7 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
+        edc = new EventDatabaseControl();
 
         navigationTabs = findViewById(R.id.nav_event);
         navigationTabs.setSelectedItemId(R.id.events_tab);
@@ -94,25 +160,12 @@ public class EventActivity extends AppCompatActivity {
             }
         });
 
+        initEvents();
         initViews();
+
+        getEvents();
         setupEventsListView();
 
-
-        // handle click event to open the creatingEvent
-        createEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventActivity.this, EventCreateActivity.class);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
-            }
-        });
-
-        // Sample cards made by Luke just for testing. Not communicating with db
-        EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,false);
-        adapter.add(card);
-        EventCard card2 = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,true);
-        adapter.add(card2);
-        adapter.notifyDataSetChanged();
+        setupCreateEventButton();
     }
 }

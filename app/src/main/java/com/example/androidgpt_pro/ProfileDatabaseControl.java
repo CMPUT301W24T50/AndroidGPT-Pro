@@ -38,6 +38,7 @@ public class ProfileDatabaseControl {
     private Boolean pGLTState = Boolean.TRUE;
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
+    private ArrayList<String> pOrganizedEvents;
 
 
     /**
@@ -72,6 +73,7 @@ public class ProfileDatabaseControl {
         data.put("pGLTState", pGLTState);
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
+        data.put("pOrganizedEvents", pOrganizedEvents);
         data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
     }
@@ -227,6 +229,33 @@ public class ProfileDatabaseControl {
                 pDocRef.update("pImageUpdated", Boolean.TRUE);
             }
         });
+    }
+
+
+    /**
+     * This is a getter for Profile Organized Events.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileOrganizedEvents
+     * profileOrganizedEvents: A list of eventID.
+     */
+    public ArrayList<String> getProfileOrganizedEvents(DocumentSnapshot profileDocumentSnapshot) {
+        return (ArrayList<String>) profileDocumentSnapshot.get("pOrganizedEvents");
+    }
+
+    /**
+     * This is a deleter for Profile Organized Events.
+     * @param eventID
+     * eventID: The ID of the event that needs to be deleted.
+     */
+    public void delProfileOrganizedEvents(String eventID) {
+        pDocRef.update("pOrganizedEvents", FieldValue.arrayRemove(eventID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        ds.delOrganizedEvent(eventID);
+                    }
+                });
     }
 
 

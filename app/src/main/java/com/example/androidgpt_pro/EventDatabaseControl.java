@@ -50,8 +50,6 @@ public class EventDatabaseControl {
 
     /**
      * This is the initializer of an event.
-     * @param eventID
-     * eventID: An ID of an event.
      * @param eventName
      * eventName: An event's name.
      * @param eventLocationStreet
@@ -67,7 +65,7 @@ public class EventDatabaseControl {
      * @param eventDescription
      * eventDescription: An event's description.
      */
-    public void initEvent(String eventID,
+    public void initEvent(String eventOrganizerID,
                           String eventName,
                           String eventLocationStreet,
                           String eventLocationCity,
@@ -76,18 +74,28 @@ public class EventDatabaseControl {
                           String eventDate,
                           String eventDescription,
                           Uri eventImageUri) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("eName", eventName);
-        data.put("eLocStreet", eventLocationStreet);
-        data.put("eLocCity", eventLocationCity);
-        data.put("eLocProvince", eventLocationProvince);
-        data.put("eTime", eventTime);
-        data.put("eDate", eventDate);
-        data.put("eDescription", eventDescription);
-        data.put("eSignUpProfiles", eSignUpProfiles);
-        data.put("eCheckInProfiles", eCheckInProfiles);
-        eColRef.document(eventID).set(data);
-        setEventImage(eventID, eventImageUri);
+        getEventStat().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String lastEventID = getLastEventID(docSns);
+                String eventID = updateEventStat(lastEventID);
+
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("eOrganizerID", eventOrganizerID);
+                data.put("eName", eventName);
+                data.put("eLocStreet", eventLocationStreet);
+                data.put("eLocCity", eventLocationCity);
+                data.put("eLocProvince", eventLocationProvince);
+                data.put("eTime", eventTime);
+                data.put("eDate", eventDate);
+                data.put("eDescription", eventDescription);
+                data.put("eSignUpProfiles", eSignUpProfiles);
+                data.put("eCheckInProfiles", eCheckInProfiles);
+                eColRef.document(eventID).set(data);
+                setEventImage(eventID, eventImageUri);
+                ds.addOrganizedProfileEvent(eventOrganizerID, eventID);
+            }
+        });
     }
 
 
@@ -97,7 +105,13 @@ public class EventDatabaseControl {
      * eventID: An ID of an event.
      */
     public void removeEvent(String eventID) {
-        eColRef.document(eventID).delete();
+        getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                eColRef.document(eventID).delete();
+                ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
+            }
+        });
     }
 
 
@@ -156,6 +170,18 @@ public class EventDatabaseControl {
      */
     public String getLastEventID(DocumentSnapshot eventDocumentSnapshot) {
         return eventDocumentSnapshot.getString("eLastEventID");
+    }
+
+
+    /**
+     * This is a getter for Event Organizer Profile ID.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventOrganizerID
+     * eventOrganizerID: The ID of the Event Organizer.
+     */
+    public String getEventOrganizerID(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eOrganizerID");
     }
 
 

@@ -38,6 +38,7 @@ import java.util.Locale;
 
 public class EventCreateActivity extends AppCompatActivity {
 
+    private String userID;
     private EventDatabaseControl edc;
     private String eID;
     private String eName;
@@ -244,22 +245,17 @@ public class EventCreateActivity extends AppCompatActivity {
      * This is a method to set upload variables in the creating event part to the database
      */
     public void applyNewEvent() {
-        edc.getEventStat()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot docSns) {
-                        String lastEventID = edc.getLastEventID(docSns);
-                        eID = edc.updateEventStat(lastEventID);
-                        edc.initEvent(eID, eName, eLocStreet, eLocCity, eLocProvince,
-                                eTime, eDate, eDescription, eImageURI);
-                    }
-                });
+        edc.initEvent(userID, eName, eLocStreet, eLocCity,
+                eLocProvince, eTime, eDate, eDescription, eImageURI);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
         edc = new EventDatabaseControl();
 
         initViews();
