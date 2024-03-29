@@ -26,7 +26,6 @@ public class EventCreateActivity extends AppCompatActivity {
 
     private String userID;
     private EventDatabaseControl edc;
-
     private String eID;
     private String eName;
     private String eLocStreet;
@@ -93,8 +92,6 @@ public class EventCreateActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-//        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
-
         datePickerDialog = new DatePickerDialog(this, dateSetListener, year, month, day);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
@@ -104,6 +101,7 @@ public class EventCreateActivity extends AppCompatActivity {
     }
 
     private String getMonthFormat(int month) {
+
         if (month == 1)
             return "JAN";
         if (month == 2)
@@ -209,7 +207,9 @@ public class EventCreateActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * This is a method to set all variables in the creating event part
+     */
     public void setEvent() {
         eName = eventNameEditText.getText().toString();
         eLocStreet = eventLocationAddressEditText.getText().toString();
@@ -227,6 +227,9 @@ public class EventCreateActivity extends AppCompatActivity {
         eDescription = eventDescriptionEditText.getText().toString();
     }
 
+    /**
+     * This is a method to set upload variables in the creating event part to the database
+     */
     public void applyNewEvent() {
         edc.initEvent(userID, eName, eLocStreet, eLocCity,
                 eLocProvince, eTime, eDate, eDescription, eImageURI);

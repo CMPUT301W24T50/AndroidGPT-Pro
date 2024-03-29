@@ -125,7 +125,7 @@ public class EventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.activity_event_list);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");

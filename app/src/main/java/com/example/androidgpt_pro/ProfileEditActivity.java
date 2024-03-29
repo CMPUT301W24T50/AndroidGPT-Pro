@@ -31,7 +31,6 @@ public class ProfileEditActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Boolean imageUpdate = Boolean.FALSE;
     private Uri imageUri;
-
     private ImageButton backButton;
     private ImageView editProfileImageView;
     private TextView editProfileImageText;
