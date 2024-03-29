@@ -1,7 +1,6 @@
 package com.example.androidgpt_pro;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -435,7 +434,6 @@ public class EventDatabaseControl {
 
     private String getEventCheckInProfileCount(DocumentSnapshot eventDocumentSnapshot,
                                              String profileID) {
-        Log.d("Testo", eventDocumentSnapshot.get("eCheckInProfiles").toString());
         if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null)
             return "-1";
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
