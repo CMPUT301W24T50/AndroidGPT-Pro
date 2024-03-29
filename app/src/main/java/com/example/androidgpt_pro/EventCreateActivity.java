@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -242,6 +243,8 @@ public class EventCreateActivity extends AppCompatActivity {
     }
 
     public void applyNewEvent() {
+        Log.d("Testo", userID + eName + eLocStreet + eLocCity
+                + eLocProvince + eTime + eDate + eDescription + eImageURI);
         edc.initEvent(userID, eName, eLocStreet, eLocCity,
                 eLocProvince, eTime, eDate, eDescription, eImageURI);
     }
