@@ -48,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         pNameTextView = findViewById(R.id.text_profile_name);
         pPhoneNumberTextView = findViewById(R.id.text_phone_number);
         pEmailTextView = findViewById(R.id.text_email);
+        editProfileButton = findViewById(R.id.btn_edit_profile);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
     }
 
@@ -86,7 +87,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupEditProfileButton() {
         // Handle click event for edit profile button.
-        editProfileButton = findViewById(R.id.btn_edit_profile);
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,21 +103,9 @@ public class ProfileActivity extends AppCompatActivity {
         geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // code here to start geolocation tracking
-                } else {
-                    // code here to stop geolocation tracking
-                }
+                pdc.setProfileGLTState(isChecked);
             }
         });
-    }
-
-    private void startGeolocationTracking() {
-
-    }
-
-    private void stopGeolocationTracking() {
-
     }
 
 
@@ -167,5 +155,6 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileImage();
         displayProfileInfo();
         setupEditProfileButton();
+        setupGLTButton();
     }
 }
