@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -245,6 +246,8 @@ public class EventCreateActivity extends AppCompatActivity {
      * This is a method to set upload variables in the creating event part to the database
      */
     public void applyNewEvent() {
+        Log.d("Testo", userID + eName + eLocStreet + eLocCity
+                + eLocProvince + eTime + eDate + eDescription + eImageURI);
         edc.initEvent(userID, eName, eLocStreet, eLocCity,
                 eLocProvince, eTime, eDate, eDescription, eImageURI);
     }
