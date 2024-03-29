@@ -290,5 +290,6 @@ public class EventCreateActivity extends AppCompatActivity {
                 }
             }
         });
+        setupBackButton();
     }
 }

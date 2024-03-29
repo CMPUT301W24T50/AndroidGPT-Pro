@@ -29,12 +29,9 @@ public class EventActivity extends AppCompatActivity {
     private String userID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
-
     BottomNavigationView navigationTabs;
     private FloatingActionButton createEventBtn;
-
     private ListView eventsListView;
-
     private ArrayList<Event> events;
     private EventArrayAdapter eventArrayAdapter;
 
@@ -100,7 +97,7 @@ public class EventActivity extends AppCompatActivity {
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventActivity.this, EventDetailActivity.class);
+                Intent intent = new Intent(EventActivity.this, EventOrganizerActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
                 startActivity(intent);
