@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -67,10 +69,13 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eTimeTV = view.findViewById(R.id.event_time);
         TextView eDateTV = view.findViewById(R.id.event_date);
         ImageView eImageIV = view.findViewById(R.id.event_image);
+        TextView signedUpCheck = view.findViewById(R.id.signed_up_check);
+        TextView signedUpText = view.findViewById(R.id.signed_up_text);
 
         eNameTV.setText(event.getEventName());
-        eLocationTV.setText(event.getEventLocationCity()
-                + ", " + event.getEventLocationProvince());
+        String eventCityProvince = event.getEventLocationCity()
+                + ", " + event.getEventLocationProvince();
+        eLocationTV.setText(eventCityProvince);
         eTimeTV.setText(event.getEventTime());
         eDateTV.setText(event.getEventDate());
         Picasso.get().load(event.getEventImageUri()).into(eImageIV);

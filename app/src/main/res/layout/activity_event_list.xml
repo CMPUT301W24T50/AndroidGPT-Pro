@@ -16,12 +16,13 @@
 
     <ListView
         android:id="@+id/event_list_view"
-        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_title"
+        android:layout_above="@+id/nav_event"
         android:layout_marginTop="0dp"
-        android:divider="#00000000"/>
+        android:divider="#00000000"
+        android:padding="16dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
