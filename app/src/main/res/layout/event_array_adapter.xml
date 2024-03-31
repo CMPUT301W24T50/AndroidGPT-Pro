@@ -46,7 +46,8 @@
                 android:layout_toLeftOf="@+id/signed_up_text"
                 android:clickable="false"
                 android:checked="true"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:enabled="false"/>
 
             <TextView
                 android:id="@+id/signed_up_text"
