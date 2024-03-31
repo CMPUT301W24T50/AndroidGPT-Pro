@@ -245,6 +245,7 @@ public class EventCreateActivity extends AppCompatActivity {
         edc = new EventDatabaseControl();
 
         initViews();
+        setupBackButton();
         setupEventImageSelector();
 
         Calendar calendar = Calendar.getInstance();
