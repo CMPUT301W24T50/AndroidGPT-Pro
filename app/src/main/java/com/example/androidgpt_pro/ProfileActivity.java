@@ -2,6 +2,10 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -48,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         pNameTextView = findViewById(R.id.text_profile_name);
         pPhoneNumberTextView = findViewById(R.id.text_phone_number);
         pEmailTextView = findViewById(R.id.text_email);
+        editProfileButton = findViewById(R.id.btn_edit_profile);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
     }
 
@@ -56,15 +61,42 @@ public class ProfileActivity extends AppCompatActivity {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(pImageView);
-                pdc.resetProfileImageUpdatedState();
+                if (uri != null) {
+                    Picasso.get().load(uri).into(pImageView);
+                    pdc.resetProfileImageUpdatedState();
+                } else {
+                    // If profile image is not available, generate initials and display them
+                    generateInitialsAndDisplay();
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                pImageView.setImageResource(android.R.drawable.sym_def_app_icon);
+                // If there's an error loading profile image, display initials
+                generateInitialsAndDisplay();
             }
         });
+    }
+    private void generateInitialsAndDisplay() {
+        // Get the first letter of the user's name
+        String name = pNameTextView.getText().toString().trim();
+        String initials = "";
+        if (!name.isEmpty()) {
+            initials = name.substring(0, 1).toUpperCase();
+        }
+
+        // Create a Bitmap with the initials on a plain white background
+        Bitmap bitmap = Bitmap.createBitmap(120, 120, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(48);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(initials, 60, 70, paint);
+
+        // Set the generated Bitmap as the profile image
+        pImageView.setImageBitmap(bitmap);
     }
 
     private void displayProfileInfo() {
@@ -77,6 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
                 pPhoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
+                generateInitialsAndDisplay();
                 if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
             }
@@ -86,7 +119,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupEditProfileButton() {
         // Handle click event for edit profile button.
-        editProfileButton = findViewById(R.id.btn_edit_profile);
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,21 +135,9 @@ public class ProfileActivity extends AppCompatActivity {
         geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // code here to start geolocation tracking
-                } else {
-                    // code here to stop geolocation tracking
-                }
+                pdc.setProfileGLTState(isChecked);
             }
         });
-    }
-
-    private void startGeolocationTracking() {
-
-    }
-
-    private void stopGeolocationTracking() {
-
     }
 
 
@@ -167,5 +187,6 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileImage();
         displayProfileInfo();
         setupEditProfileButton();
+        setupGLTButton();
     }
 }
