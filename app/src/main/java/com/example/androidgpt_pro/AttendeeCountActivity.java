@@ -7,15 +7,12 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -61,38 +58,34 @@ public class AttendeeCountActivity extends Activity {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                if (edc.getEventAllCheckInProfiles(docSns) != null) {
-                    getAttendeeName(edc.getEventAllCheckInProfiles(docSns));
-                }
+                getAttendeeName(edc.getEventAllCheckInProfiles(docSns));
             }
         });
     }
 
     private void getAttendeeName(String[][] eventAttendeeNamesCount) {
-        if(eventAttendeeNamesCount.length == 0) {
+        if(eventAttendeeNamesCount == null) {
             CharSequence text = "No one has checked in!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(AttendeeCountActivity.this, text, duration);
             toast.show();
-        }
-        else{
+        } else {
             for (int i = 0; i < eventAttendeeNamesCount.length; i++) {
-                for (int j = 0; j < eventAttendeeNamesCount[i].length; j++){
-                    String attendeeID = eventAttendeeNamesCount[i][0];
-                    String attendeeCheckInCount = eventAttendeeNamesCount[0][j];
-                    edc.getEventSnapshot(eventID)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot docSns) {
-                                    attendees.add(new Attendee(attendeeID,
-                                            attendeeID,
-                                            attendeeCheckInCount));
-                                }
-                            });
-                }
+                String attendeeID = eventAttendeeNamesCount[i][0];
+                String attendeeCheckInCount = eventAttendeeNamesCount[i][1];
+                ProfileDatabaseControl pdcTemp = new ProfileDatabaseControl(attendeeID);
+                pdcTemp.getProfileSnapshot()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot docSns) {
+                            String attendeeName = pdc.getProfileName(docSns);
+                            attendees.add(new Attendee(attendeeID,
+                                    attendeeName, attendeeCheckInCount));
+                            attendeeArrayAdapter.notifyDataSetChanged();
+                        }
+                    });
             }
         }
-
     }
 
 

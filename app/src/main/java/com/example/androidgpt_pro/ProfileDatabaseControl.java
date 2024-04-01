@@ -21,6 +21,7 @@ import java.util.Objects;
 /**
  * This is a class that controls the interaction between profile data and the database.
  */
+@SuppressWarnings("unchecked")
 public class ProfileDatabaseControl {
 
     private FirebaseFirestore db;
@@ -222,13 +223,13 @@ public class ProfileDatabaseControl {
      */
     public void setProfileImage(Uri profileImageURI) {
         pStgRef.child(pID)
-                .putFile(profileImageURI)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                pDocRef.update("pImageUpdated", Boolean.TRUE);
-            }
-        });
+            .putFile(profileImageURI)
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    pDocRef.update("pImageUpdated", Boolean.TRUE);
+                }
+            });
     }
 
 
@@ -250,12 +251,12 @@ public class ProfileDatabaseControl {
      */
     public void delProfileOrganizedEvents(String eventID) {
         pDocRef.update("pOrganizedEvents", FieldValue.arrayRemove(eventID))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        ds.delOrganizedEvent(eventID);
-                    }
-                });
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    ds.delOrganizedEvent(eventID);
+                }
+            });
     }
 
 
@@ -267,6 +268,8 @@ public class ProfileDatabaseControl {
      * profileSignUpEvents: A list of eventID.
      */
     public ArrayList<String> getProfileAllSignUpEvents(DocumentSnapshot profileDocumentSnapshot) {
+        if (profileDocumentSnapshot.get("pSignUpEvents") == null)
+            return null;
         return (ArrayList<String>) profileDocumentSnapshot.get("pSignUpEvents");
     }
 
@@ -299,23 +302,23 @@ public class ProfileDatabaseControl {
      * profileCheckInEvents: A "2D Array" list of eventID and count, null if no event.
      */
     public String[][] getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
+        if (profileDocumentSnapshot.get("pCheckInEvents") == null)
+            return null;
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         String[][] lst = new String[data.size()][];
-        for (int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++)
             lst[i] = data.get(i).split("#");
-        }
         return lst;
     }
 
     private String getProfileCheckInEventCount(DocumentSnapshot profileDocumentSnapshot,
                                                String eventID) {
-        if ((ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents") == null)
-            return "-1";
+        if (profileDocumentSnapshot.get("pCheckInEvents") == null)
+            return null;
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).split("#")[0], eventID)) {
+            if (Objects.equals(data.get(i).split("#")[0], eventID))
                 return data.get(i).split("#")[1];
-            }
         }
         return null;
     }
@@ -329,13 +332,13 @@ public class ProfileDatabaseControl {
         getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                String count = getProfileCheckInEventCount(docSns, eventID);
-                if (Objects.equals(count, "-1")) {
-                    count = "00000001";
+                if (getProfileCheckInEventCount(docSns, eventID) == null) {
+                    String count = "00000001";
                     String data = dt.constructIDCountString(eventID, count);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(data));
                     ds.newCheckInEventProfile(eventID, pID, count);
                 } else {
+                    String count = getProfileCheckInEventCount(docSns, eventID);
                     String data = dt.constructIDCountString(eventID, count);
                     String nextCount = dt.calculateAddOne(count);
                     String nextData = dt.constructIDCountString(eventID, nextCount);

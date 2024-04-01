@@ -36,7 +36,7 @@ public class AttendeeArrayAdapter extends ArrayAdapter<Attendee> {
 
         if (view == null) {
             view = LayoutInflater.from(context)
-                    .inflate(R.layout.attendee_list_content, parent, false);
+                .inflate(R.layout.attendee_list_content, parent, false);
         }
 
         Attendee attendee = attendees.get(position);
