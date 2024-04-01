@@ -33,6 +33,7 @@ public class EventDatabaseControl {
 
     private ArrayList<String> eSignUpProfiles;
     private ArrayList<String> eCheckInProfiles;
+    private ArrayList<String> eCheckInLocations;
 
 
     /**
@@ -50,6 +51,8 @@ public class EventDatabaseControl {
 
     /**
      * This is the initializer of an event.
+     * @param eventOrganizerID
+     * eventOrganizerID: The organizer's profileID.
      * @param eventName
      * eventName: An event's name.
      * @param eventLocationStreet
@@ -64,6 +67,11 @@ public class EventDatabaseControl {
      * eventDate: An event's date.
      * @param eventDescription
      * eventDescription: An event's description.
+     * @param eventGeoLocationTrackingState
+     * eventGeoLocationTrackingState: A state of Geo-Location Tracking.
+     * @param eventImageUri
+     * eventImageUri: The URI of an image.
+     *
      */
     public void initEvent(String eventOrganizerID,
                           String eventName,
@@ -73,6 +81,7 @@ public class EventDatabaseControl {
                           String eventTime,
                           String eventDate,
                           String eventDescription,
+                          Boolean eventGeoLocationTrackingState,
                           Uri eventImageUri) {
         getEventStat().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -89,8 +98,10 @@ public class EventDatabaseControl {
                 data.put("eTime", eventTime);
                 data.put("eDate", eventDate);
                 data.put("eDescription", eventDescription);
+                data.put("eGLTState", eventGeoLocationTrackingState);
                 data.put("eSignUpProfiles", eSignUpProfiles);
                 data.put("eCheckInProfiles", eCheckInProfiles);
+                data.put("eCheckInLocations", eCheckInLocations);
                 eColRef.document(eventID).set(data);
                 setEventImage(eventID, eventImageUri);
                 ds.addOrganizedProfileEvent(eventOrganizerID, eventID);
@@ -347,6 +358,29 @@ public class EventDatabaseControl {
 
 
     /**
+     * This is a getter for Event Geo-Location Tracking State.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventGLTState
+     * eventGLTState: A state of Geo-Location Tracking.
+     */
+    public Boolean getEventGLTState(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getBoolean("eGLTState");
+    }
+
+    /**
+     * This is a setter for Event Geo-Location Tracking State.
+     * @param eventID
+     * eventID: An ID of an event.
+     * @param eventGLTState
+     * eventGLTState: A state of Geo-Location Tracking.
+     */
+    public void setEventGLTState(String eventID, Boolean eventGLTState) {
+        eColRef.document(eventID).update("eGLTState", eventGLTState);
+    }
+
+
+    /**
      * This is a getter for Event Image.
      * @param eventID
      * eventID: An ID of an event.
@@ -418,8 +452,7 @@ public class EventDatabaseControl {
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
      * @return eventCheckInProfiles
-     * eventCheckInProfiles: A "2D Array" list of profileID and count,
-     * list[0][0] == "-1" if no profiles.
+     * eventCheckInProfiles: A "2D Array" list of profileID and count, null if no profile.
      */
     public String[][] getEventAllCheckInProfiles(DocumentSnapshot eventDocumentSnapshot) {
         if (eventDocumentSnapshot.get("eCheckInProfiles") == null)
@@ -427,7 +460,7 @@ public class EventDatabaseControl {
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         String[][] lst = new String[data.size()][];
         for (int i = 0; i < data.size(); i++)
-            lst[i] = data.get(i).split("#");
+            lst[i] = dt.splitSharpString(data.get(i));
         return lst;
     }
 
@@ -437,8 +470,8 @@ public class EventDatabaseControl {
             return null;
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).split("#")[0], profileID))
-                return data.get(i).split("#")[1];
+            if (Objects.equals(dt.splitSharpString(data.get(i))[0], profileID))
+                return dt.splitSharpString(data.get(i))[1];
         }
         return null;
     }
@@ -456,15 +489,15 @@ public class EventDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 if (getEventCheckInProfileCount(docSns, profileID) == null) {
                     String count = "00000001";
-                    String data = dt.constructIDCountString(profileID, count);
+                    String data = dt.constructSharpString(profileID, count);
                     eColRef.document(eventID).update("eCheckInProfiles",
                         FieldValue.arrayUnion(data));
                     ds.newCheckInProfileEvent(profileID, eventID, count);
                 } else {
                     String count = getEventCheckInProfileCount(docSns, profileID);
-                    String data = dt.constructIDCountString(profileID, count);
+                    String data = dt.constructSharpString(profileID, count);
                     String nextCount = dt.calculateAddOne(count);
-                    String nextData = dt.constructIDCountString(profileID, nextCount);
+                    String nextData = dt.constructSharpString(profileID, nextCount);
                     eColRef.document(eventID).update("eCheckInProfiles",
                         FieldValue.arrayRemove(data));
                     eColRef.document(eventID).update("eCheckInProfiles",
@@ -473,5 +506,37 @@ public class EventDatabaseControl {
                 }
             }
         });
+    }
+
+
+    /**
+     * This is a getter for Event Check In Locations.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventCheckInLocations
+     * eventCheckInLocations: A "2D Array" list of Latitude and Longitude, null if no location.
+     */
+    public String[][] getEventAllCheckInLocations(DocumentSnapshot eventDocumentSnapshot) {
+        if (eventDocumentSnapshot.get("eCheckInLocations") == null)
+            return null;
+        ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInLocations");
+        String[][] lst = new String[data.size()][];
+        for (int i = 0; i < data.size(); i++)
+            lst[i] = dt.splitSharpString(data.get(i));
+        return lst;
+    }
+
+    /**
+     * This is an adder used to add the given location to the event check in list.
+     * @param eventID
+     * eventID: An event's ID.
+     * @param latitude
+     * latitude: A part of location.
+     * @param longitude
+     * longitude: A part of location.
+     */
+    public void addEventCheckInLocation(String eventID, String latitude, String longitude) {
+        String location = dt.constructSharpString(latitude, longitude);
+        eColRef.document(eventID).update("eCheckInLocations", FieldValue.arrayUnion(location));
     }
 }

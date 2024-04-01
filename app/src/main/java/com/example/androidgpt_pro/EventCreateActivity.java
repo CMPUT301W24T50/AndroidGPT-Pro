@@ -26,6 +26,7 @@ public class EventCreateActivity extends AppCompatActivity {
 
     private String userID;
     private EventDatabaseControl edc;
+
     private String eID;
     private String eName;
     private String eLocStreet;
@@ -34,22 +35,26 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eTime;
     private String eDate;
     private String eDescription;
+    private Boolean eGLTState;
     private Uri eImageURI;
+
+    private ImageButton backButton;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
     private EditText eventNameEditText;
     private Button eventDateEditButton;
     private EditText eventLocationAddressEditText;
     private EditText eventLocationCityEditText;
     private EditText eventLocationProvinceEditText;
     private Button eventTimeEditButton;
-    private int hour, minute;
     private EditText eventDescriptionEditText;
-    private Switch geoLocationTracking;
+    private Switch eventGeoLocationTrackingSwitch;
     private Button eventSelectPicButton;
-    private static final int PICK_IMAGE_REQUEST = 1;
     private TextView selectedPicHint;
-    private ImageButton backButton;
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
+
+    private int hour, minute;
 
 
     private void initViews() {
@@ -60,6 +65,7 @@ public class EventCreateActivity extends AppCompatActivity {
         eventLocationCityEditText = findViewById(R.id.edit_city_address);
         eventLocationProvinceEditText = findViewById(R.id.edit_province_address);
         eventTimeEditButton = findViewById(R.id.edit_event_time);
+        eventGeoLocationTrackingSwitch = findViewById(R.id.geo_location_switch);
         eventSelectPicButton = findViewById(R.id.select_pic);
         selectedPicHint = findViewById(R.id.selected_pic);
         backButton = findViewById(R.id.back_button);
@@ -131,14 +137,13 @@ public class EventCreateActivity extends AppCompatActivity {
         return "JAN";
     }
 
-    private String getTodaysDate() {
+    private String getToday() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         return makeDateString(day, month, year);
     }
-
 
     public void openEventDatePicker(View view) {
         datePickerDialog.show();
@@ -225,14 +230,16 @@ public class EventCreateActivity extends AppCompatActivity {
 
         // handel eventDescription
         eDescription = eventDescriptionEditText.getText().toString();
+
+        eGLTState = eventGeoLocationTrackingSwitch.isChecked();
     }
 
     /**
      * This is a method to set upload variables in the creating event part to the database
      */
     public void applyNewEvent() {
-        edc.initEvent(userID, eName, eLocStreet, eLocCity,
-                eLocProvince, eTime, eDate, eDescription, eImageURI);
+        edc.initEvent(userID, eName, eLocStreet, eLocCity, eLocProvince,
+            eTime, eDate, eDescription, eGLTState, eImageURI);
     }
 
     @Override
@@ -254,7 +261,7 @@ public class EventCreateActivity extends AppCompatActivity {
         int currentHour = calendar.get(Calendar.HOUR);
         //24 hour format
         initEventDatePicker();
-        eventDateEditButton.setText(getTodaysDate());
+        eventDateEditButton.setText(getToday());
 
         eventConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
