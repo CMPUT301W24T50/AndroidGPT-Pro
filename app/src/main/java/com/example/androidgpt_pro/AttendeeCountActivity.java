@@ -3,11 +3,9 @@ package com.example.androidgpt_pro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AttendeeCountActivity extends AppCompatActivity {
 
@@ -85,7 +80,6 @@ public class AttendeeCountActivity extends AppCompatActivity {
                             String attendeeName = pdc.getProfileName(docSns);
                             attendees.add(new Attendee(attendeeID,
                                     attendeeName, attendeeCheckInCount));
-                            Log.d("Testo", attendeeCheckInCount);
                             attendeeArrayAdapter.notifyDataSetChanged();
                         }
                     });
