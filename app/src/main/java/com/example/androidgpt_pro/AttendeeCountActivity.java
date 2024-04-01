@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -18,7 +19,7 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
-public class AttendeeCountActivity extends AppCompatActivity {
+public class AttendeeCountActivity extends Activity {
 
     private String eventID;
     private EventDatabaseControl edc;
@@ -40,13 +41,13 @@ public class AttendeeCountActivity extends AppCompatActivity {
     }
 
     private void popUpWindow(){
-        getAttendee();
+        //getAttendee();
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width*6), (int)(height*5));
+        getWindow().setLayout((int)(width*.6), (int)(height*.5));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
