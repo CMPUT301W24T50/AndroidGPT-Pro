@@ -154,7 +154,7 @@ public class DatabaseSynchronization {
      */
     public void newCheckInEventProfile(String eventID, String profileID, String count) {
         String data = dt.constructIDCountString(profileID, count);
-        pColRef.document(eventID)
+        eColRef.document(eventID)
             .update("eCheckInProfiles", FieldValue.arrayUnion(data));
     }
 
