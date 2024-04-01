@@ -57,26 +57,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void displayProfileImage() {
-        pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                if (uri != null) {
-                    Picasso.get().load(uri).into(pImageView);
-                    pdc.resetProfileImageUpdatedState();
-                } else {
-                    // If profile image is not available, generate initials and display them
-                    generateInitialsAndDisplay();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // If there's an error loading profile image, display initials
-                generateInitialsAndDisplay();
-            }
-        });
-    }
     private void generateInitialsAndDisplay() {
         // Get the first letter of the user's name
         String name = pNameTextView.getText().toString().trim();
@@ -99,6 +79,22 @@ public class ProfileActivity extends AppCompatActivity {
         pImageView.setImageBitmap(bitmap);
     }
 
+    private void displayProfileImage() {
+        pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(pImageView);
+                pdc.resetProfileImageUpdatedState();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // If there's an error loading profile image, display initials
+                generateInitialsAndDisplay();
+            }
+        });
+    }
+
     private void displayProfileInfo() {
         pdc.getProfile().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -109,7 +105,6 @@ public class ProfileActivity extends AppCompatActivity {
                 pPhoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
-                generateInitialsAndDisplay();
                 if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
             }
