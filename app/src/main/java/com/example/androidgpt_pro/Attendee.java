@@ -4,29 +4,23 @@ package com.example.androidgpt_pro;
  * This is a class representing Attendee(in organizer).
  */
 public class Attendee {
+
     private final String pID;
     private String name;
     private String checkedInCount;
 
     /**
      * This is the constructor of class attendee.
-     * @param profileID
-     * this is the id of profile
      * @param name
      * this is the name of attendees
      * @param checkedInCount
      * this count the checked in number of each attendees
      */
-    public Attendee( String profileID, String name, String checkedInCount) {
+    public Attendee(String profileID, String name, String checkedInCount) {
         this.pID = profileID;
         this.name = name;
         this.checkedInCount = checkedInCount;
     }
-
-    /**
-     * This is a getter of eventID.
-     * @return eventID
-     */
 
     /**
      * This is a getter of getProfileID.

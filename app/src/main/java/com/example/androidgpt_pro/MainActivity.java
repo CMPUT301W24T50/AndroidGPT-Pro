@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         ProfileDatabaseControl pdc = new ProfileDatabaseControl(uniqueID);
 
+        pdc.addProfileCheckInEvent("00000001");
+
         pdc.getProfileSnapshot().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
