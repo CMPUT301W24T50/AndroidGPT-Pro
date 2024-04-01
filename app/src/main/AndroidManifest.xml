@@ -49,6 +49,14 @@
             android:name=".EventCreateQRActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".EventOrganizerActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".AttendeeCountActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
