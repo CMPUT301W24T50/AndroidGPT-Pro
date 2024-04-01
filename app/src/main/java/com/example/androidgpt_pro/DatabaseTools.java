@@ -1,8 +1,11 @@
 package com.example.androidgpt_pro;
 
+import android.annotation.SuppressLint;
+
 /**
  * This is a class that contains database tools.
  */
+@SuppressLint("DefaultLocale")
 public class DatabaseTools {
 
     /**

@@ -21,6 +21,7 @@ import java.util.Objects;
 /**
  * This is a class that controls the interaction between event data and the database.
  */
+@SuppressWarnings("unchecked")
 public class EventDatabaseControl {
 
     private FirebaseFirestore db;
@@ -437,9 +438,8 @@ public class EventDatabaseControl {
         }
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         String[][] lst = new String[data.size()][];
-        for (int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++)
             lst[i] = data.get(i).split("#");
-        }
         return lst;
     }
 
@@ -449,9 +449,8 @@ public class EventDatabaseControl {
             return "-1";
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).split("#")[0], profileID)) {
+            if (Objects.equals(data.get(i).split("#")[0], profileID))
                 return data.get(i).split("#")[1];
-            }
         }
         return null;
     }
