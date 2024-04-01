@@ -6,7 +6,7 @@ package com.example.androidgpt_pro;
 public class Attendee {
     private final String pID;
     private String name;
-    private Integer checkedInCount;
+    private String checkedInCount;
 
     /**
      * This is the constructor of class attendee.
@@ -17,7 +17,7 @@ public class Attendee {
      * @param checkedInCount
      * this count the checked in number of each attendees
      */
-    public Attendee( String profileID, String name, Integer checkedInCount) {
+    public Attendee( String profileID, String name, String checkedInCount) {
         this.pID = profileID;
         this.name = name;
         this.checkedInCount = checkedInCount;
@@ -56,7 +56,7 @@ public class Attendee {
      * this is a getter of counting of attendees' checked in
      * @return checkedInCount
      */
-    public Integer getCheckedInCount() {
+    public String getCheckedInCount() {
         return checkedInCount;
     }
 
@@ -64,7 +64,7 @@ public class Attendee {
      * this is a setter of counting of attendees' checked in
      * @param checkedInCount
      */
-    public void setCheckedInCount(Integer checkedInCount) {
+    public void setCheckedInCount(String checkedInCount) {
         this.checkedInCount = checkedInCount;
     }
 

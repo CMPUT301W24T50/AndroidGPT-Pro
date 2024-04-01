@@ -382,8 +382,19 @@ public class EventDatabaseControl {
      * eventSignUpProfiles: A list of profileID, null if no profile.
      */
     public ArrayList<String> getEventAllSignUpProfiles(DocumentSnapshot eventDocumentSnapshot) {
-        return (ArrayList<String>) eventDocumentSnapshot.get("eSignUpProfiles");
+        // Attempt to retrieve the list from the document.
+        Object result = eventDocumentSnapshot.get("eSignUpProfiles");
+
+        // Check if the result is null or not an instance of ArrayList.
+        if (result == null || !(result instanceof ArrayList)) {
+            // Return an empty ArrayList if null to avoid NullPointerException.
+            return new ArrayList<>();
+        }
+
+        // Otherwise, cast the result to ArrayList<String> and return it.
+        return (ArrayList<String>) result;
     }
+
 
     /**
      * This is an adder used to add the given profile ID to the event sign up list.
