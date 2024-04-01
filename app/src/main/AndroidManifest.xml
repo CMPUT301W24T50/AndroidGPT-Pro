@@ -55,6 +55,7 @@
         </activity>
         <activity
             android:name=".AttendeeCountActivity"
+            android:theme="@style/PopMe"
             android:exported="true">
         </activity>
     </application>

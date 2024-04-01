@@ -38,13 +38,12 @@ public class AttendeeCountActivity extends Activity {
     }
 
     private void popUpWindow(){
-        //getAttendee();
-
+        getAttendee();
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width*.6), (int)(height*.5));
+        getWindow().setLayout((int)(width*.8), (int)(height*.7));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
@@ -73,6 +72,9 @@ public class AttendeeCountActivity extends Activity {
             for (int i = 0; i < eventAttendeeNamesCount.length; i++) {
                 String attendeeID = eventAttendeeNamesCount[i][0];
                 String attendeeCheckInCount = eventAttendeeNamesCount[i][1];
+                int attendeeCheckInNumber = Integer.parseInt(attendeeCheckInCount);
+                String checkInNumber = Integer.toString(attendeeCheckInNumber);
+
                 ProfileDatabaseControl pdcTemp = new ProfileDatabaseControl(attendeeID);
                 pdcTemp.getProfileSnapshot()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -80,7 +82,7 @@ public class AttendeeCountActivity extends Activity {
                         public void onSuccess(DocumentSnapshot docSns) {
                             String attendeeName = pdc.getProfileName(docSns);
                             attendees.add(new Attendee(attendeeID,
-                                    attendeeName, attendeeCheckInCount));
+                                    attendeeName, checkInNumber));
                             attendeeArrayAdapter.notifyDataSetChanged();
                         }
                     });
