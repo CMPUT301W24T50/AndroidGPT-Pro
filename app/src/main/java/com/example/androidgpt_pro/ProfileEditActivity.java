@@ -31,7 +31,6 @@ public class ProfileEditActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Boolean imageUpdate = Boolean.FALSE;
     private Uri imageUri;
-
     private ImageButton backButton;
     private ImageView editProfileImageView;
     private TextView editProfileImageText;
@@ -57,12 +56,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(ProfileEditActivity.this,
-                                              ProfileActivity.class);
-                newIntent.putExtra("userID", userID);
-                newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(newIntent);
-                overridePendingTransition(0,0);
+                finish();
             }
         });
     }
@@ -175,7 +169,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     /**
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *     recently supplied in {@link #onSaveInstanceState}.
+     *     <b><i>Note: Otherwise it is null.</i></b>
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

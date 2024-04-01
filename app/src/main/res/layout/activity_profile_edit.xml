@@ -31,7 +31,8 @@
                 android:id="@+id/iv_edit_profile_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:color="@color/white">
+                android:color="@color/white"
+                android:scaleType="centerCrop">
             </ImageView>
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>

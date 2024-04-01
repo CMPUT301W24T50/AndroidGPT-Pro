@@ -1,7 +1,6 @@
 package com.example.androidgpt_pro;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +21,7 @@ import java.util.Objects;
 /**
  * This is a class that controls the interaction between event data and the database.
  */
+@SuppressWarnings("unchecked")
 public class EventDatabaseControl {
 
     private FirebaseFirestore db;
@@ -50,8 +50,6 @@ public class EventDatabaseControl {
 
     /**
      * This is the initializer of an event.
-     * @param eventID
-     * eventID: An ID of an event.
      * @param eventName
      * eventName: An event's name.
      * @param eventLocationStreet
@@ -67,7 +65,7 @@ public class EventDatabaseControl {
      * @param eventDescription
      * eventDescription: An event's description.
      */
-    public void initEvent(String eventID,
+    public void initEvent(String eventOrganizerID,
                           String eventName,
                           String eventLocationStreet,
                           String eventLocationCity,
@@ -76,18 +74,28 @@ public class EventDatabaseControl {
                           String eventDate,
                           String eventDescription,
                           Uri eventImageUri) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("eName", eventName);
-        data.put("eLocStreet", eventLocationStreet);
-        data.put("eLocCity", eventLocationCity);
-        data.put("eLocProvince", eventLocationProvince);
-        data.put("eTime", eventTime);
-        data.put("eDate", eventDate);
-        data.put("eDescription", eventDescription);
-        data.put("eSignUpProfiles", eSignUpProfiles);
-        data.put("eCheckInProfiles", eCheckInProfiles);
-        eColRef.document(eventID).set(data);
-        setEventImage(eventID, eventImageUri);
+        getEventStat().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String lastEventID = getLastEventID(docSns);
+                String eventID = updateEventStat(lastEventID);
+
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("eOrganizerID", eventOrganizerID);
+                data.put("eName", eventName);
+                data.put("eLocStreet", eventLocationStreet);
+                data.put("eLocCity", eventLocationCity);
+                data.put("eLocProvince", eventLocationProvince);
+                data.put("eTime", eventTime);
+                data.put("eDate", eventDate);
+                data.put("eDescription", eventDescription);
+                data.put("eSignUpProfiles", eSignUpProfiles);
+                data.put("eCheckInProfiles", eCheckInProfiles);
+                eColRef.document(eventID).set(data);
+                setEventImage(eventID, eventImageUri);
+                ds.addOrganizedProfileEvent(eventOrganizerID, eventID);
+            }
+        });
     }
 
 
@@ -97,7 +105,13 @@ public class EventDatabaseControl {
      * eventID: An ID of an event.
      */
     public void removeEvent(String eventID) {
-        eColRef.document(eventID).delete();
+        getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                eColRef.document(eventID).delete();
+                ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
+            }
+        });
     }
 
 
@@ -156,6 +170,18 @@ public class EventDatabaseControl {
      */
     public String getLastEventID(DocumentSnapshot eventDocumentSnapshot) {
         return eventDocumentSnapshot.getString("eLastEventID");
+    }
+
+
+    /**
+     * This is a getter for Event Organizer Profile ID.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventOrganizerID
+     * eventOrganizerID: The ID of the Event Organizer.
+     */
+    public String getEventOrganizerID(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eOrganizerID");
     }
 
 
@@ -357,6 +383,8 @@ public class EventDatabaseControl {
      * eventSignUpProfiles: A list of profileID, null if no profile.
      */
     public ArrayList<String> getEventAllSignUpProfiles(DocumentSnapshot eventDocumentSnapshot) {
+        if (eventDocumentSnapshot.get("eSignUpProfiles") == null)
+            return null;
         return (ArrayList<String>) eventDocumentSnapshot.get("eSignUpProfiles");
     }
 
@@ -394,30 +422,23 @@ public class EventDatabaseControl {
      * list[0][0] == "-1" if no profiles.
      */
     public String[][] getEventAllCheckInProfiles(DocumentSnapshot eventDocumentSnapshot) {
-        if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null) {
-            String[][] data = new String[0][];
-            data[0][0] = "-1";
-            return data;
-        }
+        if (eventDocumentSnapshot.get("eCheckInProfiles") == null)
+            return null;
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         String[][] lst = new String[data.size()][];
-        for (int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++)
             lst[i] = data.get(i).split("#");
-        }
         return lst;
     }
 
     private String getEventCheckInProfileCount(DocumentSnapshot eventDocumentSnapshot,
                                              String profileID) {
-        Log.d("Testo", eventDocumentSnapshot.get("eCheckInProfiles").toString());
-        if ((ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles") == null) {
-            return "-1";
-        }
+        if (eventDocumentSnapshot.get("eCheckInProfiles") == null)
+            return null;
         ArrayList<String> data = (ArrayList<String>) eventDocumentSnapshot.get("eCheckInProfiles");
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).split("#")[0], profileID)) {
+            if (Objects.equals(data.get(i).split("#")[0], profileID))
                 return data.get(i).split("#")[1];
-            }
         }
         return null;
     }
@@ -433,21 +454,21 @@ public class EventDatabaseControl {
         getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                String count = getEventCheckInProfileCount(docSns, profileID);
-                if (Objects.equals(count, "-1")) {
-                    count = "00000001";
+                if (getEventCheckInProfileCount(docSns, profileID) == null) {
+                    String count = "00000001";
                     String data = dt.constructIDCountString(profileID, count);
                     eColRef.document(eventID).update("eCheckInProfiles",
-                            FieldValue.arrayUnion(data));
+                        FieldValue.arrayUnion(data));
                     ds.newCheckInProfileEvent(profileID, eventID, count);
                 } else {
+                    String count = getEventCheckInProfileCount(docSns, profileID);
                     String data = dt.constructIDCountString(profileID, count);
                     String nextCount = dt.calculateAddOne(count);
                     String nextData = dt.constructIDCountString(profileID, nextCount);
                     eColRef.document(eventID).update("eCheckInProfiles",
-                            FieldValue.arrayRemove(data));
+                        FieldValue.arrayRemove(data));
                     eColRef.document(eventID).update("eCheckInProfiles",
-                            FieldValue.arrayUnion(nextData));
+                        FieldValue.arrayUnion(nextData));
                     ds.addCheckInProfileEvent(profileID, eventID, count, nextCount);
                 }
             }

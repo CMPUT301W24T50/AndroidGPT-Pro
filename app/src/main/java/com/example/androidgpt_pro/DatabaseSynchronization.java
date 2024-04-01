@@ -27,6 +27,40 @@ public class DatabaseSynchronization {
 
 
     /**
+     * This is an adder to synchronize the profile database for organized records.
+     * @param profileID
+     * profileID: A profile's ID.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void addOrganizedProfileEvent(String profileID, String eventID) {
+        pColRef.document(profileID)
+            .update("pOrganizedEvents", FieldValue.arrayUnion(eventID));
+    }
+
+    /**
+     * This is a deleter to synchronize the profile database for organized records.
+     * @param profileID
+     * profileID: A profile's ID.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delOrganizedProfileEvent(String profileID, String eventID) {
+        pColRef.document(profileID)
+            .update("pOrganizedEvents", FieldValue.arrayRemove(eventID));
+    }
+
+    /**
+     * This is a deleter to synchronize the event database for organized records.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delOrganizedEvent(String eventID) {
+        eColRef.document(eventID).delete();
+    }
+
+
+    /**
      * This is an adder to synchronize the profile database for sign up records.
      * @param profileID
      * profileID: A profile's ID.
@@ -83,7 +117,7 @@ public class DatabaseSynchronization {
     public void newCheckInProfileEvent(String profileID, String eventID, String count) {
         String data = dt.constructIDCountString(eventID, count);
         pColRef.document(profileID)
-                .update("pCheckInEvents", FieldValue.arrayUnion(data));
+            .update("pCheckInEvents", FieldValue.arrayUnion(data));
     }
 
     /**
@@ -103,10 +137,10 @@ public class DatabaseSynchronization {
                                        String nextCount) {
         String data = dt.constructIDCountString(eventID, count);
         pColRef.document(profileID)
-                .update("pCheckInEvents", FieldValue.arrayRemove(data));
+            .update("pCheckInEvents", FieldValue.arrayRemove(data));
         String nextData = dt.constructIDCountString(eventID, nextCount);
         pColRef.document(profileID)
-                .update("pCheckInEvents", FieldValue.arrayUnion(nextData));
+            .update("pCheckInEvents", FieldValue.arrayUnion(nextData));
     }
 
     /**
@@ -120,8 +154,8 @@ public class DatabaseSynchronization {
      */
     public void newCheckInEventProfile(String eventID, String profileID, String count) {
         String data = dt.constructIDCountString(profileID, count);
-        pColRef.document(eventID)
-                .update("eCheckInProfiles", FieldValue.arrayUnion(data));
+        eColRef.document(eventID)
+            .update("eCheckInProfiles", FieldValue.arrayUnion(data));
     }
 
     /**
@@ -141,9 +175,9 @@ public class DatabaseSynchronization {
                                        String nextCount) {
         String data = dt.constructIDCountString(profileID, count);
         eColRef.document(eventID)
-                .update("eCheckInProfiles", FieldValue.arrayRemove(data));
+            .update("eCheckInProfiles", FieldValue.arrayRemove(data));
         String nextData = dt.constructIDCountString(profileID, nextCount);
         eColRef.document(eventID)
-                .update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
+            .update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
     }
 }

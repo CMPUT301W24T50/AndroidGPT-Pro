@@ -58,7 +58,8 @@ public class QRScannerActivity extends ComponentActivity {
         btnScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
-        navigationTabs = findViewById(R.id.navigation);
+
+        navigationTabs = findViewById(R.id.nav_qr_scanner);
         navigationTabs.setSelectedItemId(R.id.qr_scanner_tab);
 
         // Set listener for bottom navigation items
@@ -74,11 +75,7 @@ public class QRScannerActivity extends ComponentActivity {
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(QRScannerActivity.this, QRScannerActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    assert Boolean.TRUE;
                 } else if (itemId == R.id.profile_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);

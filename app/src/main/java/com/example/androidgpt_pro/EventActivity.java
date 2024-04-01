@@ -2,6 +2,7 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -16,92 +18,126 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 /**
  * This class allows the user to browse all events in the database.
  * The user can select an event to see the event details and sign up.
  */
 public class EventActivity extends AppCompatActivity {
-    // TODO: when the user click the event button in the Navigation bar, it jumps to this page with all events listed.
+
+    private String userID;
+    private ProfileDatabaseControl pdc;
+    private EventDatabaseControl edc;
     BottomNavigationView navigationTabs;
-    private CardAdapter adapter;
-    private ListView listViewEvents;
-    // private ArrayList<EventDatabaseControl> eventList;
-    private String eID;
+    private FloatingActionButton createEventBtn;
+    private ListView eventsListView;
+    private ArrayList<Event> events;
+    private EventArrayAdapter eventArrayAdapter;
 
-    private void createSampleEvent() {
-//        EventDatabaseControl edc = new EventDatabaseControl();
-//        // We're going to add a hardcoded ID for demonstration purposes
-//        edc.getEventStat()
-//            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                @Override
-//                public void onSuccess(DocumentSnapshot docSns) {
-//                    String lastEventID = edc.getLastEventID(docSns);
-//                    eID = edc.updateEventStat(lastEventID);
-//                    edc.initEvent(eID, "Sample Event",
-//                            "123 Main St",
-//                            "Edmonton",
-//                            "AB",
-//                            "This is a sample event.",
-//                            "8:00 PM",
-//                            "April 10, 2024");
-//                    EventCard card = new EventCard("Sample Event",
-//                            "8:00 PM",
-//                            "April 10, 2024",
-//                            "Edmonton, AB",
-//                            R.drawable.partyimage1,
-//                            false);
-//                    adapter.add(card);
-//                    adapter.notifyDataSetChanged();
-//                }
-//            });
+
+    private void initEvents() {
+        events = new ArrayList<>();
     }
-    @SuppressLint("MissingInflatedId")
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_list);
-        Intent intent = getIntent();
-        String userID = intent.getStringExtra("userID");
-        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
 
-        listViewEvents = (ListView) findViewById(R.id.event_list_view);
-        adapter = new CardAdapter(this);
-        listViewEvents.setAdapter(adapter);
+    private void initViews() {
+        createEventBtn = findViewById(R.id.event_create_btn);
+        eventsListView = findViewById(R.id.event_list_view);
+        eventArrayAdapter = new EventArrayAdapter(this, events);
+        eventsListView.setAdapter(eventArrayAdapter);
+    }
 
-        // Sample cards made by Luke just for testing. Not communicating with db
-        EventCard card = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,false);
-        adapter.add(card);
-        EventCard card2 = new EventCard("SampleEvent", "8:00 PM", "April 10, 2024", "Edmonton, AB", R.drawable.partyimage1,true);
-        adapter.add(card2);
-        
-        adapter.notifyDataSetChanged();
-        createSampleEvent();
 
+    private void getEvents() {
+        getEventIDsFromProfile();
+    }
+
+    private void getEventIDsFromProfile() {
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (pdc.getProfileOrganizedEvents(docSns) != null)
+                    getEventInfo(pdc.getProfileOrganizedEvents(docSns));
+            }
+        });
+    }
+
+    private void getEventInfo(ArrayList<String> organizedEvents) {
+        for (int i = 0; i < organizedEvents.size(); i++) {
+            String eventID = organizedEvents.get(i);
+            edc.getEventSnapshot(eventID)
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot docSns) {
+                    getEventImage(eventID, docSns);
+                }
+            });
+        }
+    }
+
+    private void getEventImage(String eventID, DocumentSnapshot documentSnapshot) {
+        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                events.add(new Event(eventID,
+                    edc.getEventName(documentSnapshot),
+                    edc.getEventLocationCity(documentSnapshot),
+                    edc.getEventLocationProvince(documentSnapshot),
+                    edc.getEventTime(documentSnapshot),
+                    edc.getEventDate(documentSnapshot),
+                    uri));
+                eventArrayAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
+    private void setupEventsListView() {
         // handle click action
-        listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventActivity.this, EventDetailActivity.class);
-                intent.putExtra("eventID",eID);
+                Intent intent = new Intent(EventActivity.this, EventOrganizerActivity.class);
+                intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
+    }
 
-        // navigation bar
-        navigationTabs = findViewById(R.id.navigation);
+
+    private void setupCreateEventButton() {
+        // handle click event to open the creatingEvent
+        createEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventActivity.this, EventCreateActivity.class);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_event_list);
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
+        pdc = new ProfileDatabaseControl(userID);
+        edc = new EventDatabaseControl();
+
+        navigationTabs = findViewById(R.id.nav_event);
         navigationTabs.setSelectedItemId(R.id.events_tab);
-
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(EventActivity.this, EventActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    assert Boolean.TRUE;
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(EventActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
@@ -120,5 +156,13 @@ public class EventActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        initEvents();
+        initViews();
+
+        getEvents();
+        setupEventsListView();
+
+        setupCreateEventButton();
     }
 }

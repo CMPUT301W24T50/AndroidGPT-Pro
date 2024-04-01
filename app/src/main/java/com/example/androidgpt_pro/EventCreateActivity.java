@@ -1,14 +1,10 @@
 package com.example.androidgpt_pro;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,18 +15,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -38,8 +24,8 @@ import java.util.Locale;
 
 public class EventCreateActivity extends AppCompatActivity {
 
+    private String userID;
     private EventDatabaseControl edc;
-
     private String eID;
     private String eName;
     private String eLocStreet;
@@ -57,13 +43,14 @@ public class EventCreateActivity extends AppCompatActivity {
     private Button eventTimeEditButton;
     private int hour, minute;
     private EditText eventDescriptionEditText;
-    private Switch geoLcationTracking;
+    private Switch geoLocationTracking;
     private Button eventSelectPicButton;
     private static final int PICK_IMAGE_REQUEST = 1;
     private TextView selectedPicHint;
     private ImageButton backButton;
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
+
 
     private void initViews() {
         // Initialize views.
@@ -89,6 +76,7 @@ public class EventCreateActivity extends AppCompatActivity {
         });
     }
 
+
     private void initEventDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -104,9 +92,7 @@ public class EventCreateActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
-
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, year, month, day);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
 
@@ -115,6 +101,7 @@ public class EventCreateActivity extends AppCompatActivity {
     }
 
     private String getMonthFormat(int month) {
+
         if (month == 1)
             return "JAN";
         if (month == 2)
@@ -152,6 +139,7 @@ public class EventCreateActivity extends AppCompatActivity {
         return makeDateString(day, month, year);
     }
 
+
     public void openEventDatePicker(View view) {
         datePickerDialog.show();
     }
@@ -166,20 +154,31 @@ public class EventCreateActivity extends AppCompatActivity {
             }
         };
 
-        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
+//        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour, minute, true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
 
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
+    }
+
+
+    private void setupEventImageSelector() {
+        // handel eventPoster
+        eventSelectPicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
     }
 
     private void openGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-//                PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                PICK_IMAGE_REQUEST);
     }
 
     /**
@@ -208,18 +207,17 @@ public class EventCreateActivity extends AppCompatActivity {
         }
     }
 
-
-
-    public void setupEvent() {
+    /**
+     * This is a method to set all variables in the creating event part
+     */
+    public void setEvent() {
         eName = eventNameEditText.getText().toString();
         eLocStreet = eventLocationAddressEditText.getText().toString();
         eLocCity = eventLocationCityEditText.getText().toString();
         eLocProvince = eventLocationProvinceEditText.getText().toString();
 
         // handel day picker
-        initEventDatePicker();
-        eventDateEditButton.setText(getTodaysDate());
-        eTime = eventDateEditButton.getText().toString();
+        eDate = eventDateEditButton.getText().toString();
 
         // handel time picker
         String eventTime = hour + ":" + minute;
@@ -227,49 +225,72 @@ public class EventCreateActivity extends AppCompatActivity {
 
         // handel eventDescription
         eDescription = eventDescriptionEditText.getText().toString();
-
-        // handel eventPoster
-        eventSelectPicButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-
-        });
     }
 
-    public void newEvent() {
-        edc.getEventStat()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot docSns) {
-                        String lastEventID = edc.getLastEventID(docSns);
-                        eID = edc.updateEventStat(lastEventID);
-                        edc.initEvent(eID, eName, eLocStreet, eLocCity, eLocProvince,
-                                eTime, eDate, eDescription, eImageURI);
-                    }
-                });
+    /**
+     * This is a method to set upload variables in the creating event part to the database
+     */
+    public void applyNewEvent() {
+        edc.initEvent(userID, eName, eLocStreet, eLocCity,
+                eLocProvince, eTime, eDate, eDescription, eImageURI);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
         edc = new EventDatabaseControl();
+
         initViews();
-        setupEvent();
+        setupBackButton();
+        setupEventImageSelector();
+
+        Calendar calendar = Calendar.getInstance();
+        int currentMinute = calendar.get(Calendar.MINUTE);
+        //12 hour format
+        int currentHour = calendar.get(Calendar.HOUR);
+        //24 hour format
+        initEventDatePicker();
+        eventDateEditButton.setText(getTodaysDate());
 
         eventConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setEvent();
                 // create a new event
-                newEvent();
+                if(eName != null
+                    && eLocStreet != null
+                    && eLocCity != null
+                    && eLocProvince != null
+                    && eDate != null
+                    && eTime != null
+                    && eDescription != null
+                    && eImageURI != null) {
+                    applyNewEvent();
+                    // jump to next page
+                    Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
+                    newIntent.putExtra("eventID", eID);
+                    startActivity(newIntent);
+                }
+                else if(currentMinute <= minute && currentHour <= hour){
+                    CharSequence text = "Please Select a Valid Time";
+                    int duration = Toast.LENGTH_SHORT;
 
-                // jump to next page
-                Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
-                newIntent.putExtra("eventID", eID);
-                startActivity(newIntent);
+                    Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
+                    toast.show();
+                }
+                else {
+                    CharSequence text = "Please Fill up all Messages";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
+                    toast.show();
+                }
             }
         });
+        setupBackButton();
     }
 }

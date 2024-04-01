@@ -2,6 +2,10 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -31,7 +35,6 @@ import com.squareup.picasso.Picasso;
 public class ProfileActivity extends AppCompatActivity {
 
     private String userID;
-
     private ProfileDatabaseControl pdc;
 
     BottomNavigationView navigationTabs;
@@ -49,20 +52,45 @@ public class ProfileActivity extends AppCompatActivity {
         pNameTextView = findViewById(R.id.text_profile_name);
         pPhoneNumberTextView = findViewById(R.id.text_phone_number);
         pEmailTextView = findViewById(R.id.text_email);
+        editProfileButton = findViewById(R.id.btn_edit_profile);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
     }
 
+
+    private void generateInitialsAndDisplay() {
+        // Get the first letter of the user's name
+        String name = pNameTextView.getText().toString().trim();
+        String initials = "";
+        if (!name.isEmpty()) {
+            initials = name.substring(0, 1).toUpperCase();
+        }
+
+        // Create a Bitmap with the initials on a plain white background
+        Bitmap bitmap = Bitmap.createBitmap(120, 120, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(48);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(initials, 60, 70, paint);
+
+        // Set the generated Bitmap as the profile image
+        pImageView.setImageBitmap(bitmap);
+    }
 
     private void displayProfileImage() {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(pImageView);
+                pdc.resetProfileImageUpdatedState();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                pImageView.setImageResource(android.R.drawable.sym_def_app_icon);
+                // If there's an error loading profile image, display initials
+                generateInitialsAndDisplay();
             }
         });
     }
@@ -77,10 +105,8 @@ public class ProfileActivity extends AppCompatActivity {
                 pPhoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
-                if (pdc.getProfileImageUpdatedState(docSns)) {
+                if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
-                    pdc.resetProfileImageUpdatedState();
-                }
             }
         });
     }
@@ -88,16 +114,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupEditProfileButton() {
         // Handle click event for edit profile button.
-        editProfileButton = findViewById(R.id.btn_edit_profile);
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this,
                         ProfileEditActivity.class);
                 intent.putExtra("userID", userID);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-                overridePendingTransition(0,0);
             }
         });
     }
@@ -107,26 +130,14 @@ public class ProfileActivity extends AppCompatActivity {
         geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // code here to start geolocation tracking
-                } else {
-                    // code here to stop geolocation tracking
-                }
+                pdc.setProfileGLTState(isChecked);
             }
         });
     }
 
-    private void startGeolocationTracking() {
 
-    }
-
-    private void stopGeolocationTracking() {
-
-    }
-
-
-    private void setupNavigationTabs() {
-        navigationTabs = findViewById(R.id.navigation);
+    private void initNavigationTabs() {
+        navigationTabs = findViewById(R.id.nav_profile);
         navigationTabs.setSelectedItemId(R.id.profile_tab);
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
@@ -134,26 +145,19 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this,
-                                                  EventActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this,
-                                                  QRScannerActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this,
-                                                  ProfileActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    assert Boolean.TRUE;
                 } else {
                     throw new IllegalArgumentException("menu item ID does not exist");
                 }
@@ -173,10 +177,11 @@ public class ProfileActivity extends AppCompatActivity {
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
 
-        setupNavigationTabs();
+        initNavigationTabs();
         initViews();
         displayProfileImage();
         displayProfileInfo();
         setupEditProfileButton();
+        setupGLTButton();
     }
 }

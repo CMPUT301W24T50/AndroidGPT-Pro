@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/event_title"
         android:layout_width="wrap_content"
@@ -15,19 +16,31 @@
 
     <ListView
         android:id="@+id/event_list_view"
-        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_title"
+        android:layout_above="@+id/nav_event"
         android:layout_marginTop="0dp"
-        android:divider="#00000000"/>
+        android:divider="#00000000"
+        android:padding="16dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/navigation"
+        android:id="@+id/nav_event"
         app:menu="@menu/bottom_nav"
         android:layout_alignParentBottom="true"
         />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/event_create_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="0dp"
+        android:clickable="true"
+        android:contentDescription="submit"
+        app:srcCompat="@android:drawable/ic_menu_add" />
 
 </RelativeLayout>
