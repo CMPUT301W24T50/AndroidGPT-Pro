@@ -77,7 +77,10 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventAttendeesNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // open the list showing all signed up attendees
+                Intent intent = new Intent(EventOrganizerActivity.this, AttendeeCountActivity.class);
+                intent.putExtra("eventID", eventID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
             }
         });
     }
@@ -107,9 +110,14 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 String eventCityProvince = edc.getEventLocationCity(docSns) + ", " + edc.getEventLocationProvince(docSns);
                 eventOrganizerCityProvince.setText(eventCityProvince);
                 int eventAttendeeNumber = edc.getEventAllSignUpProfiles(docSns).size();
-                SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + eventAttendeeNumber + "/∞");
-                underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
-                eventAttendeesNumber.setText(underlineAttendeesNumber);
+                if (eventAttendeeNumber != 0){
+                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + eventAttendeeNumber + "/∞");
+                    underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
+                    eventAttendeesNumber.setText(underlineAttendeesNumber);
+                }
+                else{
+                    eventAttendeesNumber.setText("0/∞");
+                }
             }
         });
     }
@@ -127,6 +135,12 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
         eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
+
+        initViews();
+        setupBackButton();
+        fetchUserEvent();
+
+        openAttendees();
     }
 
 }
