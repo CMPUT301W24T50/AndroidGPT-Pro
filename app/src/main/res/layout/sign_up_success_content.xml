@@ -31,7 +31,7 @@
             android:layout_below="@+id/success_description"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:text="Back to Events"/>
+            android:text="Back to Main"/>
     </RelativeLayout>
 
 

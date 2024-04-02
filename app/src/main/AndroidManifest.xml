@@ -66,6 +66,10 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".EventQRActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".AttendeeCountActivity"
             android:theme="@style/PopMe"
