@@ -36,7 +36,7 @@ public class ProfileDatabaseControl {
     private String pName;
     private String pPhoneNumber;
     private String pEmail;
-    private Boolean pGLTState = Boolean.TRUE;
+    private Boolean pGLTState = Boolean.FALSE;
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
     private ArrayList<String> pOrganizedEvents;
@@ -307,7 +307,7 @@ public class ProfileDatabaseControl {
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         String[][] lst = new String[data.size()][];
         for (int i = 0; i < data.size(); i++)
-            lst[i] = data.get(i).split("#");
+            lst[i] = dt.splitSharpString(data.get(i));
         return lst;
     }
 
@@ -317,8 +317,8 @@ public class ProfileDatabaseControl {
             return null;
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).split("#")[0], eventID))
-                return data.get(i).split("#")[1];
+            if (Objects.equals(dt.splitSharpString(data.get(i))[0], eventID))
+                return dt.splitSharpString(data.get(i))[1];
         }
         return null;
     }
@@ -334,14 +334,14 @@ public class ProfileDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 if (getProfileCheckInEventCount(docSns, eventID) == null) {
                     String count = "00000001";
-                    String data = dt.constructIDCountString(eventID, count);
+                    String data = dt.constructSharpString(eventID, count);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(data));
                     ds.newCheckInEventProfile(eventID, pID, count);
                 } else {
                     String count = getProfileCheckInEventCount(docSns, eventID);
-                    String data = dt.constructIDCountString(eventID, count);
+                    String data = dt.constructSharpString(eventID, count);
                     String nextCount = dt.calculateAddOne(count);
-                    String nextData = dt.constructIDCountString(eventID, nextCount);
+                    String nextData = dt.constructSharpString(eventID, nextCount);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
                     ds.addCheckInEventProfile(eventID, pID, count, nextCount);
