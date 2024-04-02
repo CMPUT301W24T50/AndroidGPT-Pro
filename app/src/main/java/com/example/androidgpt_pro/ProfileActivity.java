@@ -44,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView pEmailTextView;
     private Button editProfileButton;
     private ToggleButton geolocationToggle;
+    private Button myEventButton;
 
 
     private void initViews() {
@@ -54,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         pEmailTextView = findViewById(R.id.text_email);
         editProfileButton = findViewById(R.id.btn_edit_profile);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
+        myEventButton = findViewById(R.id.btn_my_event);
     }
 
 
@@ -136,6 +138,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    protected void setupMyEventButton() {
+        myEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this,
+                        EventMyActivity.class);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     private void initNavigationTabs() {
         navigationTabs = findViewById(R.id.nav_profile);
@@ -146,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(ProfileActivity.this, EventActivity.class);
+                    Intent newIntent = new Intent(ProfileActivity.this, EventAllActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
@@ -184,5 +198,6 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileInfo();
         setupEditProfileButton();
         setupGLTButton();
+        setupMyEventButton();
     }
 }

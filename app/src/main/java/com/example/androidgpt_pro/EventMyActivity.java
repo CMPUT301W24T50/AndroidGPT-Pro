@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * This class allows the user to browse all events in the database.
  * The user can select an event to see the event details and sign up.
  */
-public class EventActivity extends AppCompatActivity {
+public class EventMyActivity extends AppCompatActivity {
 
     private String userID;
     private ProfileDatabaseControl pdc;
@@ -97,7 +97,7 @@ public class EventActivity extends AppCompatActivity {
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventActivity.this, EventOrganizerActivity.class);
+                Intent intent = new Intent(EventMyActivity.this, EventOrganizerActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
                 startActivity(intent);
@@ -111,7 +111,7 @@ public class EventActivity extends AppCompatActivity {
         createEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventActivity.this, EventCreateActivity.class);
+                Intent intent = new Intent(EventMyActivity.this, EventCreateActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
@@ -137,15 +137,19 @@ public class EventActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    assert Boolean.TRUE;
+                    Intent newIntent = new Intent(EventMyActivity.this, EventAllActivity.class);
+                    newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(EventActivity.this, QRScannerActivity.class);
+                    Intent newIntent = new Intent(EventMyActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
-                    Intent newIntent = new Intent(EventActivity.this, ProfileActivity.class);
+                    Intent newIntent = new Intent(EventMyActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
