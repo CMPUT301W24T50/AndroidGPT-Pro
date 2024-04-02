@@ -51,6 +51,8 @@ public class EventDatabaseControl {
 
     /**
      * This is the initializer of an event.
+     * @param eventID
+     * eventID: The ID of the event.
      * @param eventOrganizerID
      * eventOrganizerID: The organizer's profileID.
      * @param eventName
@@ -71,9 +73,9 @@ public class EventDatabaseControl {
      * eventGeoLocationTrackingState: A state of Geo-Location Tracking.
      * @param eventImageUri
      * eventImageUri: The URI of an image.
-     *
      */
-    public void initEvent(String eventOrganizerID,
+    public void initEvent(String eventID,
+                          String eventOrganizerID,
                           String eventName,
                           String eventLocationStreet,
                           String eventLocationCity,
@@ -83,30 +85,22 @@ public class EventDatabaseControl {
                           String eventDescription,
                           Boolean eventGeoLocationTrackingState,
                           Uri eventImageUri) {
-        getEventStat().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                String lastEventID = getLastEventID(docSns);
-                String eventID = updateEventStat(lastEventID);
-
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("eOrganizerID", eventOrganizerID);
-                data.put("eName", eventName);
-                data.put("eLocStreet", eventLocationStreet);
-                data.put("eLocCity", eventLocationCity);
-                data.put("eLocProvince", eventLocationProvince);
-                data.put("eTime", eventTime);
-                data.put("eDate", eventDate);
-                data.put("eDescription", eventDescription);
-                data.put("eGLTState", eventGeoLocationTrackingState);
-                data.put("eSignUpProfiles", eSignUpProfiles);
-                data.put("eCheckInProfiles", eCheckInProfiles);
-                data.put("eCheckInLocations", eCheckInLocations);
-                eColRef.document(eventID).set(data);
-                setEventImage(eventID, eventImageUri);
-                ds.addOrganizedProfileEvent(eventOrganizerID, eventID);
-            }
-        });
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("eOrganizerID", eventOrganizerID);
+        data.put("eName", eventName);
+        data.put("eLocStreet", eventLocationStreet);
+        data.put("eLocCity", eventLocationCity);
+        data.put("eLocProvince", eventLocationProvince);
+        data.put("eTime", eventTime);
+        data.put("eDate", eventDate);
+        data.put("eDescription", eventDescription);
+        data.put("eGLTState", eventGeoLocationTrackingState);
+        data.put("eSignUpProfiles", eSignUpProfiles);
+        data.put("eCheckInProfiles", eCheckInProfiles);
+        data.put("eCheckInLocations", eCheckInLocations);
+        eColRef.document(eventID).set(data);
+        setEventImage(eventID, eventImageUri);
+        ds.addOrganizedProfileEvent(eventOrganizerID, eventID);
     }
 
 

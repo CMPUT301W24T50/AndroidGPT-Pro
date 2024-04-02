@@ -18,6 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -238,8 +241,23 @@ public class EventCreateActivity extends AppCompatActivity {
      * This is a method to set upload variables in the creating event part to the database
      */
     public void applyNewEvent() {
-        edc.initEvent(userID, eName, eLocStreet, eLocCity, eLocProvince,
-            eTime, eDate, eDescription, eGLTState, eImageURI);
+        edc.getEventStat().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String lastEventID = edc.getLastEventID(docSns);
+                eID = edc.updateEventStat(lastEventID);
+                edc.initEvent(eID, userID, eName, eLocStreet, eLocCity, eLocProvince,
+                    eTime, eDate, eDescription, eGLTState, eImageURI);
+                createCompleted();
+            }
+        });
+    }
+
+    private void createCompleted() {
+        // jump to next page
+        Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
+        newIntent.putExtra("eventID", eID);
+        startActivity(newIntent);
     }
 
     @Override
@@ -268,19 +286,11 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setEvent();
                 // create a new event
-                if(eName != null
-                    && eLocStreet != null
-                    && eLocCity != null
-                    && eLocProvince != null
-                    && eDate != null
-                    && eTime != null
-                    && eDescription != null
-                    && eImageURI != null) {
+                if(eName != null && eLocStreet != null
+                        && eLocCity != null && eLocProvince != null
+                        && eDate != null && eTime != null
+                        && eDescription != null && eImageURI != null) {
                     applyNewEvent();
-                    // jump to next page
-                    Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
-                    newIntent.putExtra("eventID", eID);
-                    startActivity(newIntent);
                 }
                 else if(currentMinute <= minute && currentHour <= hour){
                     CharSequence text = "Please Select a Valid Time";
