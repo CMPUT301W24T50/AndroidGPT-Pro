@@ -33,15 +33,26 @@ public class DatabaseTools {
     }
 
     /**
-     * This is a string constructor to merge an string ID and a string count.
-     * @param someID
-     * someID: A profileID or an eventID.
-     * @param count
-     * count: A string number.
-     * @return idCountString
-     * idCountString: A string with merged ID and count.
+     * This is a string constructor to merge two string.
+     * @param stringA
+     * stringA: A string.
+     * @param stringB
+     * stringB: A string.
+     * @return sharpString
+     * sharpString: A string with merged two strings.
      */
-    public String constructIDCountString(String someID, String count) {
-        return someID + "#" + count;
+    public String constructSharpString(String stringA, String stringB) {
+        return stringA + "#" + stringB;
+    }
+
+    /**
+     * This is a string split function to split a sharp string.
+     * @param sharpString
+     * sharpString: A string with merged two strings.
+     * @return strings
+     * strings: A list of strings.
+     */
+    public String[] splitSharpString(String sharpString) {
+        return sharpString.split("#");
     }
 }
