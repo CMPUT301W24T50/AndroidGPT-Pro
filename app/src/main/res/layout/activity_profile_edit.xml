@@ -37,18 +37,32 @@
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/tv_edit_profile_image"
+    <LinearLayout
+        android:id="@+id/ll_edit_profile_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_profile_image_text"
-        android:textAlignment="center"
-        android:textColor="#6750A3"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/card_edit_profile_image">
-    </TextView>
+
+        <ImageButton
+            android:id="@+id/ib_edit_profile_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/MainTheme2"
+            android:src="@android:drawable/ic_menu_add"
+            app:tint="@color/MainTheme1">
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/ib_del_profile_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/MainTheme2"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/MainTheme1">
+        </ImageButton>
+    </LinearLayout>
 
 
     <EditText
@@ -57,7 +71,7 @@
         android:layout_height="wrap_content"
         android:hint="Profile Name"
         android:inputType="text"
-        android:layout_below="@+id/tv_edit_profile_image"
+        android:layout_below="@+id/ll_edit_profile_image"
         android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp" />

@@ -18,8 +18,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 public class EventOrganizerActivity extends AppCompatActivity {
     private String userID;
     private String eventID;
@@ -33,7 +31,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private TextView eventAttendeesNumber;
     private ImageButton eventSendNotification;
     private Button openMap;
-    private ImageView iv_checkInQRCode;
+    private ImageView ivCheckInQRCode;
 
     private void initViews(){
         backButton = findViewById(R.id.back_button);
@@ -44,7 +42,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         openMap = findViewById(R.id.organizer_event_map_btn);
-        iv_checkInQRCode = findViewById(R.id.iv_event_qr_image);
+        ivCheckInQRCode = findViewById(R.id.iv_event_qr_image);
     }
 
     private void setupBackButton() {
@@ -123,7 +121,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private void showQRCode() {
         Bitmap checkInQRCode = QRCodeGenerator
             .generateCheckInQRCodeBitmap(eventID, 400, 400);
-        iv_checkInQRCode.setImageBitmap(checkInQRCode);
+        ivCheckInQRCode.setImageBitmap(checkInQRCode);
     }
 
 

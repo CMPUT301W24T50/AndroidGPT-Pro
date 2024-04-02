@@ -36,7 +36,6 @@ public class ProfileDatabaseControl {
     private String pName;
     private String pPhoneNumber;
     private String pEmail;
-    private Boolean pGLTState = Boolean.FALSE;
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
     private ArrayList<String> pOrganizedEvents;
@@ -71,10 +70,10 @@ public class ProfileDatabaseControl {
         data.put("pRole", pRole);
         data.put("pPhoneNumber", pPhoneNumber);
         data.put("pEmail", pEmail);
-        data.put("pGLTState", pGLTState);
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         data.put("pOrganizedEvents", pOrganizedEvents);
+        data.put("pGLTState", Boolean.FALSE);
         data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
     }
@@ -230,6 +229,18 @@ public class ProfileDatabaseControl {
                     pDocRef.update("pImageUpdated", Boolean.TRUE);
                 }
             });
+    }
+
+    /**
+     * This is a deleter for Profile Image.
+     */
+    public void delProfileImage() {
+        pStgRef.child(pID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                pDocRef.update("pImageUpdated", Boolean.TRUE);
+            }
+        });
     }
 
 
