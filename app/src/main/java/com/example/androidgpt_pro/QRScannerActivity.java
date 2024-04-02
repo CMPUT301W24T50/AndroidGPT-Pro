@@ -119,7 +119,7 @@ public class QRScannerActivity extends ComponentActivity {
      * @param data The scanned QR code data, which should include the event ID for sign-up.
      */
     private void handleSignupQRCode(String data) {
-        String eventID = extractEventId(data);
+        String eventID = data.substring(22);
         Intent intent = new Intent(QRScannerActivity.this, EventQRActivity.class);
         intent.putExtra("eventID", eventID);
         intent.putExtra("userID", userID);
@@ -137,21 +137,11 @@ public class QRScannerActivity extends ComponentActivity {
      * @param data The scanned QR code data, which should include the event ID for check-in.
      */
     private void handleCheckInQRCode(String data) {
-        String eventID = extractEventId(data);
+        String eventID = data.substring(23);
         Intent intent = new Intent(QRScannerActivity.this, EventQRActivity.class);
         intent.putExtra("eventID", eventID);
         intent.putExtra("userID", userID);
         intent.putExtra("userOp", "CheckIn");
         startActivity(intent);
-    }
-
-    /**
-     * Extracts the event ID from the QR code data.
-     *
-     * @param qrCodeData The complete QR code data string.
-     * @return The extracted event ID.
-     */
-    private String extractEventId(String qrCodeData) {
-        return qrCodeData.substring(qrCodeData.indexOf("_") + 1);
     }
 }
