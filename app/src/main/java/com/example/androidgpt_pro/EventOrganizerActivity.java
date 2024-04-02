@@ -6,17 +6,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Objects;
 
 public class EventOrganizerActivity extends AppCompatActivity {
     private String userID;
@@ -32,6 +40,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private ImageButton eventSendNotification;
     private Button openMap;
     private ImageView ivCheckInQRCode;
+    private Button shareQRCodeButton;
 
     private void initViews(){
         backButton = findViewById(R.id.back_button);
@@ -43,6 +52,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         openMap = findViewById(R.id.organizer_event_map_btn);
         ivCheckInQRCode = findViewById(R.id.iv_event_qr_image);
+        shareQRCodeButton = findViewById(R.id.share_qr_image_btn);
     }
 
     private void setupBackButton() {
@@ -124,6 +134,47 @@ public class EventOrganizerActivity extends AppCompatActivity {
         ivCheckInQRCode.setImageBitmap(checkInQRCode);
     }
 
+    private void setUpShareQRCode() {
+        shareQRCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap checkInQRCode = QRCodeGenerator
+                        .generateCheckInQRCodeBitmap(eventID, 400, 400);
+                shareQRCode(checkInQRCode);
+            }
+        });
+    }
+
+    private void shareQRCode(Bitmap checkInQRCode) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        Uri bmpUri;
+        String textToShare="Share QR Code";
+        bmpUri = saveImage(checkInQRCode, getApplicationContext());
+        share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        share.putExtra(Intent.EXTRA_STREAM,bmpUri);
+        share.putExtra(Intent.EXTRA_TEXT, textToShare);
+        startActivity(Intent.createChooser(share, "Share Content"));
+    }
+
+    private static Uri saveImage(Bitmap image, Context context) {
+        File imageFolder = new File(context.getCacheDir(), "images");
+        Uri uri = null;
+        try {
+            imageFolder.mkdir();
+            File file = new File(imageFolder, "shared_qr_code.jpg");
+
+            FileOutputStream stream = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+            stream.flush();
+            stream.close();
+            uri = FileProvider.getUriForFile(Objects.requireNonNull(context.getApplicationContext()),
+                    "com.project.shareqrcode" + ".provider", file);
+        } catch (IOException e) {
+            Log.d("TAG", "Exception" + e.getMessage());
+        }
+        return uri;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
