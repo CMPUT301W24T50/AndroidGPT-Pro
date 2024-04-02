@@ -91,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 // If there's an error loading profile image, display initials
                 generateInitialsAndDisplay();
+                pdc.resetProfileImageUpdatedState();
             }
         });
     }
