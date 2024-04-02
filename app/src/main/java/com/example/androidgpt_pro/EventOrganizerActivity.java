@@ -1,6 +1,7 @@
 package com.example.androidgpt_pro;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -32,7 +33,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private TextView eventAttendeesNumber;
     private ImageButton eventSendNotification;
     private Button openMap;
-    private ImageView checkInQRCode;
+    private ImageView iv_checkInQRCode;
 
     private void initViews(){
         backButton = findViewById(R.id.back_button);
@@ -43,7 +44,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         openMap = findViewById(R.id.organizer_event_map_btn);
-        checkInQRCode = findViewById(R.id.iv_event_qr_image);
+        iv_checkInQRCode = findViewById(R.id.iv_event_qr_image);
     }
 
     private void setupBackButton() {
@@ -109,6 +110,12 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
     }
 
+    private void showQRCode() {
+        Bitmap checkInQRCode = QRCodeGenerator
+            .generateCheckInQRCodeBitmap(eventID, 400, 400);
+        iv_checkInQRCode.setImageBitmap(checkInQRCode);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -125,6 +132,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         initViews();
         setupBackButton();
         fetchUserEvent();
+        showQRCode();
 
         openAttendees();
     }

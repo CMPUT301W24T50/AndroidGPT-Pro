@@ -175,21 +175,14 @@
                     android:layout_height="180dp"
                     android:color="@color/white"
                     android:layout_below="@+id/organizer_event_qr_code"
-                    android:scaleType="fitXY"
+                    android:scaleType="fitCenter"
                     android:adjustViewBounds="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="51dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="49dp"/>
-
-
-
-
-
             </RelativeLayout>
-
         </ScrollView>
-
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -20,8 +20,8 @@ public class EventCreateQRActivity extends AppCompatActivity {
         eventID = getIntent().getStringExtra("eventID");
 
         // Generate QR codes
-        Bitmap signUpQRCode = QRCodeGenerator.generateSignUpQRCodeBitmap("sign-up_" + eventID, 400, 400);
-        Bitmap checkInQRCode = QRCodeGenerator.generateCheckInQRCodeBitmap("check-in_" + eventID, 400, 400);
+        Bitmap signUpQRCode = QRCodeGenerator.generateSignUpQRCodeBitmap(eventID, 400, 400);
+        Bitmap checkInQRCode = QRCodeGenerator.generateCheckInQRCodeBitmap(eventID, 400, 400);
 
         // Display QR codes
         ImageView signUpQRCodeImageView = findViewById(R.id.sign_up_qr_code_image_view);

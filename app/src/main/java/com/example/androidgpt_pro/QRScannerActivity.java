@@ -97,7 +97,7 @@ public class QRScannerActivity extends ComponentActivity {
      * @return true if it's a sign-up QR code; false otherwise.
      */
     private boolean isSignupQRCode(String data) {
-        return data.startsWith("sign-up_");
+        return data.startsWith("AndroidGPT-Pro_SignUp_");
     }
 
     /**
@@ -107,7 +107,7 @@ public class QRScannerActivity extends ComponentActivity {
      * @return true if it's a check-in QR code; false otherwise.
      */
     private boolean isCheckInQRCode(String data) {
-        return data.startsWith("check-in_");
+        return data.startsWith("AndroidGPT-Pro_CheckIn_");
     }
 
     /**
