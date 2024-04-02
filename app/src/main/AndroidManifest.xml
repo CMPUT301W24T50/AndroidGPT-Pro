@@ -45,7 +45,7 @@
         </activity>
 
         <activity
-            android:name=".EventActivity"
+            android:name=".EventMyActivity"
             android:exported="true">
         </activity>
 
@@ -89,12 +89,8 @@
             android:exported="true">
         </activity>
 
-<!--        <service-->
-<!--            android:name=".java.MyFirebaseMessagingService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <activity android:name=".EventAllActivity"
+            android:exported="true">
+        </activity>
     </application>
 </manifest>

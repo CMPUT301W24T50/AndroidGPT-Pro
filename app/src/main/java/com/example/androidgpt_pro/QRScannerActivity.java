@@ -69,7 +69,7 @@ public class QRScannerActivity extends ComponentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(QRScannerActivity.this, EventActivity.class);
+                    Intent newIntent = new Intent(QRScannerActivity.this, EventAllActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
