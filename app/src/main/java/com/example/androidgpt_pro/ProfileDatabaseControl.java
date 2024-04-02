@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.Objects;
 /**
  * This is a class that controls the interaction between profile data and the database.
  */
+@SuppressWarnings("unchecked")
 public class ProfileDatabaseControl {
 
     private FirebaseFirestore db;
@@ -34,9 +36,10 @@ public class ProfileDatabaseControl {
     private String pName;
     private String pPhoneNumber;
     private String pEmail;
-    private Boolean pGLTState = Boolean.TRUE;
+    private Boolean pGLTState = Boolean.FALSE;
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
+    private ArrayList<String> pOrganizedEvents;
 
 
     /**
@@ -71,6 +74,8 @@ public class ProfileDatabaseControl {
         data.put("pGLTState", pGLTState);
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
+        data.put("pOrganizedEvents", pOrganizedEvents);
+        data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
     }
 
@@ -179,6 +184,24 @@ public class ProfileDatabaseControl {
 
 
     /**
+     * This is a getter for Profile Image Updated State.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileImageUpdatedState
+     * profileImageUpdatedState: A state of Image Updated.
+     */
+    public Boolean getProfileImageUpdatedState(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getBoolean("pImageUpdated");
+    }
+
+    /**
+     * This is a reset function for Profile Image Updated State.
+     */
+    public void resetProfileImageUpdatedState() {
+        pDocRef.update("pImageUpdated", Boolean.FALSE);
+    }
+
+    /**
      * This is a getter for Profile Image.
      * @return profileImageGetTask
      * profileImageGetTask: A task for getting profileImage.
@@ -199,7 +222,41 @@ public class ProfileDatabaseControl {
      * profileImageURI: The URI of an image.
      */
     public void setProfileImage(Uri profileImageURI) {
-        pStgRef.child(pID).putFile(profileImageURI);
+        pStgRef.child(pID)
+            .putFile(profileImageURI)
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    pDocRef.update("pImageUpdated", Boolean.TRUE);
+                }
+            });
+    }
+
+
+    /**
+     * This is a getter for Profile Organized Events.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileOrganizedEvents
+     * profileOrganizedEvents: A list of eventID.
+     */
+    public ArrayList<String> getProfileOrganizedEvents(DocumentSnapshot profileDocumentSnapshot) {
+        return (ArrayList<String>) profileDocumentSnapshot.get("pOrganizedEvents");
+    }
+
+    /**
+     * This is a deleter for Profile Organized Events.
+     * @param eventID
+     * eventID: The ID of the event that needs to be deleted.
+     */
+    public void delProfileOrganizedEvents(String eventID) {
+        pDocRef.update("pOrganizedEvents", FieldValue.arrayRemove(eventID))
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    ds.delOrganizedEvent(eventID);
+                }
+            });
     }
 
 
@@ -211,6 +268,8 @@ public class ProfileDatabaseControl {
      * profileSignUpEvents: A list of eventID.
      */
     public ArrayList<String> getProfileAllSignUpEvents(DocumentSnapshot profileDocumentSnapshot) {
+        if (profileDocumentSnapshot.get("pSignUpEvents") == null)
+            return null;
         return (ArrayList<String>) profileDocumentSnapshot.get("pSignUpEvents");
     }
 
@@ -243,24 +302,23 @@ public class ProfileDatabaseControl {
      * profileCheckInEvents: A "2D Array" list of eventID and count, null if no event.
      */
     public String[][] getProfileAllCheckInEvent(DocumentSnapshot profileDocumentSnapshot) {
+        if (profileDocumentSnapshot.get("pCheckInEvents") == null)
+            return null;
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         String[][] lst = new String[data.size()][];
-        for (int i = 0; i < data.size(); i++) {
-            lst[i] = data.get(i).split("#");
-        }
+        for (int i = 0; i < data.size(); i++)
+            lst[i] = dt.splitSharpString(data.get(i));
         return lst;
     }
 
     private String getProfileCheckInEventCount(DocumentSnapshot profileDocumentSnapshot,
                                                String eventID) {
-        if ((ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents") == null) {
-            return "-1";
-        }
+        if (profileDocumentSnapshot.get("pCheckInEvents") == null)
+            return null;
         ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot.get("pCheckInEvents");
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).split("#")[0], eventID)) {
-                return data.get(i).split("#")[1];
-            }
+            if (Objects.equals(dt.splitSharpString(data.get(i))[0], eventID))
+                return dt.splitSharpString(data.get(i))[1];
         }
         return null;
     }
@@ -274,16 +332,16 @@ public class ProfileDatabaseControl {
         getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                String count = getProfileCheckInEventCount(docSns, eventID);
-                if (Objects.equals(count, "-1")) {
-                    count = "00000001";
-                    String data = dt.constructIDCountString(eventID, count);
+                if (getProfileCheckInEventCount(docSns, eventID) == null) {
+                    String count = "00000001";
+                    String data = dt.constructSharpString(eventID, count);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(data));
                     ds.newCheckInEventProfile(eventID, pID, count);
                 } else {
-                    String data = dt.constructIDCountString(eventID, count);
+                    String count = getProfileCheckInEventCount(docSns, eventID);
+                    String data = dt.constructSharpString(eventID, count);
                     String nextCount = dt.calculateAddOne(count);
-                    String nextData = dt.constructIDCountString(eventID, nextCount);
+                    String nextData = dt.constructSharpString(eventID, nextCount);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
                     ds.addCheckInEventProfile(eventID, pID, count, nextCount);

@@ -220,6 +220,36 @@ TA Questions:
 
 
 Next Meeting:
-- Tuesday March 25, 2024
+- Monday March 25, 2024
+
+/*********************************/
+
+/*********************************/
+Internal Meeting - Monday March 25, 2024
+
+Meeting Attendees:
+- Luke
+- Arturia
+- Paul
+- Kells
+- Edward
+- Yanze
+
+Agenda:
+Discuss Project Part 4, talking about the progress and questions 
+
+Discussion:
+- Arturia -> Making unit tests for database stuff, events, geolocation tracking
+- Edward -> Automatic photo generation based on profile, shape uploaded image into circle
+- Paul -> Generating QR / Create Event / Organizer Event Screen
+- Kells -> Update Check-In to automatically check in on QR scan
+- Yanze -> UML updates
+- Luke -> Update UI, Admin
+
+TA Questions:
+
+
+Next Meeting:
+- Tuesday March 26, 2024
 - Weekly TA/Client Meeting
 /*********************************/

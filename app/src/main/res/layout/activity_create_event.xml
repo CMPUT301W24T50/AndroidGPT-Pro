@@ -11,7 +11,6 @@
         android:background="@drawable/back_arrow_icon"
         android:id="@+id/back_button"
         android:layout_margin="16dp">
-
     </ImageButton>
 
     <androidx.cardview.widget.CardView
@@ -77,14 +76,18 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Date"
+                    android:text="Date(click to select a date)"
                     android:textSize="16sp" />
 
-                <EditText
+                <Button
                     android:id="@+id/edit_event_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/event_date_title"
+                    android:text="JAN 01 2020"
+                    android:textColor="@color/black"
+                    style="?android:spinnerStyle"
+                    android:onClick="openEventDatePicker"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
@@ -95,12 +98,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edit_event_date"
+                    android:onClick="popEventTimePicker"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="SELECT TIME" />
+                    android:text="SELECT TIME"
+                    android:textColor="@color/black"
+                    style="?android:spinnerStyle" />
 
                 <TextView
                     android:id="@+id/location_title"
@@ -161,37 +167,37 @@
                     android:textSize="16sp"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-                <TextView
-                    android:id="@+id/qr_code_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/geo_location_switch"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:checked="false"
-                    android:text="QR Code"
-                    android:textSize="16sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/qr_code_title"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/geo_location_switch"-->
+<!--                    android:layout_alignParentStart="true"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:checked="false"-->
+<!--                    android:text="QR Code"-->
+<!--                    android:textSize="16sp" />-->
 
-                <ImageView
-                    android:id="@+id/qr_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/qr_code_title"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:padding="30dp"
-                    android:src="@drawable/qr_scan_icon" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/qr_code"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/qr_code_title"-->
+<!--                    android:layout_alignParentStart="true"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:padding="30dp"-->
+<!--                    android:src="@drawable/qr_scan_icon" />-->
 
                 <TextView
                     android:id="@+id/poster_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/qr_code"
+                    android:layout_below="@id/geo_location_switch"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
@@ -209,7 +215,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Select Posters" />
+                    android:text="Select a Poster" />
 
                 <TextView
                     android:id="@+id/selected_pic"
@@ -219,29 +225,52 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="4sp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/upload_pic"
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/upload_pic"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/select_pic"-->
+<!--                    android:layout_alignParentStart="true"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:enabled="false"-->
+<!--                    android:text="Upload a Poster" />-->
+
+                <TextView
+                    android:id="@+id/event_description_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/selected_pic"
+                    android:layout_below="@id/selected_pic"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:enabled="false"
-                    android:text="Upload Posters" />
+                    android:text="Description"
+                    android:textSize="16sp" />
 
-                <Button
-                    android:id="@+id/confirm_create_event_title"
+                <EditText
+                    android:id="@+id/edit_event_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/upload_pic"
+                    android:layout_below="@+id/event_description_title"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" />
+
+                <Button
+                    android:id="@+id/confirm_create_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edit_event_description"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="50dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Upload Posters" />
+                    android:text="CONFIRM" />
 
             </RelativeLayout>
 

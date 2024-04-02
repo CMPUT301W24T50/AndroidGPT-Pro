@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "765731309497",
+    "project_id": "androidgpt-pro",
+    "storage_bucket": "androidgpt-pro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765731309497:android:71e72666d41b7c36835868",
+        "android_client_info": {
+          "package_name": "com.example.androidgpt_pro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-YogB3e3zS7vTtqHcbYKmEzuayeuRnms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

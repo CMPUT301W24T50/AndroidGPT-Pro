@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,9 +31,9 @@ public class ProfileEditActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Boolean imageUpdate = Boolean.FALSE;
     private Uri imageUri;
-
     private ImageButton backButton;
     private ImageView editProfileImageView;
+    private TextView editProfileImageText;
     private EditText editProfileNameEditText;
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
@@ -42,7 +43,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void initViews() {
         // Initialize views.
         backButton = findViewById(R.id.back_button);
-        editProfileImageView = findViewById(R.id.image_edit_profile_picture);
+        editProfileImageView = findViewById(R.id.iv_edit_profile_image);
+        editProfileImageText = findViewById(R.id.tv_edit_profile_image);
         editProfileNameEditText = findViewById(R.id.edit_text_edit_profile_name);
         editPhoneNumberEditText = findViewById(R.id.edit_text_edit_phone_number);
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
@@ -54,10 +56,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(ProfileEditActivity.this,
-                                              ProfileActivity.class);
-                newIntent.putExtra("userID", userID);
-                startActivity(newIntent);
+                finish();
             }
         });
     }
@@ -90,6 +89,12 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void setupProfileImageEditor() {
         // Set click listener for profile image.
         editProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+        editProfileImageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
@@ -164,7 +169,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     /**
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *     recently supplied in {@link #onSaveInstanceState}.
+     *     <b><i>Note: Otherwise it is null.</i></b>
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

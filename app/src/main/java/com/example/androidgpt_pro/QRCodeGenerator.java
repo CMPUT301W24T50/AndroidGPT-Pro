@@ -25,7 +25,7 @@ public class QRCodeGenerator {
      */
     // Method to generate Sign-up QR Code Bitmap
     public static Bitmap generateSignUpQRCodeBitmap(String eventId, int width, int height) {
-        String data = "sign-up_" + eventId;
+        String data = "AndroidGPT-Pro_SignUp_" + eventId;
         return generateQRCodeBitmap(data, width, height);
     }
 
@@ -39,7 +39,7 @@ public class QRCodeGenerator {
      */
     // Method to generate Check-in QR Code Bitmap
     public static Bitmap generateCheckInQRCodeBitmap(String eventId, int width, int height) {
-        String data = "check-in_" + eventId;
+        String data = "AndroidGPT-Pro_CheckIn_" + eventId;
         return generateQRCodeBitmap(data, width, height);
     }
 

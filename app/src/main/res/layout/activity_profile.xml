@@ -4,15 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <ImageView
-        android:id="@+id/image_profile_picture"
+    <!-- Reference: https://stackoverflow.com/a/35287222 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_profile_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@android:drawable/sym_def_app_icon"
+        app:cardCornerRadius="250dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="250dp">
+
+            <ImageView
+                android:id="@+id/iv_profile_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@color/white"
+                android:scaleType="centerCrop">
+            </ImageView>
+        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/text_profile_name"
@@ -20,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="@string/profile_name"
         android:textSize="18sp"
-        android:layout_below="@id/image_profile_picture"
+        android:layout_below="@+id/card_profile_image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
 
@@ -68,7 +82,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/navigation"
+        android:id="@+id/nav_profile"
         app:menu="@menu/bottom_nav"
         android:layout_alignParentBottom="true"
         />

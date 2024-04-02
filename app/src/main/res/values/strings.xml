@@ -9,4 +9,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loading_profile_text">One moment, please.\nWe\'re loading your profile.</string>
     <string name="edit_profile_image_text">Click To Edit</string>
+    <string name="signed_up_text">Signed Up</string>
 </resources>

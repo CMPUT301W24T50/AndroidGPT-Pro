@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -10,27 +12,43 @@
         android:layout_margin="16dp">
     </ImageButton>
 
-    <ImageView
-        android:id="@+id/image_edit_profile_picture"
+    <!-- Reference: https://stackoverflow.com/a/35287222 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_edit_profile_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@android:drawable/sym_def_app_icon"
-        android:layout_below="@id/back_button"
+        app:cardCornerRadius="250dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp"
+        android:layout_below="@id/back_button">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="250dp">
+
+            <ImageView
+                android:id="@+id/iv_edit_profile_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:color="@color/white"
+                android:scaleType="centerCrop">
+            </ImageView>
+        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/tv_edit_profile_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/image_edit_profile_picture"
-        android:layout_alignTop="@+id/image_edit_profile_picture"
-        android:layout_alignEnd="@+id/image_edit_profile_picture"
-        android:layout_alignBottom="@+id/image_edit_profile_picture"
         android:text="@string/edit_profile_image_text"
         android:textAlignment="center"
         android:textColor="#6750A3"
         android:textSize="20sp"
-        android:textStyle="bold"></TextView>
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/card_edit_profile_image">
+    </TextView>
 
 
     <EditText
@@ -39,7 +57,7 @@
         android:layout_height="wrap_content"
         android:hint="Profile Name"
         android:inputType="text"
-        android:layout_below="@id/image_edit_profile_picture"
+        android:layout_below="@+id/tv_edit_profile_image"
         android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp" />

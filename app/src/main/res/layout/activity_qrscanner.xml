@@ -10,10 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/scan_qr" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/navigation"
+        android:id="@+id/nav_qr_scanner"
         app:menu="@menu/bottom_nav"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>

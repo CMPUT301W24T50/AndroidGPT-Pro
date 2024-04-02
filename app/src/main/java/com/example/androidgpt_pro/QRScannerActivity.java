@@ -58,7 +58,8 @@ public class QRScannerActivity extends ComponentActivity {
         btnScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
-        navigationTabs = findViewById(R.id.navigation);
+
+        navigationTabs = findViewById(R.id.nav_qr_scanner);
         navigationTabs.setSelectedItemId(R.id.qr_scanner_tab);
 
         // Set listener for bottom navigation items
@@ -70,15 +71,17 @@ public class QRScannerActivity extends ComponentActivity {
                 if (itemId == R.id.events_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, EventActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(QRScannerActivity.this, QRScannerActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    startActivity(newIntent);
+                    assert Boolean.TRUE;
                 } else if (itemId == R.id.profile_tab) {
                     Intent newIntent = new Intent(QRScannerActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
+                    overridePendingTransition(0,0);
                 } else {
                     throw new IllegalArgumentException("menu item ID does not exist");
                 }
@@ -94,7 +97,7 @@ public class QRScannerActivity extends ComponentActivity {
      * @return true if it's a sign-up QR code; false otherwise.
      */
     private boolean isSignupQRCode(String data) {
-        return data.startsWith("sign-up_");
+        return data.startsWith("AndroidGPT-Pro_SignUp_");
     }
 
     /**
@@ -104,7 +107,7 @@ public class QRScannerActivity extends ComponentActivity {
      * @return true if it's a check-in QR code; false otherwise.
      */
     private boolean isCheckInQRCode(String data) {
-        return data.startsWith("check-in_");
+        return data.startsWith("AndroidGPT-Pro_CheckIn_");
     }
 
     /**
@@ -116,7 +119,7 @@ public class QRScannerActivity extends ComponentActivity {
      * @param data The scanned QR code data, which should include the event ID for sign-up.
      */
     private void handleSignupQRCode(String data) {
-        String eventID = extractEventId(data);
+        String eventID = data.substring(22);
         Intent intent = new Intent(QRScannerActivity.this, EventQRActivity.class);
         intent.putExtra("eventID", eventID);
         intent.putExtra("userID", userID);
@@ -134,21 +137,11 @@ public class QRScannerActivity extends ComponentActivity {
      * @param data The scanned QR code data, which should include the event ID for check-in.
      */
     private void handleCheckInQRCode(String data) {
-        String eventID = extractEventId(data);
+        String eventID = data.substring(23);
         Intent intent = new Intent(QRScannerActivity.this, EventQRActivity.class);
         intent.putExtra("eventID", eventID);
         intent.putExtra("userID", userID);
         intent.putExtra("userOp", "CheckIn");
         startActivity(intent);
-    }
-
-    /**
-     * Extracts the event ID from the QR code data.
-     *
-     * @param qrCodeData The complete QR code data string.
-     * @return The extracted event ID.
-     */
-    private String extractEventId(String qrCodeData) {
-        return qrCodeData.substring(qrCodeData.indexOf("_") + 1);
     }
 }

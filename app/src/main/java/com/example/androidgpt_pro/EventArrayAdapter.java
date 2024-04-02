@@ -5,55 +5,81 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
+
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 /**
- * This class manages the array of events to be displayed in the EventBrowseActivity
+ * This class is the adapter to be used to display the Event Cards in a listView.
  */
-public class EventArrayAdapter extends ArrayAdapter<EventDatabaseControl>{
+public class EventArrayAdapter extends ArrayAdapter<Event> {
 
-    private String eID;
+    private final ArrayList<Event> events;
+    private final Context context;
 
-    public EventArrayAdapter(Context context, ArrayList<EventDatabaseControl> events, String eventID){
-        super(context,0,events);
-        eID = eventID;
+
+    /**
+     * This is the constructor of the class EventArrayAdapter.
+     * @param context
+     * context: The context.
+     * @param events
+     * events: A list of event.
+     */
+    public EventArrayAdapter(Context context, ArrayList<Event> events) {
+        super(context, 0, events);
+        this.events = events;
+        this.context = context;
     }
+
+    /**
+     * This is a getter of a view.
+     * @param position The position of the item within the adapter's data set of the item whose view
+     *        we want.
+     * @param convertView The old view to reuse, if possible. Note: You should check that this view
+     *        is non-null and of an appropriate type before using. If it is not possible to convert
+     *        this view to display the correct data, this method can create a new view.
+     *        Heterogeneous lists can specify their number of view types, so that this View is
+     *        always of the right type (see {@link #getViewTypeCount()} and
+     *        {@link #getItemViewType(int)}).
+     * @param parent The parent that this view will eventually be attached to
+     * @return view
+     */
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
-        View view;
-        if(convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.event_content_simple, parent, false);
-        } else {
-            view = convertView;
+    public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
+        View view = convertView;
+
+        if (view == null) {
+            view = LayoutInflater.from(context)
+                    .inflate(R.layout.event_array_adapter, parent, false);
         }
 
-        EventDatabaseControl edc = getItem(position);
-        TextView eventName = view.findViewById(R.id.event_name);
-        TextView eventDescription = view.findViewById(R.id.event_description);
-        TextView eventDate = view.findViewById(R.id.event_date);
-        TextView eventLocationApt = view.findViewById(R.id.event_location1);
-        TextView eventLocationCity = view.findViewById(R.id.event_location2);
-//        ImageView eventImage = view.findViewById(R.id.event_image);
+        Event event = events.get(position);
 
+        TextView eNameTV = view.findViewById(R.id.event_name);
+        TextView eLocationTV = view.findViewById(R.id.event_location);
+        TextView eTimeTV = view.findViewById(R.id.event_time);
+        TextView eDateTV = view.findViewById(R.id.event_date);
+        ImageView eImageIV = view.findViewById(R.id.event_image);
+        TextView signedUpCheck = view.findViewById(R.id.signed_up_check);
+        TextView signedUpText = view.findViewById(R.id.signed_up_text);
 
-        edc.getEventSnapshot(eID)
-            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot docSns) {
-                    eventName.setText(edc.getEventName(docSns));
-                    eventLocationApt.setText(edc.getEventLocation(docSns));
-                    eventLocationCity.setText(edc.getEventSimplifiedLocation(docSns));
-                    eventDescription.setText(edc.getEventDescription(docSns));
-                    eventDate.setText(edc.getEventTime(docSns));
-                }
-            });
+        eNameTV.setText(event.getEventName());
+        String eventCityProvince = event.getEventLocationCity()
+                + ", " + event.getEventLocationProvince();
+        eLocationTV.setText(eventCityProvince);
+        eTimeTV.setText(event.getEventTime());
+        eDateTV.setText(event.getEventDate());
+        Picasso.get().load(event.getEventImageUri()).into(eImageIV);
+
         return view;
     }
 }
