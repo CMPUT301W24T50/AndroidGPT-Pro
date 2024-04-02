@@ -67,7 +67,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(editProfileImageView);
+                imageUri = uri;
+                Picasso.get().load(imageUri).into(editProfileImageView);
             }
         });
 
