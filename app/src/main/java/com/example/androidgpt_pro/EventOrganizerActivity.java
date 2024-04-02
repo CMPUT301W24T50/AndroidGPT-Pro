@@ -60,7 +60,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // open map
             }
         });
     }
@@ -70,6 +69,17 @@ public class EventOrganizerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EventOrganizerActivity.this, AttendeeCountActivity.class);
+                intent.putExtra("eventID", eventID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+    private void openSender(){
+        eventSendNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventOrganizerActivity.this, NotifSenderActivity.class);
                 intent.putExtra("eventID", eventID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
@@ -135,6 +145,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         showQRCode();
 
         openAttendees();
+        openSender();
     }
 
 }
