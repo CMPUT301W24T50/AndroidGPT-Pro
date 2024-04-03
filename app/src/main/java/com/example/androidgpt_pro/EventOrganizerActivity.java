@@ -22,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -146,32 +147,30 @@ public class EventOrganizerActivity extends AppCompatActivity {
     }
 
     private void shareQRCode(Bitmap checkInQRCode) {
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/jpeg");
-        Uri bmpUri;
-        String textToShare="Share QR Code";
-        bmpUri = saveImage(checkInQRCode, getApplicationContext());
-        share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        share.putExtra(Intent.EXTRA_STREAM,bmpUri);
-        share.putExtra(Intent.EXTRA_TEXT, textToShare);
-        startActivity(Intent.createChooser(share, "Share Content"));
-    }
+        Uri uri = getImageToShare(checkInQRCode);
 
-    private static Uri saveImage(Bitmap image, Context context) {
-        File imageFolder = new File(context.getCacheDir(), "images");
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.putExtra(Intent.EXTRA_TEXT, "Image Text");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
+        intent.setType("image/*");
+        startActivity(Intent.createChooser(intent, "Share via"));
+    }
+    private Uri getImageToShare(Bitmap bitmap) {
+        File folder = new File(getCacheDir(), "images");
         Uri uri = null;
         try {
-            imageFolder.mkdir();
-            File file = new File(imageFolder, "shared_qr_code.jpg");
+            folder.mkdir();
+            File file = new File(folder, "image.jpg");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
 
-            FileOutputStream stream = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-            stream.flush();
-            stream.close();
-            uri = FileProvider.getUriForFile(Objects.requireNonNull(context.getApplicationContext()),
-                    "com.project.shareqrcode" + ".provider", file);
-        } catch (IOException e) {
-            Log.d("TAG", "Exception" + e.getMessage());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            uri = FileProvider.getUriForFile(this, "com.example.androidgpt_pro", file);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return uri;
     }
@@ -195,6 +194,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
         openAttendees();
         openSender();
+        setUpShareQRCode();
     }
 
 }
