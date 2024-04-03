@@ -36,17 +36,18 @@
         android:text="page" />
 
 
-
-    <Button
+    <ImageButton
         android:id="@+id/event_previous_page"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_list_view"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/MainTheme2"
         android:gravity="center"
-        android:text="Previous Page"/>
+        android:src="@android:drawable/ic_media_rew"
+        app:tint="@color/MainTheme1" />
 
-    <Button
+    <ImageButton
         android:id="@+id/event_next_page"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
@@ -54,8 +55,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="0dp"
+        android:backgroundTint="@color/MainTheme2"
         android:gravity="center"
-        android:text="Next Page" />
+        android:src="@android:drawable/ic_media_ff"
+        app:tint="@color/MainTheme1" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
