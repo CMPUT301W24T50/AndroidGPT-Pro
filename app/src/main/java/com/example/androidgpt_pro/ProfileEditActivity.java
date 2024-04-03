@@ -124,6 +124,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             imageUri = data.getData();
             // Set the selected image to the profile image view.
             editProfileImageView.setImageURI(imageUri);
+            editProfileImageView.clearColorFilter();
         }
     }
 
