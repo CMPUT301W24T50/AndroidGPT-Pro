@@ -102,6 +102,18 @@ public class ProfileDatabaseControl {
 
 
     /**
+     * This is a getter for Profile Role.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileRole
+     * profileRole: A profile's role.
+     */
+    public String getProfileRole(DocumentSnapshot profileDocumentSnapshot) {
+        return profileDocumentSnapshot.getString("pRole");
+    }
+    
+
+    /**
      * This is a getter for Profile Name.
      * @param profileDocumentSnapshot
      * profileDocumentSnapshot: A profile document snapshot.

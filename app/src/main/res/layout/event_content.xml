@@ -111,7 +111,17 @@
 <!--        android:layout_marginBottom="300dp"-->
 <!--        android:text="Check In"-->
 <!--        />-->
-
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="#ff0000"
+        android:text="@string/delete_event"
+        android:textSize="16sp"
+        />
 
 
 </RelativeLayout>
