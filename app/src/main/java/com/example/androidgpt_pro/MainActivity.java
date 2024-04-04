@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot doc = task.getResult();
                     Intent intent;
-                    if (!doc.exists()){
+                    if (!doc.exists()) {
                         pdc.initProfile("user");
                     }
                     intent = new Intent(MainActivity.this, ProfileActivity.class);
