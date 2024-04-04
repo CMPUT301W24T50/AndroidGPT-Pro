@@ -1,6 +1,7 @@
 package com.example.androidgpt_pro;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -29,11 +29,11 @@ public class ProfileEditActivity extends AppCompatActivity {
     private ProfileDatabaseControl pdc;
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private Boolean imageUpdate = Boolean.FALSE;
     private Uri imageUri;
     private ImageButton backButton;
     private ImageView editProfileImageView;
-    private TextView editProfileImageText;
+    private ImageButton ibEditProfileImage;
+    private ImageButton ibDelProfileImage;
     private EditText editProfileNameEditText;
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
@@ -44,7 +44,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         // Initialize views.
         backButton = findViewById(R.id.back_button);
         editProfileImageView = findViewById(R.id.iv_edit_profile_image);
-        editProfileImageText = findViewById(R.id.tv_edit_profile_image);
+        ibEditProfileImage = findViewById(R.id.ib_edit_profile_image);
+        ibDelProfileImage = findViewById(R.id.ib_del_profile_image);
         editProfileNameEditText = findViewById(R.id.edit_text_edit_profile_name);
         editPhoneNumberEditText = findViewById(R.id.edit_text_edit_phone_number);
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
@@ -66,11 +67,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                if (uri != null) {
-                    Picasso.get().load(uri).into(editProfileImageView);
-                } else {
-                    editProfileImageView.setImageResource(android.R.drawable.sym_def_app_icon);
-                }
+                imageUri = uri;
+                Picasso.get().load(imageUri).into(editProfileImageView);
             }
         });
 
@@ -88,13 +86,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     private void setupProfileImageEditor() {
         // Set click listener for profile image.
-        editProfileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-        editProfileImageText.setOnClickListener(new View.OnClickListener() {
+        ibEditProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
@@ -132,8 +124,19 @@ public class ProfileEditActivity extends AppCompatActivity {
             imageUri = data.getData();
             // Set the selected image to the profile image view.
             editProfileImageView.setImageURI(imageUri);
-            imageUpdate = Boolean.TRUE;
+            editProfileImageView.clearColorFilter();
         }
+    }
+
+
+    private void setupProfileImageDeleter() {
+        ibDelProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageUri = null;
+                editProfileImageView.setColorFilter(Color.WHITE);
+            }
+        });
     }
 
 
@@ -152,7 +155,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         String updatedEmail = editEmailEditText.getText().toString();
 
         //update the profile information in firebase.
-        if (imageUpdate)
+        if (imageUri == null)
+            pdc.delProfileImage();
+        else
             pdc.setProfileImage(imageUri);
         pdc.setProfileName(updatedProfileName);
         pdc.setProfilePhoneNumber(updatedPhoneNumber);
@@ -185,6 +190,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         setupBackButton();
         fetchOriginalProfile();
         setupProfileImageEditor();
+        setupProfileImageDeleter();
         setupSaveButton();
     }
 }

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:text="Events"
+        android:text="My Events"
         android:layout_marginTop="36dp"
         android:textSize="36sp" />
 

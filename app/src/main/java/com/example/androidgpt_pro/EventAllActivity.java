@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,19 +19,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import java.util.ArrayList;
 
-/**
- * This class allows the user to browse all events in the database.
- * The user can select an event to see the event details and sign up.
- */
-public class EventActivity extends AppCompatActivity {
-
+public class EventAllActivity extends AppCompatActivity {
     private String userID;
+    private String eventID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     BottomNavigationView navigationTabs;
@@ -34,6 +31,8 @@ public class EventActivity extends AppCompatActivity {
     private ListView eventsListView;
     private ArrayList<Event> events;
     private EventArrayAdapter eventArrayAdapter;
+    private ImageButton previous_btn;
+    private ImageButton next_btn;
 
 
     private void initEvents() {
@@ -41,23 +40,23 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        createEventBtn = findViewById(R.id.event_create_btn);
+        previous_btn = findViewById(R.id.event_previous_page);
+        next_btn = findViewById(R.id.event_next_page);
         eventsListView = findViewById(R.id.event_list_view);
         eventArrayAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventArrayAdapter);
     }
 
-
     private void getEvents() {
-        getEventIDsFromProfile();
+        getEventIDsFromEvent();
     }
 
-    private void getEventIDsFromProfile() {
-        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    private void getEventIDsFromEvent() {
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                if (pdc.getProfileOrganizedEvents(docSns) != null)
-                    getEventInfo(pdc.getProfileOrganizedEvents(docSns));
+//                if (edc.getLastEventID(docSns) != "00000000")
+//                    getEventInfo(edc.getProfileOrganizedEvents(docSns));
             }
         });
     }
@@ -66,12 +65,12 @@ public class EventActivity extends AppCompatActivity {
         for (int i = 0; i < organizedEvents.size(); i++) {
             String eventID = organizedEvents.get(i);
             edc.getEventSnapshot(eventID)
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot docSns) {
-                    getEventImage(eventID, docSns);
-                }
-            });
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot docSns) {
+                            getEventImage(eventID, docSns);
+                        }
+                    });
         }
     }
 
@@ -80,24 +79,23 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 events.add(new Event(eventID,
-                    edc.getEventName(documentSnapshot),
-                    edc.getEventLocationCity(documentSnapshot),
-                    edc.getEventLocationProvince(documentSnapshot),
-                    edc.getEventTime(documentSnapshot),
-                    edc.getEventDate(documentSnapshot),
-                    uri));
+                        edc.getEventName(documentSnapshot),
+                        edc.getEventLocationCity(documentSnapshot),
+                        edc.getEventLocationProvince(documentSnapshot),
+                        edc.getEventTime(documentSnapshot),
+                        edc.getEventDate(documentSnapshot),
+                        uri));
                 eventArrayAdapter.notifyDataSetChanged();
             }
         });
     }
-
 
     private void setupEventsListView() {
         // handle click action
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventActivity.this, EventOrganizerActivity.class);
+                Intent intent = new Intent(EventAllActivity.this, EventDetailActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
                 startActivity(intent);
@@ -106,27 +104,16 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
-    private void setupCreateEventButton() {
-        // handle click event to open the creatingEvent
-        createEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventActivity.this, EventCreateActivity.class);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
-            }
-        });
-    }
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list);
+        setContentView(R.layout.activity_all_future_events);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
+
+        eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
 
         navigationTabs = findViewById(R.id.nav_event);
@@ -139,13 +126,13 @@ public class EventActivity extends AppCompatActivity {
                 if (itemId == R.id.events_tab) {
                     assert Boolean.TRUE;
                 } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(EventActivity.this, QRScannerActivity.class);
+                    Intent newIntent = new Intent(EventAllActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
                     overridePendingTransition(0,0);
                 } else if (itemId == R.id.profile_tab) {
-                    Intent newIntent = new Intent(EventActivity.this, ProfileActivity.class);
+                    Intent newIntent = new Intent(EventAllActivity.this, ProfileActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
@@ -156,13 +143,5 @@ public class EventActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        initEvents();
-        initViews();
-
-        getEvents();
-        setupEventsListView();
-
-        setupCreateEventButton();
     }
 }
