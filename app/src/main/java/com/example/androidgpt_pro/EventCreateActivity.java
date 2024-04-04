@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -35,7 +36,9 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eLocCity;
     private String eLocProvince;
     private String eTime;
+    private String eDateFormat;
     private String eDate;
+    private long eTimestamp;
     private String eDescription;
     private Boolean eGLTState;
     private Uri eImageURI;
@@ -55,7 +58,6 @@ public class EventCreateActivity extends AppCompatActivity {
     private TextView selectedPicHint;
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
-
     private int hour, minute;
 
 
@@ -91,6 +93,7 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
+                eDateFormat = year + "-" + month + "-" + day;
                 eventDateEditButton.setText(date);
             }
         };
@@ -228,6 +231,11 @@ public class EventCreateActivity extends AppCompatActivity {
 
         // handel time picker
         String eventTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+        String eTimestampFormat = eDateFormat + " " + eventTime + ":00";
+        // Parse the string to a Timestamp object
+        Timestamp timestamp = Timestamp.valueOf(eTimestampFormat);
+        eTimestamp = timestamp.getTime();
+
         eTime = eventTime;
 
         // handel eventDescription

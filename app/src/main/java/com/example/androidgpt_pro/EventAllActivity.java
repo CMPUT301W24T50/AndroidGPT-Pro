@@ -48,15 +48,22 @@ public class EventAllActivity extends AppCompatActivity {
     }
 
     private void getEvents() {
-        getEventIDsFromEvent();
+        getAllEventIDsFromEvent();
     }
 
-    private void getEventIDsFromEvent() {
+    private void getAllEventIDsFromEvent() {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-//                if (edc.getLastEventID(docSns) != "00000000")
-//                    getEventInfo(edc.getProfileOrganizedEvents(docSns));
+                if (edc.getLastEventID(docSns) != "00000000") {
+                    String lastEventID = edc.getLastEventID(docSns);
+                    String trimmedString = lastEventID.replaceFirst("^0+(?!$)", "");
+                    int lastEventIDValue = Integer.parseInt(trimmedString);
+                    // search all id
+                    for (int i = 1; i <= lastEventIDValue; i++) {
+
+                    }
+                }
             }
         });
     }

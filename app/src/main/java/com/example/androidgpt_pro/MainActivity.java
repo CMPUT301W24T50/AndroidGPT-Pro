@@ -8,7 +8,9 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
-
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,6 +23,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class MainActivity extends AppCompatActivity {
 
     private String uniqueID;
+    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     /**
@@ -55,13 +58,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                String token = task.getResult();
-                Log.i("My token", token);
-            }
-        });
-
-
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp currentTime = new Timestamp(date.getTime());
+        long currentTimestamp = timestamp.getTime();
+        Log.d("MyLOG", currentTime.toString());
+        Log.d("MyLOG1", Long.toString(currentTimestamp));
     }
 }
