@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -43,6 +44,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private Button openMap;
     private ImageView ivCheckInQRCode;
     private Button shareQRCodeButton;
+    private Button deleteButton;
+    private Button clearImageButton;
+
 
     private void initViews(){
         backButton = findViewById(R.id.back_button);
@@ -54,10 +58,37 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         openMap = findViewById(R.id.organizer_event_map_btn);
+        deleteButton = findViewById(R.id.btn_delete);
+        clearImageButton = findViewById(R.id.btn_clear_image);
         ivCheckInQRCode = findViewById(R.id.iv_event_qr_image);
         shareQRCodeButton = findViewById(R.id.share_qr_image_btn);
     }
 
+    private void setupDeleteButton() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.removeEvent(eventID);
+                CharSequence text = "Event Deleted";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                toast.show();
+                Intent intent = new Intent(EventOrganizerActivity.this, EventMyActivity.class);
+                intent.putExtra("userID", userID);
+
+                startActivity(intent);
+            }
+        });
+    }
+
+//    private void setupClearImageButton() {
+//        clearImageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//        });
+//    }
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +190,20 @@ public class EventOrganizerActivity extends AppCompatActivity {
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Share via"));
     }
+
+    protected void checkIfAdmin(){
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String role = pdc.getProfileRole(docSns);
+                if (!role.matches("admin")) {
+                    deleteButton.setVisibility(View.INVISIBLE);
+                    clearImageButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
     private Uri getImageToShare(Bitmap bitmap) {
         File folder = new File(getCacheDir(), "images");
         Uri uri = null;
@@ -166,7 +211,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
             folder.mkdir();
             File file = new File(folder, "image.jpg");
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
@@ -198,6 +242,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
         openAttendees();
         openSender();
         setUpShareQRCode();
+        checkIfAdmin();
+        setupDeleteButton();
+//        setupClearImageButton();
     }
 
 }
