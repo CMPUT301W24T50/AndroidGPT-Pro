@@ -48,6 +48,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private Button shareQRCodeButton;
     private Button deleteButton;
     private Button clearImageButton;
+    private Boolean eventGeoLocation = Boolean.FALSE;
 
 
     private void initViews(){
@@ -88,7 +89,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         clearImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edc.delProfileImage(eventID);
+                edc.delEventImage(eventID);
                 CharSequence text = "Image Cleared";
                 int duration = Toast.LENGTH_SHORT;
 
@@ -109,14 +110,26 @@ public class EventOrganizerActivity extends AppCompatActivity {
     }
 
     private void openMap() {
-        openMap.setOnClickListener(new View.OnClickListener() {
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventOrganizerActivity.this, EventCheckInMap.class);
-                intent.putExtra("eventID", eventID);
-                startActivity(intent);
+            public void onSuccess(DocumentSnapshot docSns) {
+                eventGeoLocation = edc.getEventGLTState(docSns);
             }
         });
+
+        if (eventGeoLocation == Boolean.FALSE ) {
+            openMap.setEnabled(false);
+        }
+        else {
+            openMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(EventOrganizerActivity.this, EventCheckInMap.class);
+                    intent.putExtra("eventID", eventID);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     private void openAttendees() {

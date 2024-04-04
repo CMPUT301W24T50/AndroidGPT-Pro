@@ -100,6 +100,10 @@
         <activity android:name=".EventAllActivity"
             android:exported="true">
         </activity>
+
+        <activity android:name=".EventCheckInMap"
+            android:exported="true">
+        </activity>
         <provider
             android:authorities="com.example.androidgpt_pro"
             android:name="androidx.core.content.FileProvider"
