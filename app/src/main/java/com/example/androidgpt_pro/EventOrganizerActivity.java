@@ -15,9 +15,11 @@ import android.widget.TextView;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
@@ -82,13 +84,21 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
     }
 
-//    private void setupClearImageButton() {
-//        clearImageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        });
-//    }
+    private void setupClearImageButton() {
+        clearImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.delProfileImage(eventID);
+                CharSequence text = "Image Cleared";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                toast.show();
+                finish();
+                startActivity(getIntent());
+            }
+        });
+    }
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +146,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(eventOrganizerPoster);
             }
-        });
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // If there's an error loading poster or poster has been deleted by admin show nothing
+                Picasso.get().load(R.drawable.partyimage1).into(eventOrganizerPoster);
+            }
+        });;
 
         // get event time&Date and city&Province and attendee#
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -244,7 +260,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         setUpShareQRCode();
         checkIfAdmin();
         setupDeleteButton();
-//        setupClearImageButton();
+        setupClearImageButton();
     }
 
 }
