@@ -37,6 +37,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private TextView eventOrganizerTitle;
     private TextView eventOrganizerTimeDate;
     private TextView eventOrganizerCityProvince;
+    private  TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
     private ImageButton eventSendNotification;
     private Button openMap;
@@ -49,6 +50,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventOrganizerTitle = findViewById(R.id.organizer_event_title);
         eventOrganizerTimeDate = findViewById(R.id.organizer_event_time_date);
         eventOrganizerCityProvince = findViewById(R.id.organizer_event_address_city_province);
+        eventOrganizerDescription = findViewById(R.id.organizer_event_description);
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         openMap = findViewById(R.id.organizer_event_map_btn);
@@ -114,6 +116,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 eventOrganizerTimeDate.setText(eventTimeDate);
                 String eventCityProvince = edc.getEventLocationCity(docSns) + ", " + edc.getEventLocationProvince(docSns);
                 eventOrganizerCityProvince.setText(eventCityProvince);
+                eventOrganizerDescription.setText(edc.getEventDescription(docSns));
                 if (edc.getEventAllSignUpProfiles(docSns) == null)
                     return;
                 int eventAttendeeNumber = edc.getEventAllSignUpProfiles(docSns).size();

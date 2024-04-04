@@ -29,7 +29,6 @@ public class EventCreateActivity extends AppCompatActivity {
 
     private String userID;
     private EventDatabaseControl edc;
-
     private String eID;
     private String eName;
     private String eLocStreet;
@@ -228,8 +227,8 @@ public class EventCreateActivity extends AppCompatActivity {
         eDate = eventDateEditButton.getText().toString();
 
         // handel time picker
-        String eventTime = hour + ":" + minute;
-        eTime = eventTime.toString();
+        String eventTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+        eTime = eventTime;
 
         // handel eventDescription
         eDescription = eventDescriptionEditText.getText().toString();
