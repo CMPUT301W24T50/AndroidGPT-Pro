@@ -30,6 +30,7 @@ public class EventQRActivity extends AppCompatActivity {
     private String eventID;
     private String userID;
     private String userOp;
+
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
@@ -43,6 +44,7 @@ public class EventQRActivity extends AppCompatActivity {
     private Button backToQRScanner;
     Dialog dialog;
 
+    Boolean eGeoLocationTracking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +74,6 @@ public class EventQRActivity extends AppCompatActivity {
         checkInButton = findViewById(R.id.btn_check_in);
         checkInButton.setVisibility(View.GONE);
 
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                eventNameTextView.setText(edc.getEventName(docSns));
-                eventDateTextView.setText(edc.getEventTime(docSns));
-                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
-                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
-                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
-                eventDescription.setText(edc.getEventDescription(docSns));
-            }
-        });
-
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -93,11 +83,22 @@ public class EventQRActivity extends AppCompatActivity {
             }
         });
 
-        if (Objects.equals(userOp, "SignUp")) {
-            eventSignUp();
-        } else {
-            eventCheckIn();
-        }
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                eventNameTextView.setText(edc.getEventName(docSns));
+                eventDateTextView.setText(edc.getEventTime(docSns));
+                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
+                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
+                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
+                eventDescription.setText(edc.getEventDescription(docSns));
+                eGeoLocationTracking = edc.getEventGLTState(docSns);
+                if (Objects.equals(userOp, "SignUp"))
+                    eventSignUp();
+                else
+                    eventCheckIn();
+            }
+        });
     }
 
 
@@ -196,6 +197,19 @@ public class EventQRActivity extends AppCompatActivity {
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkProfileToCheckIn();
+            }
+        });
+    }
+
+    private void checkProfileToCheckIn() {
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (pdc.getProfileGLTState(docSns)) {
+                    Intent intent = new Intent(EventQRActivity.this, GeoLocationControl.class);
+                    startActivity(intent);
+                };
                 pdc.addProfileCheckInEvent(eventID);
                 withdrawButton.setVisibility(View.VISIBLE);
                 checkInSuccess();
