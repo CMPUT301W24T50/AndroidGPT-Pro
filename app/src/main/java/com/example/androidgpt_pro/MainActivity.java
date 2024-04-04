@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         uniqueID = Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -56,12 +54,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Date date = new Date();
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Timestamp currentTime = new Timestamp(date.getTime());
-        long currentTimestamp = timestamp.getTime();
-        Log.d("MyLOG", currentTime.toString());
-        Log.d("MyLOG1", Long.toString(currentTimestamp));
     }
 }

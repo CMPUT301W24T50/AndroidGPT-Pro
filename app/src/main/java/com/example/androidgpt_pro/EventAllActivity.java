@@ -1,6 +1,7 @@
 package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -92,6 +95,25 @@ public class EventAllActivity extends AppCompatActivity {
                         edc.getEventTime(documentSnapshot),
                         edc.getEventDate(documentSnapshot),
                         uri));
+                eventArrayAdapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // If there's an error loading poster or poster has been deleted by admin show nothing
+                Uri imageUri = (new Uri.Builder())
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .authority(getResources().getResourcePackageName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceTypeName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceEntryName(R.drawable.partyimage1))
+                        .build();
+                events.add(new Event(eventID,
+                        edc.getEventName(documentSnapshot),
+                        edc.getEventLocationCity(documentSnapshot),
+                        edc.getEventLocationProvince(documentSnapshot),
+                        edc.getEventTime(documentSnapshot),
+                        edc.getEventDate(documentSnapshot),
+                        imageUri));
                 eventArrayAdapter.notifyDataSetChanged();
             }
         });

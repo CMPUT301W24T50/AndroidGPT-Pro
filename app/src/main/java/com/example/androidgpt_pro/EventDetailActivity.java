@@ -40,9 +40,37 @@ public class EventDetailActivity extends AppCompatActivity{
     private ImageButton backButton;
     private Button signUpButton;
     private Button withdrawButton;
+    private Button deleteButton;
     private Button checkInButton;
     Dialog dialog;
     private Button backToBrowse;
+    private ProfileDatabaseControl pdc;
+    private EventDatabaseControl edc;
+
+    protected void checkIfAdmin(){
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String role = pdc.getProfileRole(docSns);
+                if (!role.matches("admin")) {
+                    deleteButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    private void setupDeleteButton() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.removeEvent(eventID);
+                Intent intent = new Intent(EventDetailActivity.this, EventAllActivity.class);
+                intent.putExtra("userID", userID);
+
+                startActivity(intent);
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -53,8 +81,8 @@ public class EventDetailActivity extends AppCompatActivity{
         Intent intent = getIntent();
         eventID = intent.getStringExtra("eventID");
         userID = intent.getStringExtra("userID");
-        EventDatabaseControl edc = new EventDatabaseControl();
-        ProfileDatabaseControl pdc = new ProfileDatabaseControl(userID);
+        edc = new EventDatabaseControl();
+        pdc = new ProfileDatabaseControl(userID);
 
 
         //Initialize views
@@ -68,6 +96,7 @@ public class EventDetailActivity extends AppCompatActivity{
         signUpButton.setVisibility(View.GONE);
         withdrawButton = findViewById(R.id.btn_withdraw);
         withdrawButton.setVisibility(View.GONE);
+        deleteButton = findViewById(R.id.btn_delete);
 //        checkInButton = findViewById(R.id.btn_checkin);
 //        checkInButton.setVisibility();
 
@@ -82,18 +111,20 @@ public class EventDetailActivity extends AppCompatActivity{
                 eventDescription.setText(edc.getEventDescription(docSns));
             }
         });
-//
-//        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot docSns) {
+
+        checkIfAdmin();
+        setupDeleteButton();
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
 //                ArrayList<String> temp = pdc.getProfileAllSignUpEvents(docSns);
 //                if(temp.contains(eventID)) {
 //                    withdrawButton.setVisibility(View.VISIBLE);
 //                } else {
 //                    signUpButton.setVisibility(View.VISIBLE);
 //                }
-//            }
-//        });
+            }
+        });
 
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);

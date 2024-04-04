@@ -34,6 +34,7 @@ public class EventDatabaseControl {
     private ArrayList<String> eSignUpProfiles;
     private ArrayList<String> eCheckInProfiles;
     private ArrayList<String> eCheckInLocations;
+    private ArrayList<String> eNotifications;
 
 
     /**
@@ -98,6 +99,8 @@ public class EventDatabaseControl {
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         data.put("eCheckInLocations", eCheckInLocations);
+        data.put("eNotifications", eNotifications);
+        data.put("eImageUpdated", Boolean.FALSE);
         eColRef.document(eventID).set(data);
         setEventImage(eventID, eventImageUri);
         ds.addOrganizedProfileEvent(eventOrganizerID, eventID);
@@ -375,6 +378,24 @@ public class EventDatabaseControl {
 
 
     /**
+     * This is a getter for Event Image Updated State.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventImageUpdatedState
+     * eventImageUpdatedState: A state of Image Updated.
+     */
+    public Boolean getEventImageUpdatedState(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getBoolean("eImageUpdated");
+    }
+
+    /**
+     * This is a reset function for Event Image Updated State.
+     */
+    public void resetEventImageUpdatedState(String eventID) {
+        eColRef.document(eventID).update("eImageUpdated", Boolean.FALSE);
+    }
+
+    /**
      * This is a getter for Event Image.
      * @param eventID
      * eventID: An ID of an event.
@@ -400,6 +421,14 @@ public class EventDatabaseControl {
      */
     public void setEventImage(String eventID, Uri eventImageURI) {
         eStgRef.child(eventID).putFile(eventImageURI);
+    }
+
+    /**
+     * This is a deleter for Event Image.
+     */
+    public void delEventImage(String eventID) {
+        eStgRef.child(eventID).delete();
+        eColRef.document(eventID).update("eImageUpdated", Boolean.TRUE);
     }
 
 
@@ -483,15 +512,15 @@ public class EventDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 if (getEventCheckInProfileCount(docSns, profileID) == null) {
                     String count = "00000001";
-                    String data = dt.constructSharpString(profileID, count);
+                    String data = dt.constructSharpString(profileID, count, null);
                     eColRef.document(eventID).update("eCheckInProfiles",
                         FieldValue.arrayUnion(data));
                     ds.newCheckInProfileEvent(profileID, eventID, count);
                 } else {
                     String count = getEventCheckInProfileCount(docSns, profileID);
-                    String data = dt.constructSharpString(profileID, count);
+                    String data = dt.constructSharpString(profileID, count, null);
                     String nextCount = dt.calculateAddOne(count);
-                    String nextData = dt.constructSharpString(profileID, nextCount);
+                    String nextData = dt.constructSharpString(profileID, nextCount, null);
                     eColRef.document(eventID).update("eCheckInProfiles",
                         FieldValue.arrayRemove(data));
                     eColRef.document(eventID).update("eCheckInProfiles",
@@ -530,7 +559,51 @@ public class EventDatabaseControl {
      * longitude: A part of location.
      */
     public void addEventCheckInLocation(String eventID, String latitude, String longitude) {
-        String location = dt.constructSharpString(latitude, longitude);
+        String location = dt.constructSharpString(latitude, longitude, null);
         eColRef.document(eventID).update("eCheckInLocations", FieldValue.arrayUnion(location));
+    }
+
+
+    /**
+     * This is a getter for Event Notifications.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventNotifications
+     * eventNotifications: A list of Notification, null if no notification.
+     */
+    public ArrayList<String> getEventAllNotifications(DocumentSnapshot eventDocumentSnapshot) {
+        if (eventDocumentSnapshot.get("eNotifications") == null)
+            return null;
+        ArrayList<String> orgNtf = (ArrayList<String>) eventDocumentSnapshot.get("eNotifications");
+        ArrayList<String> mdfNtf = new ArrayList<>();
+        for (int i = 0; i < orgNtf.size(); i++)
+            mdfNtf.add(dt.splitSharpString(orgNtf.get(i))[1]);
+        return mdfNtf;
+    }
+
+    /**
+     * This is an adder used to add the given notification.
+     * @param eventID
+     * eventID: An event's ID.
+     * @param notification
+     * notification: The notification that need to be sent.
+     */
+    public void addEventNotification(String eventID, String notification) {
+        getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String counter;
+                if (docSns.get("eNotifications") == null) {
+                    counter = dt.formatEightBits(0);
+                } else {
+                    int arraySize = (((ArrayList<String>) docSns.get("eNotifications")).size());
+                    counter = dt.formatEightBits(arraySize);
+                }
+                String dbNtf = dt.constructSharpString(counter, notification, null);
+                eColRef.document(eventID)
+                        .update("eNotifications", FieldValue.arrayUnion(dbNtf));
+                ds.setNotificationEventProfile(eventID, counter);
+            }
+        });
     }
 }
