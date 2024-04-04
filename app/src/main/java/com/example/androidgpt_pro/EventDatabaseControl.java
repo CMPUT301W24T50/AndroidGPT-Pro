@@ -402,6 +402,13 @@ public class EventDatabaseControl {
         eStgRef.child(eventID).putFile(eventImageURI);
     }
 
+    /**
+     * This is a deleter for Event Image.
+     */
+    public void delProfileImage(String eventID) {
+        eStgRef.child(eventID).delete();
+    }
+
 
     /**
      * This is a getter for Event SignUp Profiles.
