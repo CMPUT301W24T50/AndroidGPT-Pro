@@ -112,6 +112,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(EventOrganizerActivity.this, EventCheckInMap.class);
+                intent.putExtra("eventID", eventID);
+                startActivity(intent);
             }
         });
     }
@@ -255,6 +258,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         fetchUserEvent();
         showQRCode();
 
+        openMap();
         openAttendees();
         openSender();
         setUpShareQRCode();

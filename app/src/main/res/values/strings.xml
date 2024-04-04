@@ -10,6 +10,7 @@
     <string name="loading_profile_text">One moment, please.\nWe\'re loading your profile.</string>
     <string name="edit_profile_image_text">Click To Edit</string>
     <string name="signed_up_text">Signed Up</string>
+    <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
     <string name="delete_event">Delete Event</string>
     <string name="remove_poster">Remove Poster</string>
 </resources>
