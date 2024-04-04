@@ -35,8 +35,6 @@ public class QRScannerActivity extends ComponentActivity {
             Toast.makeText(QRScannerActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
         } else {
             String scannedData = result.getContents();
-            Toast.makeText(QRScannerActivity.this, "Scanned: " + scannedData, Toast.LENGTH_LONG).show();
-
             // Determine if the QR code is for signup or check-in
             if (isSignupQRCode(scannedData)) {
                 handleSignupQRCode(scannedData);

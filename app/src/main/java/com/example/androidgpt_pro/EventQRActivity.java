@@ -1,10 +1,9 @@
 package com.example.androidgpt_pro;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class EventQRActivity extends AppCompatActivity {
@@ -30,6 +26,9 @@ public class EventQRActivity extends AppCompatActivity {
     private String eventID;
     private String userID;
     private String userOp;
+
+    private final int GEO_LOCATION_CONTROL = 1;
+
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
@@ -43,6 +42,7 @@ public class EventQRActivity extends AppCompatActivity {
     private Button backToQRScanner;
     Dialog dialog;
 
+    Boolean eGeoLocationTracking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +72,6 @@ public class EventQRActivity extends AppCompatActivity {
         checkInButton = findViewById(R.id.btn_check_in);
         checkInButton.setVisibility(View.GONE);
 
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                eventNameTextView.setText(edc.getEventName(docSns));
-                eventDateTextView.setText(edc.getEventTime(docSns));
-                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
-                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
-                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
-                eventDescription.setText(edc.getEventDescription(docSns));
-            }
-        });
-
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -93,11 +81,22 @@ public class EventQRActivity extends AppCompatActivity {
             }
         });
 
-        if (Objects.equals(userOp, "SignUp")) {
-            eventSignUp();
-        } else {
-            eventCheckIn();
-        }
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                eventNameTextView.setText(edc.getEventName(docSns));
+                eventDateTextView.setText(edc.getEventTime(docSns));
+                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
+                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
+                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
+                eventDescription.setText(edc.getEventDescription(docSns));
+                eGeoLocationTracking = edc.getEventGLTState(docSns);
+                if (Objects.equals(userOp, "SignUp"))
+                    eventSignUp();
+                else
+                    eventCheckIn();
+            }
+        });
     }
 
 
@@ -158,10 +157,7 @@ public class EventQRActivity extends AppCompatActivity {
         backToQRScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(EventQRActivity.this, QRScannerActivity.class);
-                newIntent.putExtra("userID", userID);
-                newIntent.putExtra("eventID", eventID);
-                startActivity(newIntent);
+                finish();
             }
         });
         dialog.show();
@@ -178,10 +174,7 @@ public class EventQRActivity extends AppCompatActivity {
         backToQRScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(EventQRActivity.this, QRScannerActivity.class);
-                newIntent.putExtra("userID", userID);
-                newIntent.putExtra("eventID", eventID);
-                startActivity(newIntent);
+                finish();
             }
         });
         dialog.show();
@@ -196,14 +189,39 @@ public class EventQRActivity extends AppCompatActivity {
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pdc.addProfileCheckInEvent(eventID);
-                withdrawButton.setVisibility(View.VISIBLE);
-                checkInSuccess();
+                checkProfileToCheckIn();
             }
         });
     }
 
-    private void checkInSuccess(){
+    private void checkProfileToCheckIn() {
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (pdc.getProfileGLTState(docSns)) {
+                    Intent intent = new Intent(EventQRActivity.this, GeoLocationActivity.class);
+                    intent.putExtra("eventID", eventID);
+                    startActivityForResult(intent, GEO_LOCATION_CONTROL);
+                } else {
+                    pdc.addProfileCheckInEvent(eventID);
+                    checkInSuccess();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GEO_LOCATION_CONTROL) {
+            if (resultCode == Activity.RESULT_OK) {
+                pdc.addProfileCheckInEvent(eventID);
+                checkInSuccess();
+            }
+        }
+    }
+
+    private void checkInSuccess() {
         dialog = new Dialog(EventQRActivity.this);
         dialog.setContentView(R.layout.check_in_success_content);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -214,10 +232,7 @@ public class EventQRActivity extends AppCompatActivity {
         backToQRScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newIntent = new Intent(EventQRActivity.this, QRScannerActivity.class);
-                newIntent.putExtra("userID", userID);
-                newIntent.putExtra("eventID", eventID);
-                startActivity(newIntent);
+                finish();
             }
         });
         dialog.show();
