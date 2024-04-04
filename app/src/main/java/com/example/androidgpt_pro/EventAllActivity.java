@@ -2,21 +2,28 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
 public class EventAllActivity extends AppCompatActivity {
     private String userID;
+    private String eventID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     BottomNavigationView navigationTabs;
@@ -24,6 +31,78 @@ public class EventAllActivity extends AppCompatActivity {
     private ListView eventsListView;
     private ArrayList<Event> events;
     private EventArrayAdapter eventArrayAdapter;
+    private ImageButton previous_btn;
+    private ImageButton next_btn;
+
+
+    private void initEvents() {
+        events = new ArrayList<>();
+    }
+
+    private void initViews() {
+        previous_btn = findViewById(R.id.event_previous_page);
+        next_btn = findViewById(R.id.event_next_page);
+        eventsListView = findViewById(R.id.event_list_view);
+        eventArrayAdapter = new EventArrayAdapter(this, events);
+        eventsListView.setAdapter(eventArrayAdapter);
+    }
+
+    private void getEvents() {
+        getEventIDsFromEvent();
+    }
+
+    private void getEventIDsFromEvent() {
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+//                if (edc.getLastEventID(docSns) != "00000000")
+//                    getEventInfo(edc.getProfileOrganizedEvents(docSns));
+            }
+        });
+    }
+
+    private void getEventInfo(ArrayList<String> organizedEvents) {
+        for (int i = 0; i < organizedEvents.size(); i++) {
+            String eventID = organizedEvents.get(i);
+            edc.getEventSnapshot(eventID)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot docSns) {
+                            getEventImage(eventID, docSns);
+                        }
+                    });
+        }
+    }
+
+    private void getEventImage(String eventID, DocumentSnapshot documentSnapshot) {
+        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                events.add(new Event(eventID,
+                        edc.getEventName(documentSnapshot),
+                        edc.getEventLocationCity(documentSnapshot),
+                        edc.getEventLocationProvince(documentSnapshot),
+                        edc.getEventTime(documentSnapshot),
+                        edc.getEventDate(documentSnapshot),
+                        uri));
+                eventArrayAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void setupEventsListView() {
+        // handle click action
+        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(EventAllActivity.this, EventDetailActivity.class);
+                intent.putExtra("eventID", events.get(position).getEventID());
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +112,8 @@ public class EventAllActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
+
+        eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
 
         navigationTabs = findViewById(R.id.nav_event);
