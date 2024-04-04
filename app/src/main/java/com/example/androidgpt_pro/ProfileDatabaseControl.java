@@ -2,6 +2,9 @@ package com.example.androidgpt_pro;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -250,9 +253,9 @@ public class ProfileDatabaseControl {
      * This is a deleter for Profile Image.
      */
     public void delProfileImage() {
-        pStgRef.child(pID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        pStgRef.child(pID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onSuccess(Void unused) {
+            public void onComplete(@NonNull Task<Void> task) {
                 pDocRef.update("pImageUpdated", Boolean.TRUE);
             }
         });
