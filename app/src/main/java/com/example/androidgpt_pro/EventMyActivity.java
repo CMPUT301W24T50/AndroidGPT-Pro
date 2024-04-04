@@ -130,7 +130,7 @@ public class EventMyActivity extends AppCompatActivity {
         edc = new EventDatabaseControl();
 
         navigationTabs = findViewById(R.id.nav_event);
-        navigationTabs.setSelectedItemId(R.id.events_tab);
+        navigationTabs.setSelectedItemId(R.id.profile_tab);
         navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
