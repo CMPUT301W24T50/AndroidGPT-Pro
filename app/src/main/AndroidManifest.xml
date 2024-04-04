@@ -93,7 +93,7 @@
             android:exported="true">
         </activity>
 
-        <activity android:name=".GeoLocationControl"
+        <activity android:name=".GeoLocationActivity"
             android:exported="true">
         </activity>
 

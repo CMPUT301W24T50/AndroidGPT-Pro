@@ -10,6 +10,11 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -32,18 +37,74 @@ import com.google.android.gms.tasks.Task;
  * This is a class for working with GeoLocation.
  * Reference: https://github.com/Pritish-git/get-Current-Location
  */
-public class GeoLocationControl extends AppCompatActivity {
+public class GeoLocationActivity extends AppCompatActivity {
 
     private String eventID;
     private EventDatabaseControl edc;
 
+    ImageButton btnBackButton;
+    TextView tvGLTTitle;
+    TextView tvGLTDescription;
+    Button btnStart;
+    ImageView ivRequestingPermission;
+    TextView tvRequestingPermission;
+    ImageView ivRequestingPermissionFail;
+    TextView tvRequestingPermissionFail;
+    ImageView ivDownloadingLocation;
+    TextView tvDownloadingLocation;
+
     private LocationRequest locationRequest;
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private final int REQUEST_TURN_ON_LOCATION_SERVICES = 2;
-    private Boolean locationPermissionGranted = Boolean.FALSE;
 
     private double latitude;
     private double longitude;
+
+
+    private void initViews() {
+        btnBackButton = findViewById(R.id.btn_glt_back_button);
+        tvGLTTitle = findViewById(R.id.tv_glt_title);
+        tvGLTDescription = findViewById(R.id.tv_glt_description);
+        btnStart = findViewById(R.id.btn_glt_start);
+        ivRequestingPermission = findViewById(R.id.iv_glt_requesting_permission);
+        tvRequestingPermission = findViewById(R.id.tv_glt_requesting_permission);
+        ivRequestingPermissionFail = findViewById(R.id.iv_glt_requesting_permission_fail);
+        tvRequestingPermissionFail = findViewById(R.id.tv_glt_requesting_permission_fail);
+        ivDownloadingLocation = findViewById(R.id.iv_glt_downloading_location);
+        tvDownloadingLocation = findViewById(R.id.tv_glt_downloading_location);
+        ivRequestingPermission.setVisibility(View.GONE);
+        tvRequestingPermission.setVisibility(View.GONE);
+        ivRequestingPermissionFail.setVisibility(View.GONE);
+        tvRequestingPermissionFail.setVisibility(View.GONE);
+        ivDownloadingLocation.setVisibility(View.GONE);
+        tvDownloadingLocation.setVisibility(View.GONE);
+    }
+
+    private void setupBackButton() {
+        btnBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private void setupStart() {
+        btnStart.setEnabled(Boolean.TRUE);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnStart.setEnabled(Boolean.FALSE);
+                ivRequestingPermissionFail.setVisibility(View.GONE);
+                tvRequestingPermissionFail.setVisibility(View.GONE);
+                locationRequest = LocationRequest.create();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                locationRequest.setInterval(5000);
+                locationRequest.setFastestInterval(2000);
+                getCurrentLocation();
+            }
+        });
+    }
 
 
     private void getCurrentLocation() {
@@ -52,10 +113,11 @@ public class GeoLocationControl extends AppCompatActivity {
 
 
     private void getLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(GeoLocationControl.this,
+        ivRequestingPermission.setVisibility(View.VISIBLE);
+        tvRequestingPermission.setVisibility(View.VISIBLE);
+        if (ActivityCompat.checkSelfPermission(GeoLocationActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = Boolean.TRUE;
             checkLocationServices();
         } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -70,10 +132,14 @@ public class GeoLocationControl extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                locationPermissionGranted = Boolean.TRUE;
                 checkLocationServices();
             } else {
-                locationPermissionGranted = Boolean.FALSE;
+                ivRequestingPermission.setVisibility(View.GONE);
+                tvRequestingPermission.setVisibility(View.GONE);
+                ivRequestingPermissionFail.setVisibility(View.VISIBLE);
+                tvRequestingPermissionFail.setVisibility(View.VISIBLE);
+                tvRequestingPermissionFail.setText(R.string.glt_fail_PNG);
+                setupStart();
             }
         }
     }
@@ -116,13 +182,18 @@ public class GeoLocationControl extends AppCompatActivity {
                 try {
                     ResolvableApiException resolvableApiException = (ResolvableApiException) e;
                     resolvableApiException
-                        .startResolutionForResult(GeoLocationControl.this,
+                        .startResolutionForResult(GeoLocationActivity.this,
                             REQUEST_TURN_ON_LOCATION_SERVICES);
                 } catch (IntentSender.SendIntentException ex) {
                     ex.printStackTrace();
                 }
                 break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                ivRequestingPermission.setVisibility(View.GONE);
+                tvRequestingPermission.setVisibility(View.GONE);
+                ivRequestingPermissionFail.setVisibility(View.VISIBLE);
+                tvRequestingPermissionFail.setVisibility(View.VISIBLE);
+                tvRequestingPermissionFail.setText(R.string.glt_fail_NLS);
                 break;
         }
     }
@@ -133,6 +204,13 @@ public class GeoLocationControl extends AppCompatActivity {
         if (requestCode == REQUEST_TURN_ON_LOCATION_SERVICES) {
             if (resultCode == Activity.RESULT_OK) {
                 requestLocation();
+            } else {
+                ivRequestingPermission.setVisibility(View.GONE);
+                tvRequestingPermission.setVisibility(View.GONE);
+                ivRequestingPermissionFail.setVisibility(View.VISIBLE);
+                tvRequestingPermissionFail.setVisibility(View.VISIBLE);
+                tvRequestingPermissionFail.setText(R.string.glt_fail_SNE);
+                setupStart();
             }
         }
     }
@@ -140,44 +218,49 @@ public class GeoLocationControl extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void requestLocation() {
-        LocationServices.getFusedLocationProviderClient(GeoLocationControl.this)
+        ivRequestingPermission.setVisibility(View.GONE);
+        tvRequestingPermission.setVisibility(View.GONE);
+        ivDownloadingLocation.setVisibility(View.VISIBLE);
+        tvDownloadingLocation.setVisibility(View.VISIBLE);
+        LocationServices.getFusedLocationProviderClient(GeoLocationActivity.this)
             .requestLocationUpdates(locationRequest, new LocationCallback() {
                 @Override
                 public void onLocationResult(@NonNull LocationResult locationResult) {
                     super.onLocationResult(locationResult);
                     LocationServices
-                        .getFusedLocationProviderClient(GeoLocationControl.this)
+                        .getFusedLocationProviderClient(GeoLocationActivity.this)
                         .removeLocationUpdates(this);
                     if (!locationResult.getLocations().isEmpty()) {
                         int index = locationResult.getLocations().size() - 1;
                         latitude = locationResult.getLocations().get(index).getLatitude();
                         longitude = locationResult.getLocations().get(index).getLongitude();
-                        pushLocation();
+                        pushLocationThenBack();
                     }
                 }
             }, Looper.getMainLooper());
     }
 
 
-    private void pushLocation() {
+    private void pushLocationThenBack() {
         edc.addEventCheckInLocation(eventID, String.valueOf(latitude), String.valueOf(longitude));
+        ivDownloadingLocation.setVisibility(View.GONE);
+        tvDownloadingLocation.setVisibility(View.GONE);
+        setResult(RESULT_OK);
+        finish();
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_geolocation);
 
         Intent intent = getIntent();
         eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
 
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(2000);
-
-        getCurrentLocation();
+        initViews();
+        setupBackButton();
+        setupStart();
     }
 }
