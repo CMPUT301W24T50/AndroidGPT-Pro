@@ -38,7 +38,6 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eTime;
     private String eDateFormat;
     private String eDate;
-    private long eTimestamp;
     private String eDescription;
     private Boolean eGLTState;
     private Uri eImageURI;
@@ -59,6 +58,7 @@ public class EventCreateActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
     private int hour, minute;
+    private long eTimestamp;
 
 
     private void initViews() {
@@ -93,7 +93,7 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
-                eDateFormat = year + "-" + month + "-" + day;
+                eDateFormat = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day);
                 eventDateEditButton.setText(date);
             }
         };
@@ -231,7 +231,7 @@ public class EventCreateActivity extends AppCompatActivity {
 
         // handel time picker
         String eventTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
-        String eTimestampFormat = eDateFormat + " " + eventTime + ":00";
+        String eTimestampFormat = eDateFormat + " " + eventTime + ":00.000";
         // Parse the string to a Timestamp object
         Timestamp timestamp = Timestamp.valueOf(eTimestampFormat);
         eTimestamp = timestamp.getTime();
@@ -280,11 +280,9 @@ public class EventCreateActivity extends AppCompatActivity {
         setupBackButton();
         setupEventImageSelector();
 
-        Calendar calendar = Calendar.getInstance();
-        int currentMinute = calendar.get(Calendar.MINUTE);
-        //12 hour format
-        int currentHour = calendar.get(Calendar.HOUR);
-        //24 hour format
+        // get current timestamp
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        long currentTimestamp = timestamp.getTime();
         initEventDatePicker();
         eventDateEditButton.setText(getToday());
 
@@ -296,10 +294,11 @@ public class EventCreateActivity extends AppCompatActivity {
                 if(eName != null && eLocStreet != null
                         && eLocCity != null && eLocProvince != null
                         && eDate != null && eTime != null
-                        && eDescription != null && eImageURI != null) {
+                        && eDescription != null && eImageURI != null
+                        && eTimestamp > currentTimestamp) {
                     applyNewEvent();
                 }
-                else if(currentMinute <= minute && currentHour <= hour){
+                else if(eTimestamp < currentTimestamp){
                     CharSequence text = "Please Select a Valid Time";
                     int duration = Toast.LENGTH_SHORT;
 

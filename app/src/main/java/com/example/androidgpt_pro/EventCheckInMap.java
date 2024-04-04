@@ -2,6 +2,9 @@ package com.example.androidgpt_pro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +24,23 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
     private EventDatabaseControl edc;
     private String eventID;
 
+    private void PopUpWindow() {
+        mapFragment();
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        getWindow().setLayout((int)(width*.8), (int)(height*.7));
+
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.gravity = Gravity.CENTER;
+        params.x = 0;
+        params.y = -20;
+
+        getWindow().setAttributes(params);
+    }
+
     private void mapFragment() {
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -28,15 +48,6 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_organizer_map);
-
-        Intent intent = getIntent();
-        eventID = intent.getStringExtra("eventID");
-        edc = new EventDatabaseControl();
-    }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -64,12 +75,23 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
                 LatLng markerPosition = new LatLng(checkInLatitude, checkInLongLatitude);
                 gMap.addMarker(new MarkerOptions().position(markerPosition).title("Marker at X, Y"));
             }
-            
+
             double firstCheckInLatitude = Double.parseDouble(checkInLocation[0][0]);
             double firstCheckInLongLatitude = Double.parseDouble(checkInLocation[0][1]);
 
             LatLng markerFirstPosition = new LatLng(firstCheckInLatitude, firstCheckInLongLatitude);
             gMap.moveCamera(CameraUpdateFactory.newLatLng(markerFirstPosition));
         }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_organizer_map);
+
+        Intent intent = getIntent();
+        eventID = intent.getStringExtra("eventID");
+        edc = new EventDatabaseControl();
+
+        PopUpWindow();
     }
 }
