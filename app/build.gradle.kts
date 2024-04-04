@@ -36,7 +36,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:18.0.0")
-    implementation("com.google.firebase:firebase-messaging:20.1.0")
+//    implementation("com.google.firebase:firebase-messaging:20.1.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

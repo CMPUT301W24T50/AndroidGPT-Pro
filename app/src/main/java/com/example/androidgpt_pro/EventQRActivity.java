@@ -26,7 +26,6 @@ public class EventQRActivity extends AppCompatActivity {
 
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
-
     private String eventID;
     private String userID;
     private String userOp;
