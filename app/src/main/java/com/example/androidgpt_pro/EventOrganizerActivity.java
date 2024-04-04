@@ -48,7 +48,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private Button shareQRCodeButton;
     private Button deleteButton;
     private Button clearImageButton;
-    private Boolean eventGeoLocation = Boolean.FALSE;
+    private Boolean eventGeoLocation;
 
 
     private void initViews(){
