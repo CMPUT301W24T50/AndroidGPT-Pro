@@ -55,7 +55,7 @@
                             android:layout_width="260dp"
                             android:layout_height="180dp"
                             android:color="@color/white"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:adjustViewBounds="true">
 
                         </ImageView>
