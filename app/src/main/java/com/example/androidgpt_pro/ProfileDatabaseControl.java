@@ -15,6 +15,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -39,6 +40,7 @@ public class ProfileDatabaseControl {
     private ArrayList<String> pSignUpEvents;
     private ArrayList<String> pCheckInEvents;
     private ArrayList<String> pOrganizedEvents;
+    private ArrayList<String> pNotificationsRecords;
 
 
     /**
@@ -73,6 +75,7 @@ public class ProfileDatabaseControl {
         data.put("pSignUpEvents", pSignUpEvents);
         data.put("pCheckInEvents", pCheckInEvents);
         data.put("pOrganizedEvents", pOrganizedEvents);
+        data.put("pNotificationsRecords", pNotificationsRecords);
         data.put("pGLTState", Boolean.FALSE);
         data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
@@ -345,18 +348,69 @@ public class ProfileDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 if (getProfileCheckInEventCount(docSns, eventID) == null) {
                     String count = "00000001";
-                    String data = dt.constructSharpString(eventID, count);
+                    String data = dt.constructSharpString(eventID, count, null);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(data));
                     ds.newCheckInEventProfile(eventID, pID, count);
                 } else {
                     String count = getProfileCheckInEventCount(docSns, eventID);
-                    String data = dt.constructSharpString(eventID, count);
+                    String data = dt.constructSharpString(eventID, count, null);
                     String nextCount = dt.calculateAddOne(count);
-                    String nextData = dt.constructSharpString(eventID, nextCount);
+                    String nextData = dt.constructSharpString(eventID, nextCount, null);
                     pDocRef.update("pCheckInEvents", FieldValue.arrayRemove(data));
                     pDocRef.update("pCheckInEvents", FieldValue.arrayUnion(nextData));
                     ds.addCheckInEventProfile(eventID, pID, count, nextCount);
                 }
+            }
+        });
+    }
+
+
+    /**
+     * This is a getter for Profile Notification Records.
+     * @param profileDocumentSnapshot
+     * profileDocumentSnapshot: A profile document snapshot.
+     * @return profileNotificationRecords
+     * profileNotificationRecords: A "2D Array" list of eventID, totalNumNtf, ReadNtf.
+     * Null if no notification.
+     * ReadNtf == "-1" indicates that the user has not read any notifications.
+     */
+    public String[][] getProfileAllNotificationRecords(DocumentSnapshot profileDocumentSnapshot) {
+        if (profileDocumentSnapshot.get("pNotificationsRecords") == null)
+            return null;
+        ArrayList<String> data = (ArrayList<String>) profileDocumentSnapshot
+            .get("pNotificationsRecords");
+        String[][] lst = new String[data.size()][];
+        for (int i = 0; i < data.size(); i++) {
+            lst[i] = dt.splitSharpString(data.get(i));
+        }
+        return lst;
+    }
+
+    private void updateNotificationRecord(DocumentSnapshot docSns, String eventID) {
+        if (docSns.get("pNotificationsRecords") == null)
+            return;
+        ArrayList<String> data = (ArrayList<String>) docSns.get("pNotificationsRecords");
+        String[][] lst = new String[data.size()][];
+        for (int i = 0; i < data.size(); i++) {
+            String[] tmp = dt.splitSharpString(data.get(i));
+            if (Objects.equals(tmp[0], eventID)) {
+                String newRecord = dt.constructSharpString(tmp[0], tmp[1], tmp[1]);
+                pDocRef.update("pNotificationsRecords", FieldValue.arrayRemove(data.get(i)));
+                pDocRef.update("pNotificationsRecords", FieldValue.arrayUnion(newRecord));
+            }
+        }
+    }
+
+    /**
+     * This is a setter allow user to mark notifications for specific event0 as read.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void setProfileNotificationRead(String eventID) {
+        getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                updateNotificationRecord(docSns, eventID);
             }
         });
     }
