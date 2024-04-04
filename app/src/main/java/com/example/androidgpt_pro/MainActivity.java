@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * This class manages the opening of the app and determines whether the user
@@ -54,14 +52,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                String token = task.getResult();
-                Log.i("My token", token);
-            }
-        });
-
-
     }
 }
