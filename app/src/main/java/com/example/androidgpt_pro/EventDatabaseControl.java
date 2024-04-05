@@ -634,4 +634,25 @@ public class EventDatabaseControl {
             allEventID[i - 1] = eventQueryDocumentSnapshots.getDocuments().get(i).getId();
         return allEventID;
     }
+
+    /**
+     * This is a getter for all Future Event IDs.
+     * @param eventQueryDocumentSnapshots
+     * eventQueryDocumentSnapshots: The Event Query Document Snapshots.
+     * @return allFutureEventID
+     * allFutureEventID: A list contains all Future Event IDs.
+     */
+    public String[] getAllFutureEventID(QuerySnapshot eventQueryDocumentSnapshots) {
+        if (eventQueryDocumentSnapshots == null)
+            return null;
+        int colSize = eventQueryDocumentSnapshots.getDocuments().size();
+        ArrayList<String> alAllFutureEventID = new ArrayList<>();
+        for (int i = 1; i < colSize; i++) {
+            String eventDate = eventQueryDocumentSnapshots
+                    .getDocuments().get(i).getString("eDate");
+            if (dt.compareDateBigOrEqual(eventDate, dt.getDateToday()))
+                alAllFutureEventID.add(eventQueryDocumentSnapshots.getDocuments().get(i).getId());
+        }
+        return alAllFutureEventID.toArray(new String[0]);
+    }
 }

@@ -20,4 +20,5 @@
     <string name="glt_fail_PNG">Permission not granted, please try again.</string>
     <string name="glt_fail_SNE">Location services are not enabled, please try again.</string>
     <string name="glt_fail_NLS">Your device does not have location services. Please turn off Geo-Location Tracking in the Profile settings and check in again!</string>
+    <string name="invalid_name_text">Invalid Event</string>
 </resources>

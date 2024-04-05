@@ -2,6 +2,10 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
 /**
  * This is a class that contains database tools.
  */
@@ -69,5 +73,38 @@ public class DatabaseTools {
      */
     public String[] splitSharpString(String sharpString) {
         return sharpString.split("#");
+    }
+
+    /**
+     * This is a compare function to compare two dates.
+     * @param dateA
+     * dateA: A date.
+     * @param dateB
+     * dateB: A date.
+     * @return isBigOrEqual
+     * isBigOrEqual: True if dateA is big or equal to dateB, False otherwise.
+     */
+    public Boolean compareDateBigOrEqual(String dateA, String dateB) {
+        String[] lstDateA = dateA.split(" ");
+        String[] lstDateB = dateB.split(" ");
+        List<String> month = Arrays.asList("JAN", "FEB", "MAR", "APR",
+                "MAY", "JUN", "JUL", "AUG",
+                "SEP", "OCT", "NOV", "DEC");
+        if (Integer.parseInt(lstDateA[2]) >= Integer.parseInt(lstDateB[2])
+                && month.indexOf(lstDateA[0]) >= month.indexOf(lstDateB[0])
+                && Integer.parseInt(lstDateA[2]) >= Integer.parseInt(lstDateB[2]))
+            return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+
+    public String getDateToday() {
+        Calendar cal = Calendar.getInstance();
+        String[] monthList = {"JAN", "FEB", "MAR", "APR",
+                "MAY", "JUN", "JUL", "AUG",
+                "SEP", "OCT", "NOV", "DEC"};
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        return monthList[month - 1] + " " + day + " " + year;
     }
 }

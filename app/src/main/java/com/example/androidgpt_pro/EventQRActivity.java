@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,13 +35,15 @@ public class EventQRActivity extends AppCompatActivity {
 
     private final int GEO_LOCATION_CONTROL = 1;
 
+    private CardView eventPosterCardView;
     private ImageView eventPosterImageView;
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
     private TextView eventLocationCityTextView;
     private TextView eventLocationProvinceTextView;
-    private TextView eventDescription;
+    private TextView eventDescriptionTitleTextView;
+    private TextView eventDescriptionTextView;
     private ImageButton backButton;
     private Button signUpButton;
     private Button withdrawButton;
@@ -64,13 +67,15 @@ public class EventQRActivity extends AppCompatActivity {
         pdc = new ProfileDatabaseControl(userID);
 
         //Initialize views
+        eventPosterCardView = findViewById(R.id.card_event_image);
         eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
         eventLocationAptTextView = findViewById(R.id.event_location_street_name);
         eventLocationCityTextView = findViewById(R.id.event_location_city);
         eventLocationProvinceTextView = findViewById(R.id.event_location_province);
-        eventDescription = findViewById(R.id.event_description);
+        eventDescriptionTitleTextView = findViewById(R.id.event_description_title);
+        eventDescriptionTextView = findViewById(R.id.event_description);
         eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         signUpButton = findViewById(R.id.btn_sign_up);
         signUpButton.setVisibility(View.GONE);
@@ -105,12 +110,16 @@ public class EventQRActivity extends AppCompatActivity {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
+                if (edc.getEventName(docSns) == null) {
+                    handleInvalidEvent();
+                    return;
+                }
                 eventNameTextView.setText(edc.getEventName(docSns));
                 eventDateTextView.setText(edc.getEventTime(docSns));
                 eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
                 eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
                 eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
-                eventDescription.setText(edc.getEventDescription(docSns));
+                eventDescriptionTextView.setText(edc.getEventDescription(docSns));
                 eGeoLocationTracking = edc.getEventGLTState(docSns);
                 if (Objects.equals(userOp, "SignUp"))
                     eventSignUp();
@@ -121,10 +130,19 @@ public class EventQRActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * After scan the sign up qr code, the code leads user to signup page
-     */
-    public void eventSignUp() {
+    private void handleInvalidEvent() {
+        eventNameTextView.setText(R.string.invalid_name_text);
+        eventPosterCardView.setVisibility(View.GONE);
+        eventDateTextView.setVisibility(View.GONE);
+        eventLocationAptTextView.setVisibility(View.GONE);
+        eventLocationCityTextView.setVisibility(View.GONE);
+        eventLocationProvinceTextView.setVisibility(View.GONE);
+        eventDescriptionTitleTextView.setVisibility(View.GONE);
+        eventDescriptionTextView.setVisibility(View.GONE);
+    }
+
+
+    private void eventSignUp() {
         // check if the user has sign up the event
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -202,10 +220,7 @@ public class EventQRActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * After scan the check in qr code, the code leads user to check in page
-     */
-    public void eventCheckIn() {
+    private void eventCheckIn() {
         checkInButton.setVisibility(View.VISIBLE);
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
