@@ -79,7 +79,7 @@ public class ProfileDatabaseControl {
         data.put("pCheckInEvents", pCheckInEvents);
         data.put("pOrganizedEvents", pOrganizedEvents);
         data.put("pNotificationsRecords", pNotificationsRecords);
-        data.put("pGLTState", Boolean.FALSE);
+        data.put("pGLTState", Boolean.TRUE);
         data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
     }
