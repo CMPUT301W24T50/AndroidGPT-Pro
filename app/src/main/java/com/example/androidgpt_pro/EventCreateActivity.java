@@ -41,9 +41,7 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eDescription;
     private Boolean eGLTState;
     private Uri eImageURI;
-
     private ImageButton backButton;
-
     private static final int PICK_IMAGE_REQUEST = 1;
     private EditText eventNameEditText;
     private Button eventDateEditButton;
