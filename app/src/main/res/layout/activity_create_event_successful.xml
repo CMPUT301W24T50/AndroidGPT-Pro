@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,72 +27,107 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Created Successfully!"
-                    android:textSize="24sp"
-                    android:layout_alignParentTop="true"
+                    android:textSize="26sp"
+                    android:layout_marginTop="20dp"
                     android:layout_centerHorizontal="true" />
 
                 <!-- Sign-Up QR Code and Label -->
                 <TextView
+                    android:id="@+id/tv_sign_up_qr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sign-Up QR Code"
+                    android:textSize="18sp"
                     android:layout_below="@id/create_event_title"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="24dp" />
 
                 <ImageView
                     android:id="@+id/sign_up_qr_code_image_view"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_below="@id/create_event_title"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_below="@id/tv_sign_up_qr"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="40dp"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitXY"/>
 
-                <Button
-                    android:id="@+id/save_sign_up_qr_button"
+                <LinearLayout
+                    android:id="@+id/ll_sign_up_qr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save Sign-Up QR"
-                    android:layout_below="@+id/sign_up_qr_code_image_view"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp" />
+                    android:orientation="horizontal"
+                    android:layout_below="@id/sign_up_qr_code_image_view"
+                    android:layout_centerHorizontal="true">
+
+                    <ImageButton
+                        android:id="@+id/ib_save_sign_up_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="@color/MainTheme1" />
+
+                    <ImageButton
+                        android:id="@+id/ib_share_sign_up_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_share"
+                        app:tint="@color/MainTheme1" />
+                </LinearLayout>
 
                 <!-- Check-In QR Code and Label -->
                 <TextView
+                    android:id="@+id/tv_check_in_qr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Check-In QR Code"
-                    android:layout_below="@id/save_sign_up_qr_button"
+                    android:textSize="18sp"
+                    android:layout_below="@id/ll_sign_up_qr"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="24dp" />
 
                 <ImageView
                     android:id="@+id/check_in_qr_code_image_view"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_below="@id/save_sign_up_qr_button"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_below="@id/tv_check_in_qr"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="40dp"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitXY"/>
 
-                <Button
-                    android:id="@+id/save_check_in_qr_button"
+                <LinearLayout
+                    android:id="@+id/ll_check_in_qr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save Check-In QR"
-                    android:layout_below="@+id/check_in_qr_code_image_view"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp" />
+                    android:orientation="horizontal"
+                    android:layout_below="@id/check_in_qr_code_image_view"
+                    android:layout_centerHorizontal="true">
+
+                    <ImageButton
+                        android:id="@+id/ib_save_check_in_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="@color/MainTheme1" />
+
+                    <ImageButton
+                        android:id="@+id/ib_share_check_in_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_share"
+                        app:tint="@color/MainTheme1" />
+                </LinearLayout>
+
+
                 <Button
-                    android:id="@+id/back_to_main_button"
+                    android:id="@+id/back_to_my_events_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Back to Main"
-                    android:layout_below="@+id/save_check_in_qr_button"
+                    android:text="Back"
+                    android:layout_below="@id/ll_check_in_qr"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp" />
-
+                    android:layout_marginTop="24dp" />
             </RelativeLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>

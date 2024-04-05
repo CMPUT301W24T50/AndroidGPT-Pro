@@ -1,11 +1,9 @@
 package com.example.androidgpt_pro;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,11 +11,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -31,7 +29,9 @@ public class EventMyActivity extends AppCompatActivity {
     private String userID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
+
     BottomNavigationView navigationTabs;
+    private ImageButton btnBackButton;
     private FloatingActionButton createEventBtn;
     private ListView eventsListView;
     private ArrayList<Event> events;
@@ -43,12 +43,21 @@ public class EventMyActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        btnBackButton = findViewById(R.id.back_button);
         createEventBtn = findViewById(R.id.event_create_btn);
         eventsListView = findViewById(R.id.event_list_view);
         eventArrayAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventArrayAdapter);
     }
 
+    private void setupBackButton() {
+        btnBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 
     private void getEvents() {
         getEventIDsFromProfile();
@@ -142,47 +151,16 @@ public class EventMyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list);
+        setContentView(R.layout.activity_my_events);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
         edc = new EventDatabaseControl();
 
-        navigationTabs = findViewById(R.id.nav_event);
-        navigationTabs.setSelectedItemId(R.id.profile_tab);
-        navigationTabs.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int itemId = menuItem.getItemId();
-                if (itemId == R.id.events_tab) {
-                    Intent newIntent = new Intent(EventMyActivity.this, EventAllActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
-                } else if (itemId == R.id.qr_scanner_tab) {
-                    Intent newIntent = new Intent(EventMyActivity.this, QRScannerActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
-                } else if (itemId == R.id.profile_tab) {
-                    Intent newIntent = new Intent(EventMyActivity.this, ProfileActivity.class);
-                    newIntent.putExtra("userID", userID);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(newIntent);
-                    overridePendingTransition(0,0);
-                } else {
-                    throw new IllegalArgumentException("menu item ID does not exist");
-                }
-                return false;
-            }
-        });
-
         initEvents();
         initViews();
+        setupBackButton();
 
         getEvents();
         setupEventsListView();
