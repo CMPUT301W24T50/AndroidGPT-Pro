@@ -3,18 +3,23 @@ package com.example.androidgpt_pro;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -29,6 +34,7 @@ public class EventQRActivity extends AppCompatActivity {
 
     private final int GEO_LOCATION_CONTROL = 1;
 
+    private ImageView eventPosterImageView;
     private TextView eventNameTextView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
@@ -58,6 +64,7 @@ public class EventQRActivity extends AppCompatActivity {
         pdc = new ProfileDatabaseControl(userID);
 
         //Initialize views
+        eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
         eventLocationAptTextView = findViewById(R.id.event_location_street_name);
@@ -78,6 +85,20 @@ public class EventQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        
+        // get event poster
+        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(eventPosterImageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // If there's an error loading poster or poster has been deleted by admin show nothing
+                Picasso.get().load(R.drawable.partyimage1).into(eventPosterImageView);
             }
         });
 

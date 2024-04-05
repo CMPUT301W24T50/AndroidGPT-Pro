@@ -168,7 +168,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 // If there's an error loading poster or poster has been deleted by admin show nothing
                 Picasso.get().load(R.drawable.partyimage1).into(eventOrganizerPoster);
             }
-        });;
+        });
 
         // get event time&Date and city&Province and attendee#
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

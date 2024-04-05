@@ -2,21 +2,26 @@ package com.example.androidgpt_pro;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,6 +34,7 @@ public class EventDetailActivity extends AppCompatActivity{
     //TODO: this is the detail page of an event
 
     private TextView eventNameTextView;
+    private ImageView eventPosterImageView;
     private TextView eventDateTextView;
     private TextView eventLocationAptTextView;
     private TextView eventLocationCityTextView;
@@ -86,6 +92,7 @@ public class EventDetailActivity extends AppCompatActivity{
 
 
         //Initialize views
+        eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
         eventDateTextView = findViewById(R.id.event_date);
         eventLocationAptTextView = findViewById(R.id.event_location_street_name);
@@ -99,6 +106,20 @@ public class EventDetailActivity extends AppCompatActivity{
         deleteButton = findViewById(R.id.btn_delete);
 //        checkInButton = findViewById(R.id.btn_checkin);
 //        checkInButton.setVisibility();
+
+        // get event poster
+        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(eventPosterImageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // If there's an error loading poster or poster has been deleted by admin show nothing
+                Picasso.get().load(R.drawable.partyimage1).into(eventPosterImageView);
+            }
+        });
 
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -136,7 +157,6 @@ public class EventDetailActivity extends AppCompatActivity{
             }
         });
 
-        // TODO: check if signup & check in to hide specific button
 
         // handle the sign up events when clicking signUp button
 //        signUpButton.setOnClickListener(new View.OnClickListener() {
