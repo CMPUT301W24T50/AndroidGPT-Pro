@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -18,7 +19,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -428,5 +428,32 @@ public class ProfileDatabaseControl {
                 updateNotificationRecord(docSns, eventID);
             }
         });
+    }
+
+
+    /**
+     * This is a requester for all profiles.
+     * @return profilesSnapshotGetTask
+     * profilesSnapshotGetTask: A task for getting profileQueryDocumentSnapshots.
+     */
+    public Task<QuerySnapshot> requestAllProfiles() {
+        return db.collection("Profile").get();
+    }
+
+    /**
+     * This is a getter for all Profile IDs.
+     * @param profileQueryDocumentSnapshots
+     * profileQueryDocumentSnapshots: The profile query document snapshot.
+     * @return allProfileID
+     * allProfileID: A list contains all Profile IDs.
+     */
+    public String[] getAllProfileID(QuerySnapshot profileQueryDocumentSnapshots) {
+        if (profileQueryDocumentSnapshots == null)
+            return null;
+        int colSize = profileQueryDocumentSnapshots.getDocuments().size();
+        String[] allProfileID = new String[colSize];
+        for (int i = 0; i < colSize; i++)
+            allProfileID[i] = profileQueryDocumentSnapshots.getDocuments().get(i).getId();
+        return allProfileID;
     }
 }
