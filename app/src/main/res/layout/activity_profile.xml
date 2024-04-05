@@ -74,7 +74,6 @@
         android:id="@+id/toggle_geolocation_tracking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/geolocation_tracking"
         android:layout_below="@id/btn_edit_profile"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp" />
