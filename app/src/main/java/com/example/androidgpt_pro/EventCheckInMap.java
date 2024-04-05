@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -19,7 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.android.gms.maps.model.LatLng;
 
-public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCallback {
+public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCallback{
     GoogleMap gMap;
     private EventDatabaseControl edc;
     private String eventID;

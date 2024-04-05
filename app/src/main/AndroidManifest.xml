@@ -102,6 +102,7 @@
         </activity>
 
         <activity android:name=".EventCheckInMap"
+            android:theme="@style/PopMe"
             android:exported="true">
         </activity>
         <provider
