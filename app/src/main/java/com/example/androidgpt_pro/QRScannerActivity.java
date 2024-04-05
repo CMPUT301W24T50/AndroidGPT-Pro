@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.ComponentActivity;
 
@@ -51,11 +54,14 @@ public class QRScannerActivity extends ComponentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
 
-        // Setup scan button and bottom navigation view
-        Button btnScanQR = findViewById(R.id.btnScanQR);
-        btnScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
+
+        // Setup scan button and bottom navigation view
+        ImageView ivScanQR = findViewById(R.id.iv_scan_qr);
+        TextView tvScanQR = findViewById(R.id.tv_scan_qr);
+        ivScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
+        tvScanQR.setOnClickListener(v -> barcodeLauncher.launch(new ScanOptions()));
 
         navigationTabs = findViewById(R.id.nav_qr_scanner);
         navigationTabs.setSelectedItemId(R.id.qr_scanner_tab);
