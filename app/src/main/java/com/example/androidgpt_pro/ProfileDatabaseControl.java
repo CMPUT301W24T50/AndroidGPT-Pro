@@ -2,12 +2,16 @@ package com.example.androidgpt_pro;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -15,7 +19,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -76,7 +79,7 @@ public class ProfileDatabaseControl {
         data.put("pCheckInEvents", pCheckInEvents);
         data.put("pOrganizedEvents", pOrganizedEvents);
         data.put("pNotificationsRecords", pNotificationsRecords);
-        data.put("pGLTState", Boolean.FALSE);
+        data.put("pGLTState", Boolean.TRUE);
         data.put("pImageUpdated", Boolean.FALSE);
         pDocRef.set(data);
     }
@@ -250,9 +253,9 @@ public class ProfileDatabaseControl {
      * This is a deleter for Profile Image.
      */
     public void delProfileImage() {
-        pStgRef.child(pID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        pStgRef.child(pID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onSuccess(Void unused) {
+            public void onComplete(@NonNull Task<Void> task) {
                 pDocRef.update("pImageUpdated", Boolean.TRUE);
             }
         });
@@ -425,5 +428,32 @@ public class ProfileDatabaseControl {
                 updateNotificationRecord(docSns, eventID);
             }
         });
+    }
+
+
+    /**
+     * This is a requester for all profiles.
+     * @return profilesSnapshotGetTask
+     * profilesSnapshotGetTask: A task for getting profileQueryDocumentSnapshots.
+     */
+    public Task<QuerySnapshot> requestAllProfiles() {
+        return db.collection("Profile").get();
+    }
+
+    /**
+     * This is a getter for all Profile IDs.
+     * @param profileQueryDocumentSnapshots
+     * profileQueryDocumentSnapshots: The profile query document snapshot.
+     * @return allProfileID
+     * allProfileID: A list contains all Profile IDs.
+     */
+    public String[] getAllProfileID(QuerySnapshot profileQueryDocumentSnapshots) {
+        if (profileQueryDocumentSnapshots == null)
+            return null;
+        int colSize = profileQueryDocumentSnapshots.getDocuments().size();
+        String[] allProfileID = new String[colSize];
+        for (int i = 0; i < colSize; i++)
+            allProfileID[i] = profileQueryDocumentSnapshots.getDocuments().get(i).getId();
+        return allProfileID;
     }
 }

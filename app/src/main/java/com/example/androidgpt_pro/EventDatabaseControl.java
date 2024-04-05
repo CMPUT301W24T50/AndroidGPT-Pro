@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -605,5 +606,32 @@ public class EventDatabaseControl {
                 ds.setNotificationEventProfile(eventID, counter);
             }
         });
+    }
+
+
+    /**
+     * This is a requester for all events.
+     * @return eventsSnapshotGetTask
+     * eventsSnapshotGetTask: A task for getting eventQueryDocumentSnapshots.
+     */
+    public Task<QuerySnapshot> requestAllEvents() {
+        return db.collection("Event").get();
+    }
+
+    /**
+     * This is a getter for all Event IDs.
+     * @param eventQueryDocumentSnapshots
+     * eventQueryDocumentSnapshots: The Event Query Document Snapshots.
+     * @return allEventID
+     * allEventID: A list contains all Event IDs.
+     */
+    public String[] getAllEventID(QuerySnapshot eventQueryDocumentSnapshots) {
+        if (eventQueryDocumentSnapshots == null)
+            return null;
+        int colSize = eventQueryDocumentSnapshots.getDocuments().size();
+        String[] allEventID = new String[colSize - 1];
+        for (int i = 1; i < colSize; i++)
+            allEventID[i - 1] = eventQueryDocumentSnapshots.getDocuments().get(i).getId();
+        return allEventID;
     }
 }

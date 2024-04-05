@@ -27,7 +27,7 @@
                 android:id="@+id/event_image"
                 android:background="@color/cardview_dark_background"
                 android:layout_gravity="top"
-                android:scaleType="fitXY"/>
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:layout_width="wrap_content"
