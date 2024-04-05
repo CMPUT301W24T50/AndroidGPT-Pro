@@ -8,7 +8,6 @@ import android.provider.Settings.Secure;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
-import java.text.SimpleDateFormat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,8 +19,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class MainActivity extends AppCompatActivity {
 
     private String uniqueID;
-    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
     /**
      * @param savedInstanceState If the activity is being re-initialized after
