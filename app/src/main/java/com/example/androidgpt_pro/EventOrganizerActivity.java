@@ -6,13 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Context;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Objects;
 
 public class EventOrganizerActivity extends AppCompatActivity {
     private String userID;
@@ -147,7 +142,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventOrganizerActivity.this, NotifSenderActivity.class);
+                Intent intent = new Intent(EventOrganizerActivity.this, SendNotificationActivity.class);
                 intent.putExtra("eventID", eventID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);

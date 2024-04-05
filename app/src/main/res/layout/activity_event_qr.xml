@@ -28,9 +28,9 @@
                 android:id="@+id/iv_event_image"
                 android:layout_width="260dp"
                 android:layout_height="180dp"
+                android:adjustViewBounds="true"
                 android:color="@color/white"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true">
+                android:scaleType="centerCrop">
 
             </ImageView>
         </androidx.cardview.widget.CardView>
@@ -60,7 +60,7 @@
         android:id="@+id/event_location_street_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address(street name)"
+        android:text="Address (Street)"
         android:textSize="18sp"
         android:layout_below="@id/event_date"
         android:layout_marginTop="10dp"
@@ -70,7 +70,7 @@
         android:id="@+id/event_location_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address2(city)"
+        android:text="Address (City)"
         android:textSize="18sp"
         android:layout_below="@id/event_location_street_name"
         android:layout_marginTop="5dp"
@@ -80,7 +80,7 @@
         android:id="@+id/event_location_province"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address2(province)"
+        android:text="Address (Province)"
         android:textSize="18sp"
         android:layout_below="@id/event_location_city"
         android:layout_marginTop="5dp"
@@ -103,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/event_description_title"
         android:layout_marginTop="5dp"
-        android:text="Event Detail Sample"
+        android:text="Event Detail"
         android:textColor="#BFA3A3"
         android:textSize="14sp"
         android:layout_marginLeft="16dp"/>
