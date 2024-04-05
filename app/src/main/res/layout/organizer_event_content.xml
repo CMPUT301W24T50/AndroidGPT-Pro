@@ -6,12 +6,11 @@
     android:layout_height="match_parent">
 
     <ImageButton
+        android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/back_arrow_icon"
-        android:id="@+id/back_button"
         android:layout_margin="16dp">
-
     </ImageButton>
 
     <androidx.cardview.widget.CardView
@@ -42,7 +41,6 @@
                     android:id="@+id/card_event_image"
                     android:layout_width="260dp"
                     android:layout_height="180dp"
-                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp">
 
@@ -66,12 +64,9 @@
                     android:id="@+id/organizer_event_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/card_event_image"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="49dp"
+                    android:layout_below="@id/card_event_image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:text="Sample Event"
                     android:textSize="34sp" />
@@ -80,12 +75,12 @@
                     android:id="@+id/organizer_event_time_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/organizer_event_title"
+                    android:layout_below="@id/organizer_event_title"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="50dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginEnd="49dp"
+                    android:layout_marginEnd="50dp"
                     android:text="Sample Time/Date"
                     android:textSize="16sp" />
 
@@ -93,12 +88,12 @@
                     android:id="@+id/organizer_event_address_city_province"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/organizer_event_time_date"
+                    android:layout_below="@id/organizer_event_time_date"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="50dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="49dp"
+                    android:layout_marginEnd="50dp"
                     android:text="Sample City/Province"
                     android:textSize="16sp" />
 
@@ -106,53 +101,61 @@
                     android:id="@+id/organizer_event_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/organizer_event_address_city_province"
+                    android:layout_below="@id/organizer_event_address_city_province"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="50dp"
                     android:text="Sample Description"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/organizer_event_attendee_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/organizer_event_description"
+                    android:layout_below="@id/organizer_event_description"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="49dp">
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="50dp">
 
                     <TextView
                         android:id="@+id/organizer_event_attendee"
-                        android:layout_width="250dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Attendees(#)"
                         android:textColor="#673AB7"
                         android:textColorHint="#673AB7"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/organizer_notification_btn"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
-                        app:srcCompat="@android:drawable/ic_dialog_email" />
-                </LinearLayout>
+                        android:backgroundTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@android:drawable/ic_dialog_email"
+                        app:tint="@color/MainTheme1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/organizer_event_map"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/organizer_event_attendee_layout"
+                    android:layout_below="@id/organizer_event_attendee_layout"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="49dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="50dp"
                     android:text="Check-in Map"
                     android:textSize="16sp" />
 
@@ -160,78 +163,142 @@
                     android:id="@+id/organizer_event_map_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/organizer_event_map"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
+                    android:layout_below="@id/organizer_event_map"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="49dp"
                     android:text="Open Map"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/organizer_event_qr_code"
+                    android:id="@+id/organizer_event_sign_up_qr_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/organizer_event_map_btn"
+                    android:layout_below="@id/organizer_event_map_btn"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="49dp"
-                    android:text="Check-in QR Code"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="50dp"
+                    android:text="Sign-Up QR Code"
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:id="@+id/iv_event_qr_image"
-                    android:layout_width="159dp"
-                    android:layout_height="101dp"
-                    android:layout_below="@+id/organizer_event_qr_code"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="100dp"
+                    android:id="@+id/iv_event_sign_up_qr_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_below="@id/organizer_event_sign_up_qr_code"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="100dp"
-                    android:adjustViewBounds="true"
                     android:color="@color/white"
-                    android:scaleType="fitCenter" />
-                <Button
-                    android:id="@+id/share_qr_image_btn"
+                    android:scaleType="fitXY" />
+
+                <LinearLayout
+                    android:id="@+id/ll_organizer_event_sign_up_qr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_event_qr_image"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/iv_event_sign_up_qr_image"
+                    android:layout_centerHorizontal="true">
+
+                    <ImageButton
+                        android:id="@+id/ib_save_oe_sign_up_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="@color/MainTheme1" />
+
+                    <ImageButton
+                        android:id="@+id/ib_share_oe_sign_up_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_share"
+                        app:tint="@color/MainTheme1" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/organizer_event_check_in_qr_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_organizer_event_sign_up_qr"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="51dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="49dp"
-                    android:text="Share"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="50dp"
+                    android:text="Check-In QR Code"
                     android:textSize="16sp" />
-                <Button
-                    android:id="@+id/btn_delete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/share_qr_image_btn"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="#ff0000"
-                    android:text="@string/delete_event"
-                    android:textSize="16sp"
-                    />
-                <Button
-                    android:id="@+id/btn_clear_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/btn_delete"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/remove_poster"
-                    android:textSize="16sp"
-                    />
-            </RelativeLayout>
 
+                <ImageView
+                    android:id="@+id/iv_event_check_in_qr_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_below="@id/organizer_event_check_in_qr_code"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:color="@color/white"
+                    android:scaleType="fitXY" />
+
+                <LinearLayout
+                    android:id="@+id/ll_organizer_event_check_in_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/iv_event_check_in_qr_image"
+                    android:layout_centerHorizontal="true">
+
+                    <ImageButton
+                        android:id="@+id/ib_save_oe_check_in_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="@color/MainTheme1" />
+
+                    <ImageButton
+                        android:id="@+id/ib_share_oe_check_in_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_menu_share"
+                        app:tint="@color/MainTheme1" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_organizer_event_check_in_qr"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#ff0000"
+                        android:text="@string/remove_event"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_clear_image"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btn_clear_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#ff0000"
+                        android:text="@string/remove_poster"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btn_delete"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
