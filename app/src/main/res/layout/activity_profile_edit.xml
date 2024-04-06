@@ -100,31 +100,42 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp" />
 
-    <ToggleButton
-        android:id="@+id/toggle_geolocation_tracking"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/geolocation_tracking"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/geolocation_tracking"
         android:layout_below="@id/edit_text_edit_email"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="8dp">
 
-    <TextView
-        android:id="@+id/label_geolocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Geo-location"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_toLeftOf="@id/toggle_geolocation_tracking"
-        android:layout_marginTop="455dp" />
+        <TextView
+            android:id="@+id/label_geolocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Geo-location"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/toggle_geolocation_tracking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/geolocation_tracking"
+            android:layout_marginEnd="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/button_save_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:layout_below="@id/toggle_geolocation_tracking"
+        android:layout_below="@id/geolocation_tracking"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp" />
 
