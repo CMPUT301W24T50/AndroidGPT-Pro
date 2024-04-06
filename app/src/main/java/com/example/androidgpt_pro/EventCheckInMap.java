@@ -54,12 +54,24 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
 
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                getLocation(edc.getEventAllCheckInLocations(docSns));
+            public void onMapClick(@NonNull LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(latLng.latitude+ " : " + latLng.longitude);
+                gMap.clear();
+                gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                gMap.addMarker(markerOptions);
             }
         });
+
+//        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot docSns) {
+//                getLocation(edc.getEventAllCheckInLocations(docSns));
+//            }
+//        });
     }
     private void getLocation(String[][] checkInLocation) {
         if(checkInLocation == null) {
