@@ -172,7 +172,7 @@ public class EventDetailActivity extends AppCompatActivity{
         withdrawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pdc.delProfileSignUpEvent(userID);
+                pdc.delProfileSignUpEvent(eventID);
                 withdrawButton.setVisibility(View.GONE);
                 withdrawSuccess();
             }
@@ -201,14 +201,12 @@ public class EventDetailActivity extends AppCompatActivity{
     }
 
     public void withdrawSuccess() {
-        Log.d("TAGWithdraw", "0");
         dialog = new Dialog(EventDetailActivity.this);
         dialog.setContentView(R.layout.withdraw_success_content);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
         dialog.setCancelable(false);
         backToBrowse = dialog.findViewById(R.id.back_list_button);
-        Log.d("TAGWithdraw", "1");
 
         backToBrowse.setOnClickListener(new View.OnClickListener() {
             @Override

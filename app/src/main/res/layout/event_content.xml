@@ -129,15 +129,6 @@
         android:text="Withdraw"
         />
 
-<!--    <Button-->
-<!--        android:id="@+id/btn_checkin"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginBottom="300dp"-->
-<!--        android:text="Check In"-->
-<!--        />-->
     <Button
         android:id="@+id/btn_delete"
         android:layout_width="match_parent"
