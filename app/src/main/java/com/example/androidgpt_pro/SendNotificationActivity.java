@@ -15,18 +15,14 @@ import android.content.Context;
 import javax.annotation.Nullable;
 
 public class SendNotificationActivity extends Activity {
-    private EditText ntfTitle;
     private EditText ntfEditText;
     private Button ntfSendBtn;
     private EventDatabaseControl edc;
     private ProfileDatabaseControl pdc;
     private String eventID;
     private String userID;
-    private static String BASE_URL = "https://fcm.googleapis.com/fcm/send";
-    private static String SERVER_KEY = "AAAAskkkh7k:APA91bHiHsRX7JAbCfijCE-V9ALImnJ1sChVaxIzsqRl26zx9dBQ8Vrim7SK4nypS4rNv4f4wTFEiafTxr65D3LfDlwcLyDDkFrPLAYMxQ1lIhDO2cbzxlZjaXWJZLTreTNMwX1z-jVs";
 
     private void initViews() {
-        ntfTitle = findViewById(R.id.notif_title);
         ntfEditText = findViewById(R.id.notif_text);
         ntfSendBtn = findViewById(R.id.btn_send);
     }
@@ -51,15 +47,12 @@ public class SendNotificationActivity extends Activity {
         ntfSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title = ntfTitle.getText().toString();
                 String message = ntfEditText.getText().toString();
 
-                if(!title.isEmpty() && !message.isEmpty()) {
-                    sendNotification(
-                            SendNotificationActivity.this,
-                            "636d1de22650e418",
-                            title,
-                            message);
+                if(!message.isEmpty()) {
+                    edc.addEventNotification(userID, message);
+                    Toast.makeText(SendNotificationActivity.this, "Message Sent!",
+                            Toast.LENGTH_SHORT).show();
                 } else if (message.contains("#")) {
                     Toast.makeText(SendNotificationActivity.this, "Illegal Symbol Included.",
                             Toast.LENGTH_SHORT).show();
@@ -71,9 +64,6 @@ public class SendNotificationActivity extends Activity {
         });
     }
 
-    private void sendNotification(Context context, String token, String notificationTitle, String notificationText) {
-
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

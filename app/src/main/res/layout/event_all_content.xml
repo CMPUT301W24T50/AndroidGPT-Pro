@@ -11,6 +11,17 @@
         android:id="@+id/back_button"
         android:layout_margin="16dp"/>
 
+    <ImageView
+        android:id="@+id/notification_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/MainTheme2"
+        android:src="@android:drawable/ic_dialog_email"
+        app:tint="@color/MainTheme1" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/organizer_event_card"
         android:layout_width="391dp"
