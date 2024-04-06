@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -129,7 +130,7 @@ public class EventMyActivity extends AppCompatActivity {
                 Intent intent = new Intent(EventMyActivity.this, EventOrganizerActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -145,6 +146,15 @@ public class EventMyActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        initEvents();
+        initViews();
+        getEvents();
     }
 
 

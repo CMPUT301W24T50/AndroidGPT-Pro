@@ -1,5 +1,6 @@
 package com.example.androidgpt_pro;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +38,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private  EventDatabaseControl edc;
 
     private ImageButton backButton;
+    private CardView eventOrganizerPosterCard;
     private ImageView eventOrganizerPoster;
     private TextView eventOrganizerTitle;
     private TextView eventOrganizerTimeDate;
@@ -43,10 +46,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private  TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
     private ImageButton eventSendNotification;
+    private TextView tvOpenMap;
     private Button openMap;
+    private TextView tvSignUpQRCode;
     private ImageView ivSignUpQRCode;
     private ImageButton ibSignUpQRCodeSave;
     private ImageButton ibSignUpQRCodeShare;
+    private TextView tvCheckInQRCode;
     private ImageView ivCheckInQRCode;
     private ImageButton ibCheckInQRCodeSave;
     private ImageButton ibCheckInQRCodeShare;
@@ -60,6 +66,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private void initViews(){
         backButton = findViewById(R.id.back_button);
+        eventOrganizerPosterCard = findViewById(R.id.card_event_image);
         eventOrganizerPoster = findViewById(R.id.iv_event_image);
         eventOrganizerTitle = findViewById(R.id.organizer_event_title);
         eventOrganizerTimeDate = findViewById(R.id.organizer_event_time_date);
@@ -67,50 +74,21 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventOrganizerDescription = findViewById(R.id.organizer_event_description);
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
+        tvOpenMap = findViewById(R.id.organizer_event_map);
         openMap = findViewById(R.id.organizer_event_map_btn);
-        deleteButton = findViewById(R.id.btn_delete);
-        clearImageButton = findViewById(R.id.btn_clear_image);
+        tvSignUpQRCode = findViewById(R.id.organizer_event_sign_up_qr_code);
         ivSignUpQRCode = findViewById(R.id.iv_event_sign_up_qr_image);
         ibSignUpQRCodeSave = findViewById(R.id.ib_save_oe_sign_up_qr);
         ibSignUpQRCodeShare = findViewById(R.id.ib_share_oe_sign_up_qr);
+        tvCheckInQRCode = findViewById(R.id.organizer_event_check_in_qr_code);
         ivCheckInQRCode = findViewById(R.id.iv_event_check_in_qr_image);
         ibCheckInQRCodeSave = findViewById(R.id.ib_save_oe_check_in_qr);
         ibCheckInQRCodeShare = findViewById(R.id.ib_share_oe_check_in_qr);
+        deleteButton = findViewById(R.id.btn_delete);
+        clearImageButton = findViewById(R.id.btn_clear_image);
     }
 
-    private void setupDeleteButton() {
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edc.removeEvent(eventID);
-                CharSequence text = "Event Deleted";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
-                toast.show();
-                Intent intent = new Intent(EventOrganizerActivity.this, EventMyActivity.class);
-                intent.putExtra("userID", userID);
-
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setupClearImageButton() {
-        clearImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edc.delEventImage(eventID);
-                CharSequence text = "Image Cleared";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
-                toast.show();
-                finish();
-                startActivity(getIntent());
-            }
-        });
-    }
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,6 +277,58 @@ public class EventOrganizerActivity extends AppCompatActivity {
                     deleteButton.setVisibility(View.INVISIBLE);
                     clearImageButton.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+    }
+
+    private void setupDeleteButton() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.removeEvent(eventID);
+                eventOrganizerTitle.setText(R.string.invalid_name_text);
+                deleteButton.setVisibility(View.GONE);
+                clearImageButton.setVisibility(View.GONE);
+                eventOrganizerPosterCard.setVisibility(View.GONE);
+                eventOrganizerTimeDate.setVisibility(View.GONE);
+                eventOrganizerCityProvince.setVisibility(View.GONE);
+                eventOrganizerDescription.setVisibility(View.GONE);
+                eventAttendeesNumber.setVisibility(View.GONE);
+                eventSendNotification.setVisibility(View.GONE);
+                tvOpenMap.setVisibility(View.GONE);
+                openMap.setVisibility(View.GONE);
+                tvSignUpQRCode.setVisibility(View.GONE);
+                ivSignUpQRCode.setVisibility(View.GONE);
+                ibSignUpQRCodeSave.setVisibility(View.GONE);
+                ibSignUpQRCodeShare.setVisibility(View.GONE);
+                tvCheckInQRCode.setVisibility(View.GONE);
+                ivCheckInQRCode.setVisibility(View.GONE);
+                ibCheckInQRCodeSave.setVisibility(View.GONE);
+                ibCheckInQRCodeShare.setVisibility(View.GONE);
+                CharSequence text = "Event Deleted";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                toast.show();
+            }
+        });
+    }
+
+    private void setupClearImageButton() {
+        clearImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.delEventImage(eventID);
+                Uri imageUri = (new Uri.Builder())
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .authority(getResources().getResourcePackageName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceTypeName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceEntryName(R.drawable.partyimage1))
+                        .build();
+                eventOrganizerPoster.setImageURI(imageUri);
+                CharSequence text = "Image Initialized";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                toast.show();
             }
         });
     }
