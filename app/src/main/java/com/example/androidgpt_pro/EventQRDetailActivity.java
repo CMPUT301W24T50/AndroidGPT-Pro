@@ -53,7 +53,8 @@ public class EventQRDetailActivity extends AppCompatActivity {
     Dialog dialog;
     private Button popBackBtn;
 
-    Boolean eGeoLocationTracking;
+    private Boolean eGeoLocationTracking;
+    private Boolean eventSignUpLimit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,8 @@ public class EventQRDetailActivity extends AppCompatActivity {
                 eventAddressTextView.setText(edc.getEventLocationCity(docSns));
                 eventDescriptionTextView.setText(edc.getEventDescription(docSns));
                 eGeoLocationTracking = edc.getEventGLTState(docSns);
+                eventSignUpLimit = (edc.getEventAllSignUpProfiles(docSns).size()
+                        >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
                 fetchEventPoster();
                 if (Objects.equals(userOp, "SignUp"))
                     eventSignUp();
@@ -156,8 +159,14 @@ public class EventQRDetailActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot docSns) {
                 if (pdc.getProfileAllSignUpEvents(docSns) == null
                     || !pdc.getProfileAllSignUpEvents(docSns).contains(eventID)) {
-                    signUpButton.setVisibility(View.VISIBLE);
-                    setupSignUpButton();
+                    if (eventSignUpLimit) {
+                        signUpButton.setText(R.string.unavailable_text);
+                        signUpButton.setEnabled(Boolean.FALSE);
+                        signUpButton.setVisibility(View.VISIBLE);
+                    } else {
+                        signUpButton.setVisibility(View.VISIBLE);
+                        setupSignUpButton();
+                    }
                 } else {
                     withdrawButton.setVisibility(View.VISIBLE);
                     setupWithdrawButton();
@@ -239,7 +248,7 @@ public class EventQRDetailActivity extends AppCompatActivity {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                if (pdc.getProfileGLTState(docSns)) {
+                if (eGeoLocationTracking && pdc.getProfileGLTState(docSns)) {
                     Intent intent = new Intent(EventQRDetailActivity.this, GeoLocationActivity.class);
                     intent.putExtra("eventID", eventID);
                     startActivityForResult(intent, GEO_LOCATION_CONTROL);

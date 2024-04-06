@@ -167,37 +167,23 @@
                     android:textSize="16sp"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/qr_code_title"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/geo_location_switch"-->
-<!--                    android:layout_alignParentStart="true"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="10dp"-->
-<!--                    android:checked="false"-->
-<!--                    android:text="QR Code"-->
-<!--                    android:textSize="16sp" />-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/qr_code"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/qr_code_title"-->
-<!--                    android:layout_alignParentStart="true"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:layout_marginEnd="10dp"-->
-<!--                    android:padding="30dp"-->
-<!--                    android:src="@drawable/qr_scan_icon" />-->
+                <EditText
+                    android:id="@+id/sign_up_limit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/geo_location_switch"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="Sign Up Limit"/>
 
                 <TextView
                     android:id="@+id/poster_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/geo_location_switch"
+                    android:layout_below="@id/sign_up_limit"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
@@ -224,18 +210,6 @@
                     android:layout_below="@+id/select_pic"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="4sp" />
-
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/upload_pic"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/select_pic"-->
-<!--                    android:layout_alignParentStart="true"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:layout_marginEnd="10dp"-->
-<!--                    android:enabled="false"-->
-<!--                    android:text="Upload a Poster" />-->
 
                 <TextView
                     android:id="@+id/event_description_title"
@@ -268,8 +242,9 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="20dp"
                     android:text="CONFIRM" />
 
             </RelativeLayout>

@@ -37,14 +37,15 @@ public class EventAllDetailActivity extends AppCompatActivity{
     private String eventID;
     private String userID;
 
+    private ImageButton backButton;
+
     private CardView eventPosterImageCard;
     private ImageView eventPosterImageView;
     private TextView eventNameTextView;
     private TextView eventTimeDateTextView;
     private TextView eventAddressTextView;
     private TextView eventDescription;
-
-    private ImageButton backButton;
+    private Boolean eventSignUpLimit;
     private Button signUpButton;
     private Button withdrawButton;
     private Button deleteButton;
@@ -108,6 +109,8 @@ public class EventAllDetailActivity extends AppCompatActivity{
                         + ", " + edc.getEventLocationCity(docSns)
                         + ", " + edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
+                eventSignUpLimit = (edc.getEventAllSignUpProfiles(docSns).size()
+                        >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
                 fetchEventPoster();
                 setupButtons();
                 checkIfAdmin();
@@ -151,10 +154,15 @@ public class EventAllDetailActivity extends AppCompatActivity{
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
                 if (pdc.getProfileAllSignUpEvents(docSns) == null
-                        || !pdc.getProfileAllSignUpEvents(docSns).contains(eventID))
+                        || !pdc.getProfileAllSignUpEvents(docSns).contains(eventID)) {
+                    if (eventSignUpLimit) {
+                        signUpButton.setText("Unavailable");
+                        signUpButton.setEnabled(Boolean.FALSE);
+                    }
                     signUpButton.setVisibility(View.VISIBLE);
-                else
+                } else {
                     withdrawButton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
