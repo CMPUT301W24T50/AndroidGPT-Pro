@@ -54,9 +54,7 @@
                             android:layout_height="180dp"
                             android:color="@color/white"
                             android:scaleType="centerCrop"
-                            android:adjustViewBounds="true">
-
-                        </ImageView>
+                            android:adjustViewBounds="true"/>
                     </androidx.cardview.widget.CardView>
                 </androidx.cardview.widget.CardView>
 
@@ -68,7 +66,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="Sample Event"
+                    android:text="Event"
                     android:textSize="34sp" />
 
                 <TextView
@@ -81,11 +79,11 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="50dp"
-                    android:text="Sample Time/Date"
+                    android:text="Time/Date"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/organizer_event_address_city_province"
+                    android:id="@+id/organizer_event_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/organizer_event_time_date"
@@ -94,20 +92,20 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="50dp"
-                    android:text="Sample City/Province"
+                    android:text="Street/City/Province"
                     android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/organizer_event_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/organizer_event_address_city_province"
+                    android:layout_below="@id/organizer_event_address"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="50dp"
-                    android:text="Sample Description"
+                    android:text="Description"
                     android:textSize="16sp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
