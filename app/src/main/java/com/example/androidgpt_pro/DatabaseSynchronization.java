@@ -64,6 +64,7 @@ public class DatabaseSynchronization {
         eColRef.document(eventID).delete();
     }
 
+
     /**
      * This is an adder to synchronize the profile database for sign up records.
      * @param profileID
@@ -87,26 +88,6 @@ public class DatabaseSynchronization {
     }
 
     /**
-     * This is a deleter to synchronize the profile database for sign up records.
-     * @param eventID
-     * eventID: An event's ID.
-     */
-    public void delSignUpAllProfileEvent(String eventID) {
-        db.collection("Profile").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot qDocSns) {
-                        if (qDocSns == null)
-                            return;
-                        int colSize = qDocSns.getDocuments().size();
-                        String[] allProfileID = new String[colSize];
-                        for (int i = 0; i < colSize; i++)
-                            delSignUpProfileEvent(qDocSns.getDocuments().get(i).getId(), eventID);
-                    }
-                });
-    }
-
-    /**
      * This is an adder to synchronize the event database for sign up records.
      * @param eventID
      * eventID: An event's ID.
@@ -126,6 +107,26 @@ public class DatabaseSynchronization {
      */
     public void delSignUpEventProfile(String eventID, String profileID) {
         eColRef.document(eventID).update("eSignUpProfiles", FieldValue.arrayRemove(profileID));
+    }
+
+    /**
+     * This is a deleter to synchronize the profile database for sign up records.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delSignUpAllProfileEvent(String eventID) {
+        db.collection("Profile").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot qDocSns) {
+                        if (qDocSns == null)
+                            return;
+                        int colSize = qDocSns.getDocuments().size();
+                        String[] allProfileID = new String[colSize];
+                        for (int i = 0; i < colSize; i++)
+                            delSignUpProfileEvent(qDocSns.getDocuments().get(i).getId(), eventID);
+                    }
+                });
     }
 
 
