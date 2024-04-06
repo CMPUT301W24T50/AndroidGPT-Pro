@@ -56,7 +56,6 @@ public class GeoLocationActivity extends AppCompatActivity {
     private LocationRequest locationRequest;
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private final int REQUEST_TURN_ON_LOCATION_SERVICES = 2;
-
     private double latitude;
     private double longitude;
 

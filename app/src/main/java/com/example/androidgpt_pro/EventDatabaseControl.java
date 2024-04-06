@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -70,6 +71,8 @@ public class EventDatabaseControl {
      * eventDate: An event's date.
      * @param eventDescription
      * eventDescription: An event's description.
+     * @param eventSignUpLimit
+     * eventSignUpLimit: An limit for sign up.
      * @param eventGeoLocationTrackingState
      * eventGeoLocationTrackingState: A state of Geo-Location Tracking.
      * @param eventImageUri
@@ -84,6 +87,7 @@ public class EventDatabaseControl {
                           String eventTime,
                           String eventDate,
                           String eventDescription,
+                          String eventSignUpLimit,
                           Boolean eventGeoLocationTrackingState,
                           Uri eventImageUri) {
         HashMap<String, Object> data = new HashMap<>();
@@ -96,6 +100,7 @@ public class EventDatabaseControl {
         data.put("eDate", eventDate);
         data.put("eDescription", eventDescription);
         data.put("eGLTState", eventGeoLocationTrackingState);
+        data.put("eSignUpLimit", eventSignUpLimit);
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         data.put("eCheckInLocations", eCheckInLocations);
@@ -118,6 +123,7 @@ public class EventDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 eColRef.document(eventID).delete();
                 ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
+                ds.delSignUpAllProfileEvent(eventID);
             }
         });
     }
@@ -433,6 +439,17 @@ public class EventDatabaseControl {
 
 
     /**
+     * This is a getter for event sign up limit.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventSignUpLimit
+     * eventSignUpLimit: The limit for sign up.
+     */
+    public String getEventSignUpLimit(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eSignUpLimit");
+    }
+
+    /**
      * This is a getter for Event SignUp Profiles.
      * @param eventDocumentSnapshot
      * eventDocumentSnapshot: An event document snapshot.
@@ -605,5 +622,53 @@ public class EventDatabaseControl {
                 ds.setNotificationEventProfile(eventID, counter);
             }
         });
+    }
+
+
+    /**
+     * This is a requester for all events.
+     * @return eventsSnapshotGetTask
+     * eventsSnapshotGetTask: A task for getting eventQueryDocumentSnapshots.
+     */
+    public Task<QuerySnapshot> requestAllEvents() {
+        return db.collection("Event").get();
+    }
+
+    /**
+     * This is a getter for all Event IDs.
+     * @param eventQueryDocumentSnapshots
+     * eventQueryDocumentSnapshots: The Event Query Document Snapshots.
+     * @return allEventID
+     * allEventID: A list contains all Event IDs.
+     */
+    public String[] getAllEventID(QuerySnapshot eventQueryDocumentSnapshots) {
+        if (eventQueryDocumentSnapshots == null)
+            return null;
+        int colSize = eventQueryDocumentSnapshots.getDocuments().size();
+        String[] allEventID = new String[colSize - 1];
+        for (int i = 1; i < colSize; i++)
+            allEventID[i - 1] = eventQueryDocumentSnapshots.getDocuments().get(i).getId();
+        return allEventID;
+    }
+
+    /**
+     * This is a getter for all Future Event IDs.
+     * @param eventQueryDocumentSnapshots
+     * eventQueryDocumentSnapshots: The Event Query Document Snapshots.
+     * @return allFutureEventID
+     * allFutureEventID: A list contains all Future Event IDs.
+     */
+    public String[] getAllFutureEventID(QuerySnapshot eventQueryDocumentSnapshots) {
+        if (eventQueryDocumentSnapshots == null)
+            return null;
+        int colSize = eventQueryDocumentSnapshots.getDocuments().size();
+        ArrayList<String> alAllFutureEventID = new ArrayList<>();
+        for (int i = 1; i < colSize; i++) {
+            String eventDate = eventQueryDocumentSnapshots
+                    .getDocuments().get(i).getString("eDate");
+            if (dt.compareDateBigOrEqual(eventDate, dt.getDateToday()))
+                alAllFutureEventID.add(eventQueryDocumentSnapshots.getDocuments().get(i).getId());
+        }
+        return alAllFutureEventID.toArray(new String[0]);
     }
 }

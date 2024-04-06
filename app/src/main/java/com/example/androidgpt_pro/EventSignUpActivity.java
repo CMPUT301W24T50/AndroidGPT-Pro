@@ -1,39 +1,35 @@
 package com.example.androidgpt_pro;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-/**
- * This class allows the user to browse all events in the database.
- * The user can select an event to see the event details and sign up.
- */
-public class EventMyActivity extends AppCompatActivity {
-
+public class EventSignUpActivity extends AppCompatActivity {
     private String userID;
+    private String eventID;
+    private ImageButton backButton;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
-
-    BottomNavigationView navigationTabs;
-    private ImageButton btnBackButton;
-    private FloatingActionButton createEventBtn;
     private ListView eventsListView;
     private ArrayList<Event> events;
     private EventArrayAdapter eventArrayAdapter;
@@ -44,15 +40,14 @@ public class EventMyActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        btnBackButton = findViewById(R.id.back_button);
-        createEventBtn = findViewById(R.id.event_create_btn);
+        backButton = findViewById(R.id.back_button);
         eventsListView = findViewById(R.id.event_list_view);
         eventArrayAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventArrayAdapter);
     }
 
     private void setupBackButton() {
-        btnBackButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -61,29 +56,30 @@ public class EventMyActivity extends AppCompatActivity {
     }
 
     private void getEvents() {
-        getEventIDsFromProfile();
+        getAllEventIDsFromEvent();
     }
 
-    private void getEventIDsFromProfile() {
+    private void getAllEventIDsFromEvent() {
+
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                if (pdc.getProfileOrganizedEvents(docSns) != null)
-                    getEventInfo(pdc.getProfileOrganizedEvents(docSns));
+                ArrayList<String> allSignUpEvent = pdc.getProfileAllSignUpEvents(docSns);
+                getEventInfo(allSignUpEvent);
             }
         });
     }
 
-    private void getEventInfo(ArrayList<String> organizedEvents) {
-        for (int i = 0; i < organizedEvents.size(); i++) {
-            String eventID = organizedEvents.get(i);
-            edc.getEventSnapshot(eventID)
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot docSns) {
-                    getEventImage(eventID, docSns);
-                }
-            });
+    private void getEventInfo(ArrayList<String> allSignUpEvent) {
+        for (int i = 0; i < allSignUpEvent.size(); i++) {
+            String signUpEventID = allSignUpEvent.get(i);
+            edc.getEventSnapshot(signUpEventID).
+                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot docSns) {
+                            getEventImage(signUpEventID, docSns);
+                        }
+                    });
         }
     }
 
@@ -120,28 +116,17 @@ public class EventMyActivity extends AppCompatActivity {
                 eventArrayAdapter.notifyDataSetChanged();
             }
         });
-    };
+
+    }
+
 
     private void setupEventsListView() {
         // handle click action
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventMyActivity.this, EventMyDetailActivity.class);
+                Intent intent = new Intent(EventSignUpActivity.this, EventAllDetailActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
-                intent.putExtra("userID", userID);
-                startActivityForResult(intent, 0);
-            }
-        });
-    }
-
-
-    private void setupCreateEventButton() {
-        // handle click event to open the creatingEvent
-        createEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventMyActivity.this, EventCreateActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
@@ -150,31 +135,24 @@ public class EventMyActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        initEvents();
-        initViews();
-        getEvents();
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_events);
+        setContentView(R.layout.activity_signed_up_events);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
+
+        eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
 
         initEvents();
         initViews();
-        setupBackButton();
 
         getEvents();
         setupEventsListView();
 
-        setupCreateEventButton();
+        setupBackButton();
+
     }
 }

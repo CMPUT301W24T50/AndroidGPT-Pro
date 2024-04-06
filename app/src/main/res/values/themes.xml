@@ -7,7 +7,7 @@
 
     <style name="Theme.AndroidGPTPro" parent="Base.Theme.AndroidGPTPro" />
 
-    <style name="PopMe" parent="android:Theme.NoTitleBar">
+    <style name="PopMe" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>

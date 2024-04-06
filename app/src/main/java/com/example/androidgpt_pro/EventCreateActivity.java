@@ -30,6 +30,7 @@ public class EventCreateActivity extends AppCompatActivity {
 
     private String userID;
     private EventDatabaseControl edc;
+
     private String eID;
     private String eName;
     private String eLocStreet;
@@ -40,11 +41,12 @@ public class EventCreateActivity extends AppCompatActivity {
     private String eDate;
     private String eDescription;
     private Boolean eGLTState;
+    private String eSignUpLimit;
     private Uri eImageURI;
 
     private ImageButton backButton;
-
     private static final int PICK_IMAGE_REQUEST = 1;
+
     private EditText eventNameEditText;
     private Button eventDateEditButton;
     private EditText eventLocationAddressEditText;
@@ -53,6 +55,7 @@ public class EventCreateActivity extends AppCompatActivity {
     private Button eventTimeEditButton;
     private EditText eventDescriptionEditText;
     private Switch eventGeoLocationTrackingSwitch;
+    private EditText eventSignUpLimitEditText;
     private Button eventSelectPicButton;
     private TextView selectedPicHint;
     private DatePickerDialog datePickerDialog;
@@ -70,6 +73,7 @@ public class EventCreateActivity extends AppCompatActivity {
         eventLocationProvinceEditText = findViewById(R.id.edit_province_address);
         eventTimeEditButton = findViewById(R.id.edit_event_time);
         eventGeoLocationTrackingSwitch = findViewById(R.id.geo_location_switch);
+        eventSignUpLimitEditText = findViewById(R.id.sign_up_limit);
         eventSelectPicButton = findViewById(R.id.select_pic);
         selectedPicHint = findViewById(R.id.selected_pic);
         backButton = findViewById(R.id.back_button);
@@ -112,34 +116,10 @@ public class EventCreateActivity extends AppCompatActivity {
     }
 
     private String getMonthFormat(int month) {
-
-        if (month == 1)
-            return "JAN";
-        if (month == 2)
-            return "FEB";
-        if (month == 3)
-            return "MAR";
-        if (month == 4)
-            return "APR";
-        if (month == 5)
-            return "MAY";
-        if (month == 6)
-            return "JUN";
-        if (month == 7)
-            return "JUL";
-        if (month == 8)
-            return "AUG";
-        if (month == 9)
-            return "SEP";
-        if (month == 10)
-            return "OCT";
-        if (month == 11)
-            return "NOV";
-        if (month == 12)
-            return "DEC";
-
-        // this should never happen
-        return "JAN";
+        String[] lst = {"JAN", "FEB", "MAR", "APR",
+                "MAY", "JUN", "JUL", "AUG",
+                "SEP", "OCT", "NOV", "DEC"};
+        return lst[month - 1];
     }
 
     private String getToday() {
@@ -242,6 +222,7 @@ public class EventCreateActivity extends AppCompatActivity {
         eDescription = eventDescriptionEditText.getText().toString();
 
         eGLTState = eventGeoLocationTrackingSwitch.isChecked();
+        eSignUpLimit = eventSignUpLimitEditText.getText().toString();
     }
 
     /**
@@ -254,7 +235,7 @@ public class EventCreateActivity extends AppCompatActivity {
                 String lastEventID = edc.getLastEventID(docSns);
                 eID = edc.updateEventStat(lastEventID);
                 edc.initEvent(eID, userID, eName, eLocStreet, eLocCity, eLocProvince,
-                    eTime, eDate, eDescription, eGLTState, eImageURI);
+                    eTime, eDate, eDescription, eSignUpLimit, eGLTState, eImageURI);
                 createCompleted();
             }
         });
@@ -262,7 +243,8 @@ public class EventCreateActivity extends AppCompatActivity {
 
     private void createCompleted() {
         // jump to next page
-        Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
+        Intent newIntent = new Intent(EventCreateActivity.this, EventCreateCompletedActivity.class);
+        newIntent.putExtra("userID", userID);
         newIntent.putExtra("eventID", eID);
         startActivity(newIntent);
     }

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,7 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class EventAllActivity extends AppCompatActivity {
     BottomNavigationView navigationTabs;
     private FloatingActionButton createEventBtn;
     private ListView eventsListView;
+    private Pagination pagination;
+    private int lastPage, currentPage = 0;
     private ArrayList<Event> events;
     private EventArrayAdapter eventArrayAdapter;
     private ImageButton previous_btn;
@@ -43,8 +46,6 @@ public class EventAllActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        previous_btn = findViewById(R.id.event_previous_page);
-        next_btn = findViewById(R.id.event_next_page);
         eventsListView = findViewById(R.id.event_list_view);
         eventArrayAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventArrayAdapter);
@@ -55,32 +56,26 @@ public class EventAllActivity extends AppCompatActivity {
     }
 
     private void getAllEventIDsFromEvent() {
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                if (edc.getLastEventID(docSns) != "00000000") {
-                    String lastEventID = edc.getLastEventID(docSns);
-                    String trimmedString = lastEventID.replaceFirst("^0+(?!$)", "");
-                    int lastEventIDValue = Integer.parseInt(trimmedString);
-                    // search all id
-                    for (int i = 1; i <= lastEventIDValue; i++) {
 
-                    }
-                }
+        edc.requestAllEvents().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                String[] allFutureEventID = edc.getAllFutureEventID(queryDocumentSnapshots);
+                getEventInfo(allFutureEventID);
             }
         });
     }
 
-    private void getEventInfo(ArrayList<String> organizedEvents) {
-        for (int i = 0; i < organizedEvents.size(); i++) {
-            String eventID = organizedEvents.get(i);
-            edc.getEventSnapshot(eventID)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot docSns) {
-                            getEventImage(eventID, docSns);
-                        }
-                    });
+    private void getEventInfo(String[] allFutureEventID) {
+        for (int i = 0; i < allFutureEventID.length; i++) {
+            String futureEventID = allFutureEventID[i];
+            edc.getEventSnapshot(futureEventID).
+                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot docSns) {
+                    getEventImage(futureEventID, docSns);
+                }
+            });
         }
     }
 
@@ -117,6 +112,15 @@ public class EventAllActivity extends AppCompatActivity {
                 eventArrayAdapter.notifyDataSetChanged();
             }
         });
+
+        pagination = new Pagination(5, events);
+        lastPage = pagination.getLastPage();
+        updateData(); // method to update the listView data
+    }
+
+    private void updateData() {
+        // updating the data
+//        ArrayList<Event> aPageData = pagination.generateData(0);
     }
 
     private void setupEventsListView() {
@@ -124,12 +128,21 @@ public class EventAllActivity extends AppCompatActivity {
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventAllActivity.this, EventDetailActivity.class);
+                Intent intent = new Intent(EventAllActivity.this, EventAllDetailActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        initEvents();
+        initViews();
+        getEvents();
     }
 
 
@@ -172,5 +185,11 @@ public class EventAllActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        initEvents();
+        initViews();
+
+        getEvents();
+        setupEventsListView();
     }
 }
