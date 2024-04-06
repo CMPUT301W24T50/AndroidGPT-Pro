@@ -101,6 +101,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
 
+    <Button
+        android:id="@+id/btn_admin_functions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Functions"
+        android:layout_below="@id/btn_sign_up_event"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

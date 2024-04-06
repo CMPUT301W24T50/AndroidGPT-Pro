@@ -47,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView notificationIcon;
     private Button myEventButton;
     private Button signedUpEvent;
+    private Button adminFunctionsButton;
 
 
     private void initViews() {
@@ -181,13 +182,13 @@ public class ProfileActivity extends AppCompatActivity {
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                 } else if (itemId == R.id.profile_tab) {
                     assert Boolean.TRUE;
                 } else {
@@ -217,5 +218,27 @@ public class ProfileActivity extends AppCompatActivity {
         setupMyEventButton();
         setupSignedUpEventButton();
         setupNotificationIcon();
+
+        adminFunctionsButton = findViewById(R.id.btn_admin_functions);
+        adminFunctionsButton.setVisibility(View.INVISIBLE);
+        checkIfAdmin();
+        adminFunctionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to the ProfileManagementActivity
+                Intent intent = new Intent(ProfileActivity.this, ProfileManagementActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+    protected void checkIfAdmin() {
+        pdc.getProfileSnapshot().addOnSuccessListener(docSns -> {
+            String role = pdc.getProfileRole(docSns);
+            if (role.equals("admin")) {
+                adminFunctionsButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
 }
