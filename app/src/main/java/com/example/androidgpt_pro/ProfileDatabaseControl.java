@@ -84,6 +84,10 @@ public class ProfileDatabaseControl {
         pDocRef.set(data);
     }
 
+    public void delProfile() {
+        pDocRef.delete();
+    }
+
 
     /**
      * This is a getter for a profile snapshot.
