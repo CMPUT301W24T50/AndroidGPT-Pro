@@ -49,7 +49,6 @@ public class EventAllDetailActivity extends AppCompatActivity{
     private TextView eventAddressTextView;
     private TextView eventDescription;
 
-    private ImageButton backButton;
     private ImageButton announcementBoxButton;
     private Boolean eventSignUpLimit;
     private Button signUpButton;
