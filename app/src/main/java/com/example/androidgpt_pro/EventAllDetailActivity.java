@@ -71,7 +71,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         eventPosterImageCard = findViewById(R.id.card_event_image);
         eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
-        eventTimeDateTextView = findViewById(R.id.event_date);
+        eventTimeDateTextView = findViewById(R.id.event_time_date);
         eventAddressTextView = findViewById(R.id.event_address);
         eventDescription = findViewById(R.id.event_description);
         signUpButton = findViewById(R.id.btn_sign_up);
@@ -94,7 +94,42 @@ public class EventAllDetailActivity extends AppCompatActivity{
             }
         });
 
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (edc.getEventName(docSns) == null) {
+                    handleInvalidEvent();
+                    return;
+                }
+                eventNameTextView.setText(edc.getEventName(docSns));
+                eventTimeDateTextView.setText(edc.getEventTime(docSns)
+                        + " - " + edc.getEventDate(docSns));
+                eventAddressTextView.setText(edc.getEventLocationStreet(docSns)
+                        + ", " + edc.getEventLocationCity(docSns)
+                        + ", " + edc.getEventLocationProvince(docSns));
+                eventDescription.setText(edc.getEventDescription(docSns));
+                fetchEventPoster();
+                setupButtons();
+                checkIfAdmin();
+                setupDeleteButton();
+                setupClearImageButton();
+            }
+        });
+    }
 
+    private void handleInvalidEvent() {
+        eventNameTextView.setText(R.string.invalid_name_text);
+        deleteButton.setVisibility(View.GONE);
+        clearImageButton.setVisibility(View.GONE);
+        eventPosterImageCard.setVisibility(View.GONE);
+        eventTimeDateTextView.setVisibility(View.GONE);
+        eventAddressTextView.setVisibility(View.GONE);
+        eventDescription.setVisibility(View.GONE);
+        signUpButton.setVisibility(View.GONE);
+        withdrawButton.setVisibility(View.GONE);
+    }
+
+    public void fetchEventPoster() {
         // get event poster
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -108,20 +143,10 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 Picasso.get().load(R.drawable.partyimage1).into(eventPosterImageView);
             }
         });
+    }
 
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                eventNameTextView.setText(edc.getEventName(docSns));
-                eventTimeDateTextView.setText(edc.getEventTime(docSns)
-                        + " - " + edc.getEventDate(docSns));
-                eventAddressTextView.setText(edc.getEventLocationStreet(docSns)
-                        + ", " + edc.getEventLocationCity(docSns)
-                        + ", " + edc.getEventLocationProvince(docSns));
-                eventDescription.setText(edc.getEventDescription(docSns));
-            }
-        });
 
+    public void setupButtons() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
@@ -152,10 +177,6 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 withdrawSuccess();
             }
         });
-
-        checkIfAdmin();
-        setupDeleteButton();
-        setupClearImageButton();
     }
 
     public void signUpSuccess() {
@@ -191,6 +212,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
         dialog.show();
     }
+
 
     protected void checkIfAdmin(){
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

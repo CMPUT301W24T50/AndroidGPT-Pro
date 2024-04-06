@@ -119,6 +119,7 @@ public class EventDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 eColRef.document(eventID).delete();
                 ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
+                ds.delSignUpAllProfileEvent(eventID);
             }
         });
     }

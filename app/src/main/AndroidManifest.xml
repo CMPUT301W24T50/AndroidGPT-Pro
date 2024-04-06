@@ -77,7 +77,7 @@
             android:exported="true">
         </activity>
 
-        <activity android:name=".EventQRActivity"
+        <activity android:name=".EventQRDetailActivity"
             android:exported="true">
         </activity>
 

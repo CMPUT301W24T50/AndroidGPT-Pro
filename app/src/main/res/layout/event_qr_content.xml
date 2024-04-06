@@ -122,6 +122,15 @@
                     android:layout_below="@id/event_description"
                     android:text="Withdraw" />
 
+                <Button
+                    android:id="@+id/btn_check_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
+                    android:layout_below="@id/event_description"
+                    android:text="Check In" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

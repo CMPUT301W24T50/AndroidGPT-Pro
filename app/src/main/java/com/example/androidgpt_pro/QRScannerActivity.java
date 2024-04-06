@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,7 +122,7 @@ public class QRScannerActivity extends ComponentActivity {
      */
     private void handleSignupQRCode(String data) {
         String eventID = data.substring(22);
-        Intent intent = new Intent(QRScannerActivity.this, EventQRActivity.class);
+        Intent intent = new Intent(QRScannerActivity.this, EventQRDetailActivity.class);
         intent.putExtra("eventID", eventID);
         intent.putExtra("userID", userID);
         intent.putExtra("userOp", "SignUp");
@@ -142,7 +140,7 @@ public class QRScannerActivity extends ComponentActivity {
      */
     private void handleCheckInQRCode(String data) {
         String eventID = data.substring(23);
-        Intent intent = new Intent(QRScannerActivity.this, EventQRActivity.class);
+        Intent intent = new Intent(QRScannerActivity.this, EventQRDetailActivity.class);
         intent.putExtra("eventID", eventID);
         intent.putExtra("userID", userID);
         intent.putExtra("userOp", "CheckIn");
