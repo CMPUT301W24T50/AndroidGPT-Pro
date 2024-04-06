@@ -446,6 +446,8 @@ public class EventDatabaseControl {
      * eventSignUpLimit: The limit for sign up.
      */
     public String getEventSignUpLimit(DocumentSnapshot eventDocumentSnapshot) {
+        if (Objects.equals(eventDocumentSnapshot.getString("eSignUpLimit"), ""))
+            return "100000000";
         return eventDocumentSnapshot.getString("eSignUpLimit");
     }
 

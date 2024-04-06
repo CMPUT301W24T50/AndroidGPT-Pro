@@ -177,7 +177,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:hint="Sign Up Limit"/>
+                    android:hint="Sign Up Limit (Optional)"/>
 
                 <TextView
                     android:id="@+id/poster_title"
