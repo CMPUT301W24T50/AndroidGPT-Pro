@@ -50,7 +50,7 @@ public class EventCreateQRActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Intent to navigate back to the main activity
                 Intent intent = new Intent(EventCreateQRActivity.this,
-                        EventMyActivity.class);
+                        ProfileActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }
