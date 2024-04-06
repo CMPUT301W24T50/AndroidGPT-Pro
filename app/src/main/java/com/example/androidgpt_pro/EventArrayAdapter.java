@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -28,10 +27,9 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
     /**
      * This is the constructor of the class EventArrayAdapter.
-     * @param context
-     * context: The context.
-     * @param events
-     * events: A list of event.
+     *
+     * @param context        context: The context.
+     * @param events         events: A list of event.
      */
     public EventArrayAdapter(Context context, ArrayList<Event> events) {
         super(context, 0, events);
@@ -69,8 +67,6 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eTimeTV = view.findViewById(R.id.event_time);
         TextView eDateTV = view.findViewById(R.id.event_date);
         ImageView eImageIV = view.findViewById(R.id.event_image);
-        TextView signedUpCheck = view.findViewById(R.id.signed_up_check);
-        TextView signedUpText = view.findViewById(R.id.signed_up_text);
 
         eNameTV.setText(event.getEventName());
         String eventCityProvince = event.getEventLocationCity()
@@ -82,4 +78,5 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
         return view;
     }
+
 }

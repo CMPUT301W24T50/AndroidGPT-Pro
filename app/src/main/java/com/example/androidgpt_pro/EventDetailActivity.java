@@ -138,12 +138,12 @@ public class EventDetailActivity extends AppCompatActivity{
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-//                ArrayList<String> temp = pdc.getProfileAllSignUpEvents(docSns);
-//                if(temp.contains(eventID)) {
-//                    withdrawButton.setVisibility(View.VISIBLE);
-//                } else {
-//                    signUpButton.setVisibility(View.VISIBLE);
-//                }
+                ArrayList<String> temp = pdc.getProfileAllSignUpEvents(docSns);
+                if(temp.contains(eventID)) {
+                    withdrawButton.setVisibility(View.VISIBLE);
+                } else {
+                    signUpButton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -159,66 +159,64 @@ public class EventDetailActivity extends AppCompatActivity{
 
 
         // handle the sign up events when clicking signUp button
-//        signUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                pdc.addProfileSignUpEvent(eventID);
-//                signUpButton.setVisibility(View.GONE);
-//                withdrawButton.setVisibility(View.VISIBLE);
-//                signUpSuccess();
-//            }
-//        });
-//
-//        // handle the withdraw events when clicking withdraw button
-//        withdrawButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                pdc.delProfileSignUpEvent(userID);
-//                withdrawButton.setVisibility(View.GONE);
-//                signUpButton.setVisibility(View.VISIBLE);
-//                withdrawSuccess();
-//            }
-//        });
-//
-//    }
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pdc.addProfileSignUpEvent(eventID);
+                signUpButton.setVisibility(View.GONE);
+                signUpSuccess();
+            }
+        });
 
-//    public void signUpSuccess() {
-//        dialog = new Dialog(EventDetailActivity.this);
-//        dialog.setContentView(R.layout.sign_up_success_content);
-//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
-//        dialog.setCancelable(false);
-//        backToBrowse = dialog.findViewById(R.id.back_list_button);
-//
-//        backToBrowse.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent newIntent = new Intent(EventDetailActivity.this, EventActivity.class);
-//                newIntent.putExtra("userID", userID);
-//                newIntent.putExtra("eventID", eventID);
-//                startActivity(newIntent);
-//            }
-//        });
-//        dialog.show();
-//    }
+        // handle the withdraw events when clicking withdraw button
+        withdrawButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pdc.delProfileSignUpEvent(eventID);
+                withdrawButton.setVisibility(View.GONE);
+                withdrawSuccess();
+            }
+        });
 
-//    public void withdrawSuccess() {
-//        dialog = new Dialog(EventDetailActivity.this);
-//        dialog.setContentView(R.layout.withdraw_success_content);
-//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
-//        dialog.setCancelable(false);
-//        backToBrowse = dialog.findViewById(R.id.back_list_button);
-//
-//        backToBrowse.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent newIntent = new Intent(EventDetailActivity.this, EventActivity.class);
-//                newIntent.putExtra("userID", userID);
-//                newIntent.putExtra("eventID", eventID);
-//                startActivity(newIntent);
-//            }
-//        });
-//        dialog.show();
+    }
+
+    public void signUpSuccess() {
+        dialog = new Dialog(EventDetailActivity.this);
+        dialog.setContentView(R.layout.sign_up_success_content);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
+        dialog.setCancelable(false);
+        backToBrowse = dialog.findViewById(R.id.back_list_button);
+
+        backToBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(EventDetailActivity.this, EventAllActivity.class);
+                newIntent.putExtra("userID", userID);
+                newIntent.putExtra("eventID", eventID);
+                startActivity(newIntent);
+            }
+        });
+        dialog.show();
+    }
+
+    public void withdrawSuccess() {
+        dialog = new Dialog(EventDetailActivity.this);
+        dialog.setContentView(R.layout.withdraw_success_content);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
+        dialog.setCancelable(false);
+        backToBrowse = dialog.findViewById(R.id.back_list_button);
+
+        backToBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(EventDetailActivity.this, EventAllActivity.class);
+                newIntent.putExtra("userID", userID);
+                newIntent.putExtra("eventID", eventID);
+                startActivity(newIntent);
+            }
+        });
+        dialog.show();
     }
 }
