@@ -89,15 +89,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
-    private void setupGLTButton() {
-        geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                pdc.setProfileGLTState(isChecked);
-            }
-        });
-    }
-
     private void setupProfileImageEditor() {
         // Set click listener for profile image.
         ibEditProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +167,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         pdc.setProfileName(updatedProfileName);
         pdc.setProfilePhoneNumber(updatedPhoneNumber);
         pdc.setProfileEmail(updatedEmail);
+        pdc.setProfileGLTState(geolocationToggle.isChecked());
 
         // just display a toast message confirming the changes for now.
         Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
@@ -206,6 +198,5 @@ public class ProfileEditActivity extends AppCompatActivity {
         setupProfileImageEditor();
         setupProfileImageDeleter();
         setupSaveButton();
-        setupGLTButton();
     }
 }
