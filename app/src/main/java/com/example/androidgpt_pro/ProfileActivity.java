@@ -59,12 +59,6 @@ public class ProfileActivity extends AppCompatActivity {
         myEventButton = findViewById(R.id.btn_my_event);
         notificationIcon = findViewById(R.id.notification_icon);
         signedUpEvent = findViewById(R.id.btn_sign_up_event);
-        notificationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "No outstanding notifications", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
@@ -160,6 +154,19 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void setupNotificationIcon() {
+        notificationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch NotificationBox activity to display notifications
+                Intent intent = new Intent(ProfileActivity.this, Notifications.class);
+                // Pass necessary data, such as user ID, to fetch notifications
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     private void initNavigationTabs() {
         navigationTabs = findViewById(R.id.nav_profile);
@@ -209,5 +216,6 @@ public class ProfileActivity extends AppCompatActivity {
         setupEditProfileButton();
         setupMyEventButton();
         setupSignedUpEventButton();
+        setupNotificationIcon();
     }
 }
