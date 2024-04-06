@@ -108,7 +108,12 @@ public class EventQRDetailActivity extends AppCompatActivity {
                 eventAddressTextView.setText(edc.getEventLocationCity(docSns));
                 eventDescriptionTextView.setText(edc.getEventDescription(docSns));
                 eGeoLocationTracking = edc.getEventGLTState(docSns);
-                eventSignUpLimit = (edc.getEventAllSignUpProfiles(docSns).size()
+                int alreadySignUp;
+                if (edc.getEventAllSignUpProfiles(docSns) == null)
+                    alreadySignUp = 0;
+                else
+                    alreadySignUp = edc.getEventAllSignUpProfiles(docSns).size();
+                eventSignUpLimit = (alreadySignUp
                         >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
                 fetchEventPoster();
                 if (Objects.equals(userOp, "SignUp"))

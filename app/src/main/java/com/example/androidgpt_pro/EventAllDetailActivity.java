@@ -109,7 +109,12 @@ public class EventAllDetailActivity extends AppCompatActivity{
                         + ", " + edc.getEventLocationCity(docSns)
                         + ", " + edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
-                eventSignUpLimit = (edc.getEventAllSignUpProfiles(docSns).size()
+                int alreadySignUp;
+                if (edc.getEventAllSignUpProfiles(docSns) == null)
+                    alreadySignUp = 0;
+                else
+                    alreadySignUp = edc.getEventAllSignUpProfiles(docSns).size();
+                eventSignUpLimit = (alreadySignUp
                         >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
                 fetchEventPoster();
                 setupButtons();
