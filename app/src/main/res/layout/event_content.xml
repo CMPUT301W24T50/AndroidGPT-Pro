@@ -115,7 +115,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="230dp"
-        android:layout_below="@id/event_description"
         android:text="Sign Up" />
 
     <Button
@@ -125,7 +124,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="230dp"
-        android:layout_below="@id/event_description"
         android:text="Withdraw"
         />
 
