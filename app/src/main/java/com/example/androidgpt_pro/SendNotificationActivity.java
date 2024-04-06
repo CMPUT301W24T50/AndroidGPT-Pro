@@ -49,12 +49,12 @@ public class SendNotificationActivity extends Activity {
             public void onClick(View v) {
                 String message = ntfEditText.getText().toString();
 
-                if(!message.isEmpty()) {
+                if (message.contains("#")) {
+                    Toast.makeText(SendNotificationActivity.this, "Illegal Symbol Included.",
+                            Toast.LENGTH_SHORT).show();
+                } else if (!message.isEmpty()) {
                     edc.addEventNotification(userID, message);
                     Toast.makeText(SendNotificationActivity.this, "Message Sent!",
-                            Toast.LENGTH_SHORT).show();
-                } else if (message.contains("#")) {
-                    Toast.makeText(SendNotificationActivity.this, "Illegal Symbol Included.",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(SendNotificationActivity.this, "Write Some Text!",
