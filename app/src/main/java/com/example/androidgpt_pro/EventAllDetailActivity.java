@@ -40,6 +40,8 @@ public class EventAllDetailActivity extends AppCompatActivity{
     private String eventID;
     private String userID;
 
+    private ImageButton backButton;
+
     private CardView eventPosterImageCard;
     private ImageView eventPosterImageView;
     private TextView eventNameTextView;
@@ -49,6 +51,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
 
     private ImageButton backButton;
     private ImageButton announcementBoxButton;
+    private Boolean eventSignUpLimit;
     private Button signUpButton;
     private Button withdrawButton;
     private Button deleteButton;
@@ -75,7 +78,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         eventPosterImageCard = findViewById(R.id.card_event_image);
         eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
-        eventTimeDateTextView = findViewById(R.id.event_date);
+        eventTimeDateTextView = findViewById(R.id.event_time_date);
         eventAddressTextView = findViewById(R.id.event_address);
         eventDescription = findViewById(R.id.event_description);
         signUpButton = findViewById(R.id.btn_sign_up);
@@ -98,7 +101,44 @@ public class EventAllDetailActivity extends AppCompatActivity{
             }
         });
 
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (edc.getEventName(docSns) == null) {
+                    handleInvalidEvent();
+                    return;
+                }
+                eventNameTextView.setText(edc.getEventName(docSns));
+                eventTimeDateTextView.setText(edc.getEventTime(docSns)
+                        + " - " + edc.getEventDate(docSns));
+                eventAddressTextView.setText(edc.getEventLocationStreet(docSns)
+                        + ", " + edc.getEventLocationCity(docSns)
+                        + ", " + edc.getEventLocationProvince(docSns));
+                eventDescription.setText(edc.getEventDescription(docSns));
+                eventSignUpLimit = (edc.getEventAllSignUpProfiles(docSns).size()
+                        >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
+                fetchEventPoster();
+                setupButtons();
+                checkIfAdmin();
+                setupDeleteButton();
+                setupClearImageButton();
+            }
+        });
+    }
 
+    private void handleInvalidEvent() {
+        eventNameTextView.setText(R.string.invalid_name_text);
+        deleteButton.setVisibility(View.GONE);
+        clearImageButton.setVisibility(View.GONE);
+        eventPosterImageCard.setVisibility(View.GONE);
+        eventTimeDateTextView.setVisibility(View.GONE);
+        eventAddressTextView.setVisibility(View.GONE);
+        eventDescription.setVisibility(View.GONE);
+        signUpButton.setVisibility(View.GONE);
+        withdrawButton.setVisibility(View.GONE);
+    }
+
+    public void fetchEventPoster() {
         // get event poster
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -112,28 +152,23 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 Picasso.get().load(R.drawable.partyimage1).into(eventPosterImageView);
             }
         });
+    }
 
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                eventNameTextView.setText(edc.getEventName(docSns));
-                eventTimeDateTextView.setText(edc.getEventTime(docSns)
-                        + " - " + edc.getEventDate(docSns));
-                eventAddressTextView.setText(edc.getEventLocationStreet(docSns)
-                        + ", " + edc.getEventLocationCity(docSns)
-                        + ", " + edc.getEventLocationProvince(docSns));
-                eventDescription.setText(edc.getEventDescription(docSns));
-            }
-        });
 
+    public void setupButtons() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
                 if (pdc.getProfileAllSignUpEvents(docSns) == null
-                        || !pdc.getProfileAllSignUpEvents(docSns).contains(eventID))
+                        || !pdc.getProfileAllSignUpEvents(docSns).contains(eventID)) {
+                    if (eventSignUpLimit) {
+                        signUpButton.setText("Unavailable");
+                        signUpButton.setEnabled(Boolean.FALSE);
+                    }
                     signUpButton.setVisibility(View.VISIBLE);
-                else
+                } else {
                     withdrawButton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -156,11 +191,11 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 withdrawSuccess();
             }
         });
-
         checkIfAdmin();
         setupDeleteButton();
         setupClearImageButton();
         setupAnnouncementBox();
+
     }
 
     public void signUpSuccess() {
@@ -196,6 +231,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
         dialog.show();
     }
+
 
     protected void checkIfAdmin(){
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

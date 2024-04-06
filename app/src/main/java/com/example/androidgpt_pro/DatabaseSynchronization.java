@@ -5,6 +5,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
 
@@ -63,7 +64,6 @@ public class DatabaseSynchronization {
         eColRef.document(eventID).delete();
     }
 
-
     /**
      * This is an adder to synchronize the profile database for sign up records.
      * @param profileID
@@ -84,6 +84,26 @@ public class DatabaseSynchronization {
      */
     public void delSignUpProfileEvent(String profileID, String eventID) {
         pColRef.document(profileID).update("pSignUpEvents", FieldValue.arrayRemove(eventID));
+    }
+
+    /**
+     * This is a deleter to synchronize the profile database for sign up records.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delSignUpAllProfileEvent(String eventID) {
+        db.collection("Profile").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot qDocSns) {
+                        if (qDocSns == null)
+                            return;
+                        int colSize = qDocSns.getDocuments().size();
+                        String[] allProfileID = new String[colSize];
+                        for (int i = 0; i < colSize; i++)
+                            delSignUpProfileEvent(qDocSns.getDocuments().get(i).getId(), eventID);
+                    }
+                });
     }
 
     /**

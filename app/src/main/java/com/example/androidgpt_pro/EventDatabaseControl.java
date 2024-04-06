@@ -71,6 +71,8 @@ public class EventDatabaseControl {
      * eventDate: An event's date.
      * @param eventDescription
      * eventDescription: An event's description.
+     * @param eventSignUpLimit
+     * eventSignUpLimit: An limit for sign up.
      * @param eventGeoLocationTrackingState
      * eventGeoLocationTrackingState: A state of Geo-Location Tracking.
      * @param eventImageUri
@@ -85,6 +87,7 @@ public class EventDatabaseControl {
                           String eventTime,
                           String eventDate,
                           String eventDescription,
+                          String eventSignUpLimit,
                           Boolean eventGeoLocationTrackingState,
                           Uri eventImageUri) {
         HashMap<String, Object> data = new HashMap<>();
@@ -97,6 +100,7 @@ public class EventDatabaseControl {
         data.put("eDate", eventDate);
         data.put("eDescription", eventDescription);
         data.put("eGLTState", eventGeoLocationTrackingState);
+        data.put("eSignUpLimit", eventSignUpLimit);
         data.put("eSignUpProfiles", eSignUpProfiles);
         data.put("eCheckInProfiles", eCheckInProfiles);
         data.put("eCheckInLocations", eCheckInLocations);
@@ -119,6 +123,7 @@ public class EventDatabaseControl {
             public void onSuccess(DocumentSnapshot docSns) {
                 eColRef.document(eventID).delete();
                 ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
+                ds.delSignUpAllProfileEvent(eventID);
             }
         });
     }
@@ -432,6 +437,17 @@ public class EventDatabaseControl {
         eColRef.document(eventID).update("eImageUpdated", Boolean.TRUE);
     }
 
+
+    /**
+     * This is a getter for event sign up limit.
+     * @param eventDocumentSnapshot
+     * eventDocumentSnapshot: An event document snapshot.
+     * @return eventSignUpLimit
+     * eventSignUpLimit: The limit for sign up.
+     */
+    public String getEventSignUpLimit(DocumentSnapshot eventDocumentSnapshot) {
+        return eventDocumentSnapshot.getString("eSignUpLimit");
+    }
 
     /**
      * This is a getter for Event SignUp Profiles.

@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
-                android:id="@+id/event_date"
+                android:id="@+id/event_time_date"
                 android:layout_below="@+id/event_name"
                 android:layout_toEndOf="@+id/time_date_dash"
                 android:text="Feb 14, 2024"

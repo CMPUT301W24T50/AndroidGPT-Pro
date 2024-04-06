@@ -99,6 +99,89 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
+
+    private void fetchEventInfo() {
+        // get event time&Date and city&Province and attendee#
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (edc.getEventName(docSns) == null) {
+                    handleInvalidEvent();
+                    return;
+                }
+                eventOrganizerTitle.setText(edc.getEventName(docSns));
+                String eventTimeDate = edc.getEventTime(docSns)
+                        + " - "+ edc.getEventDate(docSns);
+                eventOrganizerTimeDate.setText(eventTimeDate);
+                String eventCityProvince = edc.getEventLocationStreet(docSns)
+                        + ", " + edc.getEventLocationCity(docSns)
+                        + ", " + edc.getEventLocationProvince(docSns);
+                eventOrganizerAddress.setText(eventCityProvince);
+                eventOrganizerDescription.setText(edc.getEventDescription(docSns));
+                fetchEventPoster();
+                showQRCode();
+                openMap();
+                openAttendees();
+                openSender();
+                setupSaveQRCode();
+                setupShareQRCode();
+                checkIfAdmin();
+                setupDeleteButton();
+                setupClearImageButton();
+                if (edc.getEventAllSignUpProfiles(docSns) == null)
+                    return;
+                int eventAttendeeNumber = edc.getEventAllSignUpProfiles(docSns).size();
+                if (eventAttendeeNumber != 0){
+                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + eventAttendeeNumber + "/∞");
+                    underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
+                    eventAttendeesNumber.setText(underlineAttendeesNumber);
+                }
+                else{
+                    eventAttendeesNumber.setText("0/∞");
+                }
+            }
+        });
+    }
+
+    private void handleInvalidEvent() {
+        eventOrganizerTitle.setText(R.string.invalid_name_text);
+        deleteButton.setVisibility(View.GONE);
+        clearImageButton.setVisibility(View.GONE);
+        eventOrganizerPosterCard.setVisibility(View.GONE);
+        eventOrganizerTimeDate.setVisibility(View.GONE);
+        eventOrganizerAddress.setVisibility(View.GONE);
+        eventOrganizerDescription.setVisibility(View.GONE);
+        eventAttendeesNumber.setVisibility(View.GONE);
+        eventSendNotification.setVisibility(View.GONE);
+        tvOpenMap.setVisibility(View.GONE);
+        openMap.setVisibility(View.GONE);
+        tvSignUpQRCode.setVisibility(View.GONE);
+        ivSignUpQRCode.setVisibility(View.GONE);
+        ibSignUpQRCodeSave.setVisibility(View.GONE);
+        ibSignUpQRCodeShare.setVisibility(View.GONE);
+        tvCheckInQRCode.setVisibility(View.GONE);
+        ivCheckInQRCode.setVisibility(View.GONE);
+        ibCheckInQRCodeSave.setVisibility(View.GONE);
+        ibCheckInQRCodeShare.setVisibility(View.GONE);
+    }
+
+    private void fetchEventPoster() {
+        // get event poster
+        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(eventOrganizerPoster);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // If there's an error loading poster or poster has been deleted by admin show nothing
+                Picasso.get().load(R.drawable.partyimage1).into(eventOrganizerPoster);
+            }
+        });
+    }
+
+
     private void openMap() {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -133,6 +216,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
             }
         });
     }
+
     private void openSender(){
         eventSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,49 +225,6 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 intent.putExtra("eventID", eventID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
-            }
-        });
-    }
-
-    private void fetchUserEvent() {
-        // get event poster
-        edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(eventOrganizerPoster);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // If there's an error loading poster or poster has been deleted by admin show nothing
-                Picasso.get().load(R.drawable.partyimage1).into(eventOrganizerPoster);
-            }
-        });
-
-        // get event time&Date and city&Province and attendee#
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                eventOrganizerTitle.setText(edc.getEventName(docSns));
-                String eventTimeDate = edc.getEventTime(docSns)
-                        + " - "+ edc.getEventDate(docSns);
-                eventOrganizerTimeDate.setText(eventTimeDate);
-                String eventCityProvince = edc.getEventLocationStreet(docSns)
-                        + ", " + edc.getEventLocationCity(docSns)
-                        + ", " + edc.getEventLocationProvince(docSns);
-                eventOrganizerAddress.setText(eventCityProvince);
-                eventOrganizerDescription.setText(edc.getEventDescription(docSns));
-                if (edc.getEventAllSignUpProfiles(docSns) == null)
-                    return;
-                int eventAttendeeNumber = edc.getEventAllSignUpProfiles(docSns).size();
-                if (eventAttendeeNumber != 0){
-                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + eventAttendeeNumber + "/∞");
-                    underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
-                    eventAttendeesNumber.setText(underlineAttendeesNumber);
-                }
-                else{
-                    eventAttendeesNumber.setText("0/∞");
-                }
             }
         });
     }
@@ -337,6 +378,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -351,16 +393,6 @@ public class EventMyDetailActivity extends AppCompatActivity {
 
         initViews();
         setupBackButton();
-        fetchUserEvent();
-        showQRCode();
-
-        openMap();
-        openAttendees();
-        openSender();
-        setupSaveQRCode();
-        setupShareQRCode();
-        checkIfAdmin();
-        setupDeleteButton();
-        setupClearImageButton();
+        fetchEventInfo();
     }
 }
