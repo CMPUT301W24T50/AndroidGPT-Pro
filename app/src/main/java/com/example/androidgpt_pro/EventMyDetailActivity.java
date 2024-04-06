@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-public class EventOrganizerActivity extends AppCompatActivity {
+public class EventMyDetailActivity extends AppCompatActivity {
 
     private String userID;
     private String eventID;
@@ -42,7 +42,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private ImageView eventOrganizerPoster;
     private TextView eventOrganizerTitle;
     private TextView eventOrganizerTimeDate;
-    private TextView eventOrganizerCityProvince;
+    private TextView eventOrganizerAddress;
     private  TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
     private ImageButton eventSendNotification;
@@ -70,7 +70,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventOrganizerPoster = findViewById(R.id.iv_event_image);
         eventOrganizerTitle = findViewById(R.id.organizer_event_title);
         eventOrganizerTimeDate = findViewById(R.id.organizer_event_time_date);
-        eventOrganizerCityProvince = findViewById(R.id.organizer_event_address_city_province);
+        eventOrganizerAddress = findViewById(R.id.organizer_event_address);
         eventOrganizerDescription = findViewById(R.id.organizer_event_description);
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
@@ -86,6 +86,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
         ibCheckInQRCodeShare = findViewById(R.id.ib_share_oe_check_in_qr);
         deleteButton = findViewById(R.id.btn_delete);
         clearImageButton = findViewById(R.id.btn_clear_image);
+        deleteButton.setVisibility(View.INVISIBLE);
+        clearImageButton.setVisibility(View.INVISIBLE);
     }
 
 
@@ -113,7 +115,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             openMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(EventOrganizerActivity.this, EventCheckInMap.class);
+                    Intent intent = new Intent(EventMyDetailActivity.this, EventCheckInMap.class);
                     intent.putExtra("eventID", eventID);
                     startActivity(intent);
                 }
@@ -125,7 +127,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventAttendeesNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventOrganizerActivity.this, AttendeeCountActivity.class);
+                Intent intent = new Intent(EventMyDetailActivity.this, AttendeeCountActivity.class);
                 intent.putExtra("eventID", eventID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
@@ -136,7 +138,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventOrganizerActivity.this, SendNotificationActivity.class);
+                Intent intent = new Intent(EventMyDetailActivity.this, SendNotificationActivity.class);
                 intent.putExtra("eventID", eventID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
@@ -164,10 +166,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
                 eventOrganizerTitle.setText(edc.getEventName(docSns));
-                String eventTimeDate = edc.getEventTime(docSns) + " - "+ edc.getEventDate(docSns);
+                String eventTimeDate = edc.getEventTime(docSns)
+                        + " - "+ edc.getEventDate(docSns);
                 eventOrganizerTimeDate.setText(eventTimeDate);
-                String eventCityProvince = edc.getEventLocationCity(docSns) + ", " + edc.getEventLocationProvince(docSns);
-                eventOrganizerCityProvince.setText(eventCityProvince);
+                String eventCityProvince = edc.getEventLocationStreet(docSns)
+                        + ", " + edc.getEventLocationCity(docSns)
+                        + ", " + edc.getEventLocationProvince(docSns);
+                eventOrganizerAddress.setText(eventCityProvince);
                 eventOrganizerDescription.setText(edc.getEventDescription(docSns));
                 if (edc.getEventAllSignUpProfiles(docSns) == null)
                     return;
@@ -273,9 +278,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
                 String role = pdc.getProfileRole(docSns);
-                if (!role.matches("admin")) {
-                    deleteButton.setVisibility(View.INVISIBLE);
-                    clearImageButton.setVisibility(View.INVISIBLE);
+                if (role.matches("admin")) {
+                    deleteButton.setVisibility(View.VISIBLE);
+                    clearImageButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -291,7 +296,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 clearImageButton.setVisibility(View.GONE);
                 eventOrganizerPosterCard.setVisibility(View.GONE);
                 eventOrganizerTimeDate.setVisibility(View.GONE);
-                eventOrganizerCityProvince.setVisibility(View.GONE);
+                eventOrganizerAddress.setVisibility(View.GONE);
                 eventOrganizerDescription.setVisibility(View.GONE);
                 eventAttendeesNumber.setVisibility(View.GONE);
                 eventSendNotification.setVisibility(View.GONE);
@@ -307,7 +312,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 ibCheckInQRCodeShare.setVisibility(View.GONE);
                 CharSequence text = "Event Deleted";
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                Toast toast = Toast.makeText(EventMyDetailActivity.this, text, duration);
                 toast.show();
             }
         });
@@ -327,7 +332,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 eventOrganizerPoster.setImageURI(imageUri);
                 CharSequence text = "Image Initialized";
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                Toast toast = Toast.makeText(EventMyDetailActivity.this, text, duration);
                 toast.show();
             }
         });
@@ -336,7 +341,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.organizer_event_content);
+        setContentView(R.layout.event_my_content);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");

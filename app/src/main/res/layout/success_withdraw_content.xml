@@ -7,13 +7,15 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="30dp">
+
         <TextView
             android:id="@+id/success_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Withdrawn!"
+            android:text="WITHDRAW"
             android:textSize="34sp" />
 
         <TextView
@@ -23,7 +25,8 @@
             android:layout_below="@+id/success_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="You Have Withdrawn the Event!" />
+            android:text="You have withdrawn the Event!" />
+
         <Button
             android:id="@+id/back_list_button"
             android:layout_width="wrap_content"
@@ -33,6 +36,4 @@
             android:layout_marginTop="50dp"
             android:text="Back"/>
     </RelativeLayout>
-
-
 </androidx.cardview.widget.CardView>

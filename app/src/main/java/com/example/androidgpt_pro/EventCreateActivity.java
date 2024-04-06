@@ -236,7 +236,7 @@ public class EventCreateActivity extends AppCompatActivity {
 
     private void createCompleted() {
         // jump to next page
-        Intent newIntent = new Intent(EventCreateActivity.this, EventCreateQRActivity.class);
+        Intent newIntent = new Intent(EventCreateActivity.this, EventCreateCompletedActivity.class);
         newIntent.putExtra("userID", userID);
         newIntent.putExtra("eventID", eID);
         startActivity(newIntent);

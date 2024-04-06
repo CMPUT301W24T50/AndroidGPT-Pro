@@ -57,7 +57,7 @@
         android:layout_marginLeft="16dp"/>
 
     <TextView
-        android:id="@+id/event_location_street_name"
+        android:id="@+id/event_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Address (Street)"
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:text="Address (City)"
         android:textSize="18sp"
-        android:layout_below="@id/event_location_street_name"
+        android:layout_below="@id/event_address"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="16dp"/>
 
