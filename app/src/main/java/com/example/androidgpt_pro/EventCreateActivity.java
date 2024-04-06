@@ -140,12 +140,8 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                 Calendar calendar = Calendar.getInstance();
                 int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-                Log.d("currentHour", String.valueOf(currentHour));
                 int currentMinute = calendar.get(Calendar.MINUTE);
-                Log.d("currentMinute", String.valueOf(currentMinute));
-
-                Log.d("selectedHour", String.valueOf(selectedHour));
-                Log.d("selectedMinute", String.valueOf(selectedMinute));
+                
                 if (selectedHour > currentHour ||
                         (selectedHour == currentHour && selectedMinute > currentMinute)) {
                     hour = selectedHour;
