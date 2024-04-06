@@ -50,7 +50,7 @@ public class SendNotificationActivity extends Activity {
                 String message = ntfEditText.getText().toString();
 
                 if(!message.isEmpty()) {
-                    edc.addEventNotification(userID, message);
+                    edc.addEventNotification(eventID, message);
                     Toast.makeText(SendNotificationActivity.this, "Message Sent!",
                             Toast.LENGTH_SHORT).show();
                 } else if (message.contains("#")) {

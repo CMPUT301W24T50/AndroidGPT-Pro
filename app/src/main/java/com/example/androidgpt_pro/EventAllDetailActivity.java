@@ -88,6 +88,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         clearImageButton = findViewById(R.id.btn_clear_image);
         deleteButton.setVisibility(View.INVISIBLE);
         clearImageButton.setVisibility(View.INVISIBLE);
+        announcementBoxButton = findViewById(R.id.notification_icon);
 
 
         // set the button function to back to eventList page

@@ -15,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import java.text.SimpleDateFormat;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,6 +63,7 @@ public class EventCreateActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
     private int hour, minute;
+    private  int SYear, SMonth, SDay; // select year month and day
 
 
     private void initViews() {
@@ -97,6 +99,9 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
+                SYear = year;
+                SMonth = month;
+                SDay = day;
                 eDateFormat = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day);
                 eventDateEditButton.setText(date);
             }
@@ -138,12 +143,19 @@ public class EventCreateActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                Calendar calendar = Calendar.getInstance();
-                int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-                int currentMinute = calendar.get(Calendar.MINUTE);
+                Calendar now = Calendar.getInstance();
+
+                Calendar selectedTime = Calendar.getInstance();
+                selectedTime.set(SYear, SMonth, SDay, selectedHour, selectedMinute);
+
+//                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//                String formattedNow = dateFormat.format(now.getTime());
+//                String formattedSelectedTime = dateFormat.format(selectedTime.getTime());
+//                // Log the formatted dates
+//                Log.d("CurrentTime", formattedNow);
+//                Log.d("SelectedTime", formattedSelectedTime);
                 
-                if (selectedHour > currentHour ||
-                        (selectedHour == currentHour && selectedMinute > currentMinute)) {
+                if (selectedTime.after(now)) {
                     hour = selectedHour;
                     minute = selectedMinute;
                     eventTimeEditButton.setText(String.format(Locale.getDefault(), "%02d: %02d", hour, minute));
@@ -272,6 +284,16 @@ public class EventCreateActivity extends AppCompatActivity {
         setupBackButton();
         setupEventImageSelector();
 
+//        Calendar calendar = Calendar.getInstance();
+//        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int currentMinute = calendar.get(Calendar.MINUTE);
+//        int currentYear = calendar.get(Calendar.YEAR);
+//        int currentMonth = calendar.get(Calendar.MONTH);
+//        int CurrentDay = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//        Calendar selectedTime = Calendar.getInstance();
+//        selectedTime.set(year, month, day, hour, minute);
+
 
         initEventDatePicker();
         eventDateEditButton.setText(getToday());
@@ -281,6 +303,7 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setEvent();
                 // create a new event
+
                 if(!eName.isEmpty() && !eLocStreet.isEmpty()
                         && !eLocCity.isEmpty() && !eLocProvince.isEmpty()
                         && !eDate.isEmpty() && !eTime.isEmpty()

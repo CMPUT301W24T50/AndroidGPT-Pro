@@ -11,7 +11,7 @@
         android:id="@+id/back_button"
         android:layout_margin="16dp"/>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/notification_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
