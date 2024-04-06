@@ -5,8 +5,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -64,6 +64,19 @@ public class DatabaseSynchronization {
         eColRef.document(eventID).delete();
     }
 
+    /**
+     * This is a deleter to synchronize the event database for organized records.
+     * @param profileOrganizedEvents
+     * profileOrganizedEvents: A list of eventID.
+     */
+    public void delOrganizedAllEvent(ArrayList<String> profileOrganizedEvents) {
+        if (profileOrganizedEvents == null)
+            return;
+        EventDatabaseControl edc = new EventDatabaseControl();
+        for (int i = 0; i < profileOrganizedEvents.size(); i++)
+            edc.removeEvent(profileOrganizedEvents.get(i));
+    }
+
 
     /**
      * This is an adder to synchronize the profile database for sign up records.
@@ -85,6 +98,21 @@ public class DatabaseSynchronization {
      */
     public void delSignUpProfileEvent(String profileID, String eventID) {
         pColRef.document(profileID).update("pSignUpEvents", FieldValue.arrayRemove(eventID));
+    }
+
+    /**
+     * This is a deleter to synchronize the profile database for sign up records.
+     * @param eventAllSignUpProfiles
+     * eventAllSignUpProfiles: A list of profileID.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delSignUpAllProfileEvent(ArrayList<String> eventAllSignUpProfiles,
+                                         String eventID) {
+        if (eventAllSignUpProfiles == null)
+            return;
+        for (int i = 0; i < eventAllSignUpProfiles.size(); i++)
+            delSignUpProfileEvent(eventAllSignUpProfiles.get(i), eventID);
     }
 
     /**
@@ -110,23 +138,18 @@ public class DatabaseSynchronization {
     }
 
     /**
-     * This is a deleter to synchronize the profile database for sign up records.
-     * @param eventID
-     * eventID: An event's ID.
+     * This is a deleter to synchronize the event database for sign up records.
+     * @param profileAllSignUpEvents
+     * profileAllSignUpEvents: A list of eventID.
+     * @param profileID
+     * profileID: A profile's ID.
      */
-    public void delSignUpAllProfileEvent(String eventID) {
-        db.collection("Profile").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot qDocSns) {
-                        if (qDocSns == null)
-                            return;
-                        int colSize = qDocSns.getDocuments().size();
-                        String[] allProfileID = new String[colSize];
-                        for (int i = 0; i < colSize; i++)
-                            delSignUpProfileEvent(qDocSns.getDocuments().get(i).getId(), eventID);
-                    }
-                });
+    public void delSignUpAllEventProfile(ArrayList<String> profileAllSignUpEvents,
+                                         String profileID) {
+        if (profileAllSignUpEvents == null)
+            return;
+        for (int i = 0; i < profileAllSignUpEvents.size(); i++)
+            delSignUpEventProfile(profileAllSignUpEvents.get(i), profileID);
     }
 
 
@@ -169,6 +192,25 @@ public class DatabaseSynchronization {
     }
 
     /**
+     * This is a deleter to synchronize the profile database for check in records.
+     * @param eventAllCheckInProfiles
+     * eventAllCheckInProfiles: A list of profileID.
+     * @param eventID
+     * eventID: An event's ID.
+     */
+    public void delCheckInAllProfileEvent(String[][] eventAllCheckInProfiles,
+                                          String eventID) {
+        if (eventAllCheckInProfiles == null)
+            return;
+        for (String[] eventAllCheckInProfile : eventAllCheckInProfiles) {
+            String data = dt.constructSharpString(eventID,
+                    eventAllCheckInProfile[1], null);
+            pColRef.document(eventAllCheckInProfile[0])
+                    .update("pCheckInEvents", FieldValue.arrayRemove(data));
+        }
+    }
+
+    /**
      * This is a creator to synchronize the event database for check in records.
      * @param eventID
      * eventID: An event's ID.
@@ -204,6 +246,25 @@ public class DatabaseSynchronization {
         String nextData = dt.constructSharpString(profileID, nextCount, null);
         eColRef.document(eventID)
             .update("eCheckInProfiles", FieldValue.arrayUnion(nextData));
+    }
+
+    /**
+     * This is a deleter to synchronize the event database for check in records.
+     * @param profileAllCheckInEvents
+     * profileAllCheckInEvents: A list of eventID.
+     * @param profileID
+     * profileID: A profile's ID.
+     */
+    public void delCheckInAllEventProfile(String[][] profileAllCheckInEvents,
+                                          String profileID) {
+        if (profileAllCheckInEvents == null)
+            return;
+        for (String[] profileAllCheckInEvent : profileAllCheckInEvents) {
+            String data = dt.constructSharpString(profileID,
+                    profileAllCheckInEvent[1], null);
+            eColRef.document(profileAllCheckInEvent[0])
+                    .update("eCheckInProfiles", FieldValue.arrayRemove(data));
+        }
     }
 
 
