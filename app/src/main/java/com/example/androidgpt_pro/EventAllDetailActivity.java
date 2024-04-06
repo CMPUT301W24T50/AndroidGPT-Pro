@@ -303,5 +303,4 @@ public class EventAllDetailActivity extends AppCompatActivity{
             }
         });
     }
-
 }
