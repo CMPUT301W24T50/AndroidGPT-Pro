@@ -127,7 +127,7 @@ public class EventMyActivity extends AppCompatActivity {
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventMyActivity.this, EventOrganizerActivity.class);
+                Intent intent = new Intent(EventMyActivity.this, EventMyDetailActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
                 startActivityForResult(intent, 0);

@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-public class EventCreateQRActivity extends AppCompatActivity {
+public class EventCreateCompletedActivity extends AppCompatActivity {
 
     private String userID;
     private String eventID;
@@ -49,7 +49,7 @@ public class EventCreateQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Intent to navigate back to the main activity
-                Intent intent = new Intent(EventCreateQRActivity.this,
+                Intent intent = new Intent(EventCreateCompletedActivity.this,
                         ProfileActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);

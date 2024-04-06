@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,7 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -122,8 +121,6 @@ public class EventAllActivity extends AppCompatActivity {
     private void updateData() {
         // updating the data
 //        ArrayList<Event> aPageData = pagination.generateData(0);
-
-
     }
 
     private void setupEventsListView() {
@@ -131,14 +128,22 @@ public class EventAllActivity extends AppCompatActivity {
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventAllActivity.this, EventDetailActivity.class);
+                Intent intent = new Intent(EventAllActivity.this, EventAllDetailActivity.class);
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        initEvents();
+        initViews();
+        getEvents();
+    }
 
 
     @Override
