@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:text="Signed up Events"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="50dp"
         android:textSize="36sp" />
 
     <ListView
