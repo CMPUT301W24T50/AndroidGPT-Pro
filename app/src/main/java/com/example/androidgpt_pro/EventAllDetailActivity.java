@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * This class represents a single event. It includes the event
@@ -45,6 +48,8 @@ public class EventAllDetailActivity extends AppCompatActivity{
     private TextView eventTimeDateTextView;
     private TextView eventAddressTextView;
     private TextView eventDescription;
+
+    private ImageButton announcementBoxButton;
     private Boolean eventSignUpLimit;
     private Button signUpButton;
     private Button withdrawButton;
@@ -56,7 +61,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_all_content);
 
@@ -190,6 +195,11 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 withdrawSuccess();
             }
         });
+        checkIfAdmin();
+        setupDeleteButton();
+        setupClearImageButton();
+        setupAnnouncementBox();
+
     }
 
     public void signUpSuccess() {
@@ -281,4 +291,16 @@ public class EventAllDetailActivity extends AppCompatActivity{
             }
         });
     }
+
+    private void setupAnnouncementBox() {
+        announcementBoxButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventAllDetailActivity.this, AnnouncementBox.class);
+                intent.putExtra("eventID", eventID);
+                startActivity(intent);
+            }
+        });
+    }
+
 }

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,8 +65,10 @@ public class EventSignUpActivity extends AppCompatActivity {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                ArrayList<String> allSignUpEvent = pdc.getProfileAllSignUpEvents(docSns);
-                getEventInfo(allSignUpEvent);
+                if (pdc.getProfileAllSignUpEvents(docSns) != null){
+                    ArrayList<String> allSignUpEvent = pdc.getProfileAllSignUpEvents(docSns);
+                    getEventInfo(allSignUpEvent);
+                }
             }
         });
     }
@@ -129,8 +132,17 @@ public class EventSignUpActivity extends AppCompatActivity {
                 intent.putExtra("eventID", events.get(position).getEventID());
                 intent.putExtra("userID", userID);
                 startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        initEvents();
+        initViews();
+        getEvents();
     }
 
 
@@ -143,7 +155,7 @@ public class EventSignUpActivity extends AppCompatActivity {
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
 
-        eventID = intent.getStringExtra("eventID");
+        //eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
 
         initEvents();
