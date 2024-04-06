@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button editProfileButton;
     private ImageView notificationIcon;
     private Button myEventButton;
+    private Button signedUpEvent;
 
 
     private void initViews() {
@@ -57,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileButton = findViewById(R.id.btn_edit_profile);
         myEventButton = findViewById(R.id.btn_my_event);
         notificationIcon = findViewById(R.id.notification_icon);
+        signedUpEvent = findViewById(R.id.btn_sign_up_event);
         notificationIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +148,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    protected void setupSignedUpEventButton() {
+        signedUpEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this,
+                        EventSignUpActivity.class);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     private void initNavigationTabs() {
         navigationTabs = findViewById(R.id.nav_profile);
@@ -194,5 +208,6 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileInfo();
         setupEditProfileButton();
         setupMyEventButton();
+        setupSignedUpEventButton();
     }
 }

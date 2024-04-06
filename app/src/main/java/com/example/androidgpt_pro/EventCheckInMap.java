@@ -53,7 +53,7 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
-
+        
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
@@ -74,7 +74,7 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
                 double checkInLongLatitude = Double.parseDouble(checkInLocation[i][1]);
 
                 LatLng markerPosition = new LatLng(checkInLatitude, checkInLongLatitude);
-                gMap.addMarker(new MarkerOptions().position(markerPosition).title("Marker at X, Y"));
+                gMap.addMarker(new MarkerOptions().position(markerPosition));
             }
 
             double firstCheckInLatitude = Double.parseDouble(checkInLocation[0][0]);
