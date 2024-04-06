@@ -208,7 +208,7 @@ public class EventQRActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
         dialog.setCancelable(false);
-        backToQRScanner = dialog.findViewById(R.id.back_QR_button);
+        backToQRScanner = dialog.findViewById(R.id.back_list_button);
 
         backToQRScanner.setOnClickListener(new View.OnClickListener() {
             @Override
