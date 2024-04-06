@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView pPhoneNumberTextView;
     private TextView pEmailTextView;
     private Button editProfileButton;
-    private ToggleButton geolocationToggle;
+    private ImageView notificationIcon;
     private Button myEventButton;
 
 
@@ -54,8 +55,14 @@ public class ProfileActivity extends AppCompatActivity {
         pPhoneNumberTextView = findViewById(R.id.text_phone_number);
         pEmailTextView = findViewById(R.id.text_email);
         editProfileButton = findViewById(R.id.btn_edit_profile);
-        geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
         myEventButton = findViewById(R.id.btn_my_event);
+        notificationIcon = findViewById(R.id.notification_icon);
+        notificationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ProfileActivity.this, "No outstanding notifications", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -107,7 +114,6 @@ public class ProfileActivity extends AppCompatActivity {
                 pNameTextView.setText(pdc.getProfileName(docSns));
                 pPhoneNumberTextView.setText(pdc.getProfilePhoneNumber(docSns));
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
-                geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
                 if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
             }
@@ -124,16 +130,6 @@ public class ProfileActivity extends AppCompatActivity {
                         ProfileEditActivity.class);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
-            }
-        });
-    }
-
-
-    private void setupGLTButton() {
-        geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                pdc.setProfileGLTState(isChecked);
             }
         });
     }
@@ -197,7 +193,6 @@ public class ProfileActivity extends AppCompatActivity {
         displayProfileImage();
         displayProfileInfo();
         setupEditProfileButton();
-        setupGLTButton();
         setupMyEventButton();
     }
 }

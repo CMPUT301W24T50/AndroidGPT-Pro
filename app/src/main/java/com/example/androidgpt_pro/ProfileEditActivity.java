@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     private EditText editPhoneNumberEditText;
     private EditText editEmailEditText;
     private Button saveButton;
+    private ToggleButton geolocationToggle;
 
 
     private void initViews() {
@@ -50,6 +53,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         editPhoneNumberEditText = findViewById(R.id.edit_text_edit_phone_number);
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
         saveButton = findViewById(R.id.button_save_profile);
+        geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
     }
 
 
@@ -80,6 +84,16 @@ public class ProfileEditActivity extends AppCompatActivity {
                 editProfileNameEditText.setText(pdc.getProfileName(docSns));
                 editPhoneNumberEditText.setText(pdc.getProfilePhoneNumber(docSns));
                 editEmailEditText.setText(pdc.getProfileEmail(docSns));
+                geolocationToggle.setChecked(pdc.getProfileGLTState(docSns));
+            }
+        });
+    }
+
+    private void setupGLTButton() {
+        geolocationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                pdc.setProfileGLTState(isChecked);
             }
         });
     }
@@ -192,5 +206,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         setupProfileImageEditor();
         setupProfileImageDeleter();
         setupSaveButton();
+        setupGLTButton();
     }
 }
