@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -65,7 +64,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eNameTV = view.findViewById(R.id.event_name);
         TextView eLocationTV = view.findViewById(R.id.event_location);
         TextView eTimeTV = view.findViewById(R.id.event_time);
-        TextView eDateTV = view.findViewById(R.id.event_date);
+        TextView eDateTV = view.findViewById(R.id.event_time_date);
         ImageView eImageIV = view.findViewById(R.id.event_image);
 
         eNameTV.setText(event.getEventName());

@@ -2,6 +2,7 @@ package com.example.androidgpt_pro;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-public class EventQRActivity extends AppCompatActivity {
+public class EventQRDetailActivity extends AppCompatActivity {
 
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
@@ -35,19 +37,18 @@ public class EventQRActivity extends AppCompatActivity {
 
     private final int GEO_LOCATION_CONTROL = 1;
 
+    private ImageButton backButton;
     private CardView eventPosterCardView;
     private ImageView eventPosterImageView;
     private TextView eventNameTextView;
-    private TextView eventDateTextView;
-    private TextView eventLocationAptTextView;
-    private TextView eventLocationCityTextView;
-    private TextView eventLocationProvinceTextView;
-    private TextView eventDescriptionTitleTextView;
+    private TextView eventTimeDateTextView;
+    private TextView eventAddressTextView;
     private TextView eventDescriptionTextView;
-    private ImageButton backButton;
     private Button signUpButton;
     private Button withdrawButton;
     private Button checkInButton;
+    private Button deleteButton;
+    private Button clearImageButton;
 
     Dialog dialog;
     private Button popBackBtn;
@@ -57,7 +58,7 @@ public class EventQRActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_qr);
+        setContentView(R.layout.event_qr_content);
 
         // Get profile & event information from intent
         Intent intent = getIntent();
@@ -71,19 +72,19 @@ public class EventQRActivity extends AppCompatActivity {
         eventPosterCardView = findViewById(R.id.card_event_image);
         eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
-        eventDateTextView = findViewById(R.id.event_date);
-        eventLocationAptTextView = findViewById(R.id.event_address);
-        eventLocationCityTextView = findViewById(R.id.event_location_city);
-        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
-        eventDescriptionTitleTextView = findViewById(R.id.event_description_title);
+        eventTimeDateTextView = findViewById(R.id.event_time_date);
+        eventAddressTextView = findViewById(R.id.event_address);
         eventDescriptionTextView = findViewById(R.id.event_description);
-        eventLocationProvinceTextView = findViewById(R.id.event_location_province);
         signUpButton = findViewById(R.id.btn_sign_up);
         signUpButton.setVisibility(View.GONE);
         withdrawButton = findViewById(R.id.btn_withdraw);
         withdrawButton.setVisibility(View.GONE);
         checkInButton = findViewById(R.id.btn_check_in);
         checkInButton.setVisibility(View.GONE);
+        deleteButton = findViewById(R.id.btn_delete);
+        clearImageButton = findViewById(R.id.btn_clear_image);
+        deleteButton.setVisibility(View.INVISIBLE);
+        clearImageButton.setVisibility(View.INVISIBLE);
 
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
@@ -93,7 +94,45 @@ public class EventQRActivity extends AppCompatActivity {
                 finish();
             }
         });
-        
+
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                if (edc.getEventName(docSns) == null) {
+                    handleInvalidEvent();
+                    return;
+                }
+                eventNameTextView.setText(edc.getEventName(docSns));
+                eventTimeDateTextView.setText(edc.getEventTime(docSns));
+                eventAddressTextView.setText(edc.getEventLocationCity(docSns));
+                eventDescriptionTextView.setText(edc.getEventDescription(docSns));
+                eGeoLocationTracking = edc.getEventGLTState(docSns);
+                fetchEventPoster();
+                if (Objects.equals(userOp, "SignUp"))
+                    eventSignUp();
+                else
+                    eventCheckIn();
+                checkIfAdmin();
+                setupDeleteButton();
+                setupClearImageButton();
+            }
+        });
+    }
+
+    private void handleInvalidEvent() {
+        eventNameTextView.setText(R.string.invalid_name_text);
+        deleteButton.setVisibility(View.GONE);
+        clearImageButton.setVisibility(View.GONE);
+        eventPosterCardView.setVisibility(View.GONE);
+        eventTimeDateTextView.setVisibility(View.GONE);
+        eventAddressTextView.setVisibility(View.GONE);
+        eventDescriptionTextView.setVisibility(View.GONE);
+        signUpButton.setVisibility(View.GONE);
+        withdrawButton.setVisibility(View.GONE);
+        checkInButton.setVisibility(View.GONE);
+    }
+
+    private void fetchEventPoster() {
         // get event poster
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -107,39 +146,6 @@ public class EventQRActivity extends AppCompatActivity {
                 Picasso.get().load(R.drawable.partyimage1).into(eventPosterImageView);
             }
         });
-
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                if (edc.getEventName(docSns) == null) {
-                    handleInvalidEvent();
-                    return;
-                }
-                eventNameTextView.setText(edc.getEventName(docSns));
-                eventDateTextView.setText(edc.getEventTime(docSns));
-                eventLocationAptTextView.setText(edc.getEventLocationStreet(docSns));
-                eventLocationCityTextView.setText(edc.getEventLocationCity(docSns));
-                eventLocationProvinceTextView.setText(edc.getEventLocationProvince(docSns));
-                eventDescriptionTextView.setText(edc.getEventDescription(docSns));
-                eGeoLocationTracking = edc.getEventGLTState(docSns);
-                if (Objects.equals(userOp, "SignUp"))
-                    eventSignUp();
-                else
-                    eventCheckIn();
-            }
-        });
-    }
-
-
-    private void handleInvalidEvent() {
-        eventNameTextView.setText(R.string.invalid_name_text);
-        eventPosterCardView.setVisibility(View.GONE);
-        eventDateTextView.setVisibility(View.GONE);
-        eventLocationAptTextView.setVisibility(View.GONE);
-        eventLocationCityTextView.setVisibility(View.GONE);
-        eventLocationProvinceTextView.setVisibility(View.GONE);
-        eventDescriptionTitleTextView.setVisibility(View.GONE);
-        eventDescriptionTextView.setVisibility(View.GONE);
     }
 
 
@@ -185,7 +191,7 @@ public class EventQRActivity extends AppCompatActivity {
     }
 
     private void signUpSuccess() {
-        dialog = new Dialog(EventQRActivity.this);
+        dialog = new Dialog(EventQRDetailActivity.this);
         dialog.setContentView(R.layout.success_sign_up_content);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
@@ -202,7 +208,7 @@ public class EventQRActivity extends AppCompatActivity {
     }
 
     private void withdrawSuccess() {
-        dialog = new Dialog(EventQRActivity.this);
+        dialog = new Dialog(EventQRDetailActivity.this);
         dialog.setContentView(R.layout.success_withdraw_content);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
@@ -234,7 +240,7 @@ public class EventQRActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
                 if (pdc.getProfileGLTState(docSns)) {
-                    Intent intent = new Intent(EventQRActivity.this, GeoLocationActivity.class);
+                    Intent intent = new Intent(EventQRDetailActivity.this, GeoLocationActivity.class);
                     intent.putExtra("eventID", eventID);
                     startActivityForResult(intent, GEO_LOCATION_CONTROL);
                 } else {
@@ -257,7 +263,7 @@ public class EventQRActivity extends AppCompatActivity {
     }
 
     private void checkInSuccess() {
-        dialog = new Dialog(EventQRActivity.this);
+        dialog = new Dialog(EventQRDetailActivity.this);
         dialog.setContentView(R.layout.success_check_in_content);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.background_box));
@@ -271,5 +277,62 @@ public class EventQRActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+
+    protected void checkIfAdmin(){
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String role = pdc.getProfileRole(docSns);
+                if (role.matches("admin")) {
+                    deleteButton.setVisibility(View.VISIBLE);
+                    clearImageButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void setupDeleteButton() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.removeEvent(eventID);
+                eventNameTextView.setText(R.string.invalid_name_text);
+                deleteButton.setVisibility(View.GONE);
+                clearImageButton.setVisibility(View.GONE);
+                eventPosterCardView.setVisibility(View.GONE);
+                eventTimeDateTextView.setVisibility(View.GONE);
+                eventAddressTextView.setVisibility(View.GONE);
+                eventDescriptionTextView.setVisibility(View.GONE);
+                signUpButton.setVisibility(View.GONE);
+                withdrawButton.setVisibility(View.GONE);
+                checkInButton.setVisibility(View.GONE);
+                CharSequence text = "Event Deleted";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(EventQRDetailActivity.this, text, duration);
+                toast.show();
+            }
+        });
+    }
+
+    private void setupClearImageButton() {
+        clearImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.delEventImage(eventID);
+                Uri imageUri = (new Uri.Builder())
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .authority(getResources().getResourcePackageName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceTypeName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceEntryName(R.drawable.partyimage1))
+                        .build();
+                eventPosterImageView.setImageURI(imageUri);
+                CharSequence text = "Image Initialized";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(EventQRDetailActivity.this, text, duration);
+                toast.show();
+            }
+        });
     }
 }
