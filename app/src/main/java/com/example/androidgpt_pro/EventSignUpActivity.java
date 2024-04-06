@@ -27,6 +27,7 @@ import java.util.ArrayList;
 public class EventSignUpActivity extends AppCompatActivity {
     private String userID;
     private String eventID;
+    private ImageButton backButton;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     private ListView eventsListView;
@@ -39,9 +40,19 @@ public class EventSignUpActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        backButton = findViewById(R.id.back_button);
         eventsListView = findViewById(R.id.event_list_view);
         eventArrayAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventArrayAdapter);
+    }
+
+    private void setupBackButton() {
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getEvents() {
@@ -140,6 +151,8 @@ public class EventSignUpActivity extends AppCompatActivity {
 
         getEvents();
         setupEventsListView();
+
+        setupBackButton();
 
     }
 }

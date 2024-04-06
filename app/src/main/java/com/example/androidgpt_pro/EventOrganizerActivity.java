@@ -59,7 +59,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private Button deleteButton;
     private Button clearImageButton;
     private Boolean eventGeoLocation;
-
     private Bitmap signUpQRCode;
     private Bitmap checkInQRCode;
 
