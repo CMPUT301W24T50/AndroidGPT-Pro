@@ -166,7 +166,6 @@ public class EventQRActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pdc.addProfileSignUpEvent(eventID);
                 signUpButton.setVisibility(View.GONE);
-                withdrawButton.setVisibility(View.VISIBLE);
                 signUpSuccess();
             }
         });
@@ -179,7 +178,6 @@ public class EventQRActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pdc.delProfileSignUpEvent(eventID);
                 withdrawButton.setVisibility(View.GONE);
-                signUpButton.setVisibility(View.VISIBLE);
                 withdrawSuccess();
             }
         });

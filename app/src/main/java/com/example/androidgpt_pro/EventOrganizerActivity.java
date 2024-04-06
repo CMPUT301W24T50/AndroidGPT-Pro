@@ -1,9 +1,12 @@
 package com.example.androidgpt_pro;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,13 +28,17 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class EventOrganizerActivity extends AppCompatActivity {
+
     private String userID;
     private String eventID;
     private ProfileDatabaseControl pdc;
     private  EventDatabaseControl edc;
+
     private ImageButton backButton;
+    private CardView eventOrganizerPosterCard;
     private ImageView eventOrganizerPoster;
     private TextView eventOrganizerTitle;
     private TextView eventOrganizerTimeDate;
@@ -38,16 +46,27 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private  TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
     private ImageButton eventSendNotification;
+    private TextView tvOpenMap;
     private Button openMap;
+    private TextView tvSignUpQRCode;
+    private ImageView ivSignUpQRCode;
+    private ImageButton ibSignUpQRCodeSave;
+    private ImageButton ibSignUpQRCodeShare;
+    private TextView tvCheckInQRCode;
     private ImageView ivCheckInQRCode;
-    private Button shareQRCodeButton;
+    private ImageButton ibCheckInQRCodeSave;
+    private ImageButton ibCheckInQRCodeShare;
     private Button deleteButton;
     private Button clearImageButton;
     private Boolean eventGeoLocation;
 
+    private Bitmap signUpQRCode;
+    private Bitmap checkInQRCode;
+
 
     private void initViews(){
         backButton = findViewById(R.id.back_button);
+        eventOrganizerPosterCard = findViewById(R.id.card_event_image);
         eventOrganizerPoster = findViewById(R.id.iv_event_image);
         eventOrganizerTitle = findViewById(R.id.organizer_event_title);
         eventOrganizerTimeDate = findViewById(R.id.organizer_event_time_date);
@@ -55,46 +74,21 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventOrganizerDescription = findViewById(R.id.organizer_event_description);
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
+        tvOpenMap = findViewById(R.id.organizer_event_map);
         openMap = findViewById(R.id.organizer_event_map_btn);
+        tvSignUpQRCode = findViewById(R.id.organizer_event_sign_up_qr_code);
+        ivSignUpQRCode = findViewById(R.id.iv_event_sign_up_qr_image);
+        ibSignUpQRCodeSave = findViewById(R.id.ib_save_oe_sign_up_qr);
+        ibSignUpQRCodeShare = findViewById(R.id.ib_share_oe_sign_up_qr);
+        tvCheckInQRCode = findViewById(R.id.organizer_event_check_in_qr_code);
+        ivCheckInQRCode = findViewById(R.id.iv_event_check_in_qr_image);
+        ibCheckInQRCodeSave = findViewById(R.id.ib_save_oe_check_in_qr);
+        ibCheckInQRCodeShare = findViewById(R.id.ib_share_oe_check_in_qr);
         deleteButton = findViewById(R.id.btn_delete);
         clearImageButton = findViewById(R.id.btn_clear_image);
-        ivCheckInQRCode = findViewById(R.id.iv_event_qr_image);
-        shareQRCodeButton = findViewById(R.id.share_qr_image_btn);
     }
 
-    private void setupDeleteButton() {
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edc.removeEvent(eventID);
-                CharSequence text = "Event Deleted";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
-                toast.show();
-                Intent intent = new Intent(EventOrganizerActivity.this, EventMyActivity.class);
-                intent.putExtra("userID", userID);
-
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setupClearImageButton() {
-        clearImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edc.delEventImage(eventID);
-                CharSequence text = "Image Cleared";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
-                toast.show();
-                finish();
-                startActivity(getIntent());
-            }
-        });
-    }
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,18 +184,56 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
     }
 
+
     private void showQRCode() {
-        Bitmap checkInQRCode = QRCodeGenerator
-            .generateCheckInQRCodeBitmap(eventID, 400, 400);
+        signUpQRCode = QRCodeGenerator.generateSignUpQRCodeBitmap(eventID, 400, 400);
+        ivSignUpQRCode.setImageBitmap(signUpQRCode);
+        checkInQRCode = QRCodeGenerator.generateCheckInQRCodeBitmap(eventID, 400, 400);
         ivCheckInQRCode.setImageBitmap(checkInQRCode);
     }
 
-    private void setUpShareQRCode() {
-        shareQRCodeButton.setOnClickListener(new View.OnClickListener() {
+    private void setupSaveQRCode() {
+        ibSignUpQRCodeSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap checkInQRCode = QRCodeGenerator
-                        .generateCheckInQRCodeBitmap(eventID, 400, 400);
+                saveImage(signUpQRCode, "sign_up_qr_code_" + eventID);
+            }
+        });
+        ibCheckInQRCodeSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImage(checkInQRCode, "check_in_qr_code_" + eventID);
+            }
+        });
+    }
+
+    private void saveImage(Bitmap bitmap, String fileName) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/YourAppName"); // Use an appropriate folder name
+
+        Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.close();
+            Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error saving image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setupShareQRCode() {
+        ibSignUpQRCodeShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareQRCode(signUpQRCode);
+            }
+        });
+        ibCheckInQRCodeShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 shareQRCode(checkInQRCode);
             }
         });
@@ -209,26 +241,12 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private void shareQRCode(Bitmap checkInQRCode) {
         Uri uri = getImageToShare(checkInQRCode);
-
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.putExtra(Intent.EXTRA_TEXT, "Image Text");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Share via"));
-    }
-
-    protected void checkIfAdmin(){
-        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot docSns) {
-                String role = pdc.getProfileRole(docSns);
-                if (!role.matches("admin")) {
-                    deleteButton.setVisibility(View.INVISIBLE);
-                    clearImageButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
     }
 
     private Uri getImageToShare(Bitmap bitmap) {
@@ -247,6 +265,72 @@ public class EventOrganizerActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
         return uri;
+    }
+
+
+    protected void checkIfAdmin(){
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                String role = pdc.getProfileRole(docSns);
+                if (!role.matches("admin")) {
+                    deleteButton.setVisibility(View.INVISIBLE);
+                    clearImageButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    private void setupDeleteButton() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.removeEvent(eventID);
+                eventOrganizerTitle.setText(R.string.invalid_name_text);
+                deleteButton.setVisibility(View.GONE);
+                clearImageButton.setVisibility(View.GONE);
+                eventOrganizerPosterCard.setVisibility(View.GONE);
+                eventOrganizerTimeDate.setVisibility(View.GONE);
+                eventOrganizerCityProvince.setVisibility(View.GONE);
+                eventOrganizerDescription.setVisibility(View.GONE);
+                eventAttendeesNumber.setVisibility(View.GONE);
+                eventSendNotification.setVisibility(View.GONE);
+                tvOpenMap.setVisibility(View.GONE);
+                openMap.setVisibility(View.GONE);
+                tvSignUpQRCode.setVisibility(View.GONE);
+                ivSignUpQRCode.setVisibility(View.GONE);
+                ibSignUpQRCodeSave.setVisibility(View.GONE);
+                ibSignUpQRCodeShare.setVisibility(View.GONE);
+                tvCheckInQRCode.setVisibility(View.GONE);
+                ivCheckInQRCode.setVisibility(View.GONE);
+                ibCheckInQRCodeSave.setVisibility(View.GONE);
+                ibCheckInQRCodeShare.setVisibility(View.GONE);
+                CharSequence text = "Event Deleted";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                toast.show();
+            }
+        });
+    }
+
+    private void setupClearImageButton() {
+        clearImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edc.delEventImage(eventID);
+                Uri imageUri = (new Uri.Builder())
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .authority(getResources().getResourcePackageName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceTypeName(R.drawable.partyimage1))
+                        .appendPath(getResources().getResourceEntryName(R.drawable.partyimage1))
+                        .build();
+                eventOrganizerPoster.setImageURI(imageUri);
+                CharSequence text = "Image Initialized";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(EventOrganizerActivity.this, text, duration);
+                toast.show();
+            }
+        });
     }
 
     @Override
@@ -269,10 +353,10 @@ public class EventOrganizerActivity extends AppCompatActivity {
         openMap();
         openAttendees();
         openSender();
-        setUpShareQRCode();
+        setupSaveQRCode();
+        setupShareQRCode();
         checkIfAdmin();
         setupDeleteButton();
         setupClearImageButton();
     }
-
 }
