@@ -9,6 +9,7 @@
         android:id="@+id/attendee_list"
         android:layout_width="409dp"
         android:layout_height="729dp"
+        android:padding="8dp"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp" />
 
