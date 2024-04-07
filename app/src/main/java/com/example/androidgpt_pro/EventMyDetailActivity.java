@@ -128,16 +128,15 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 checkIfAdmin();
                 setupDeleteButton();
                 setupClearImageButton();
-                if (edc.getEventAllSignUpProfiles(docSns) == null)
-                    return;
-                int eventAttendeeNumber = edc.getEventAllSignUpProfiles(docSns).size();
-                if (eventAttendeeNumber != 0){
-                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + eventAttendeeNumber + "/∞");
+
+
+                if (edc.getEventAllSignUpProfiles(docSns) != null){
+                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + edc.getEventAllSignUpProfiles(docSns));
                     underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
                     eventAttendeesNumber.setText(underlineAttendeesNumber);
                 }
-                else{
-                    eventAttendeesNumber.setText("0/∞");
+                else {
+                    eventAttendeesNumber.setText("Attendees");
                 }
             }
         });
