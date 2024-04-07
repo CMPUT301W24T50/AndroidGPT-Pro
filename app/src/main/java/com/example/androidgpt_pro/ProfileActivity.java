@@ -30,6 +30,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 /**
  * This class displays the users profile information on the screen.
  */
@@ -45,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView pEmailTextView;
     private Button editProfileButton;
     private ImageView notificationIcon;
+    private ImageView unreadDot;
     private Button myEventButton;
     private Button signedUpEvent;
     private Button adminFunctionsButton;
@@ -59,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileButton = findViewById(R.id.btn_edit_profile);
         myEventButton = findViewById(R.id.btn_my_event);
         notificationIcon = findViewById(R.id.notification_icon);
+        unreadDot = findViewById(R.id.unread_dot);
         signedUpEvent = findViewById(R.id.btn_sign_up_event);
     }
 
@@ -167,6 +171,25 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+    private void setupUnreadDot() {
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot doSns) {
+                if(pdc.getProfileAllNotificationRecords(doSns) == null){
+                    unreadDot.setVisibility(View.GONE);
+                }
+                for(int i = 0; i < pdc.getProfileAllNotificationRecords(doSns).length; i++){
+                    if(!Objects.equals(pdc.getProfileAllNotificationRecords(doSns)[i][1],
+                            pdc.getProfileAllNotificationRecords(doSns)[i][2])) {
+                        unreadDot.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        unreadDot.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
 
 
     private void initNavigationTabs() {
@@ -218,6 +241,7 @@ public class ProfileActivity extends AppCompatActivity {
         setupMyEventButton();
         setupSignedUpEventButton();
         setupNotificationIcon();
+        setupUnreadDot();
 
         adminFunctionsButton = findViewById(R.id.btn_admin_functions);
         adminFunctionsButton.setVisibility(View.INVISIBLE);
