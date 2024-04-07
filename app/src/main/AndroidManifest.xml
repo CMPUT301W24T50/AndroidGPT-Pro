@@ -107,7 +107,6 @@
         </activity>
 
         <activity android:name=".EventSignUpActivity"
-            android:theme="@style/PopMe"
             android:exported="true">
         </activity>
 
@@ -121,6 +120,10 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".Notifications"
+            android:theme="@style/NotificationPopMe"
+            android:exported="true">
+        </activity>
 
 
         <provider

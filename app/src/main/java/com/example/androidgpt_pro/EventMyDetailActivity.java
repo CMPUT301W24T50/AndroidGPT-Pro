@@ -389,7 +389,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 if ((edc.getEventAllCheckInProfiles(docSns)) == null) {
                     return;
                 }
-                if (profiles.length % 2 == 0) {
+                if (profiles.length % 10 == 0) {
                     Toast.makeText(getApplicationContext(), "You have another 10 people checked in!", Toast.LENGTH_SHORT).show();
                 }
             }

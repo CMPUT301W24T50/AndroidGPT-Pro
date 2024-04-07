@@ -50,5 +50,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        Intent intent = new Intent(MainActivity.this, EventQRDetailActivity.class);
+//        intent.putExtra("eventID", "00000020");
+//        intent.putExtra("userID", uniqueID);
+//        intent.putExtra("userOp", "CheckIn");
+//        startActivity(intent);
     }
+
 }
