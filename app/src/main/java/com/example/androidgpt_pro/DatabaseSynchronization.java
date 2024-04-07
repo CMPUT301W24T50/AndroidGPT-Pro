@@ -5,6 +5,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,8 +17,10 @@ import java.util.Objects;
 public class DatabaseSynchronization {
 
     private FirebaseFirestore db;
+    private FirebaseStorage st;
     private CollectionReference pColRef;
     private CollectionReference eColRef;
+    private StorageReference eStgRef;
     private DatabaseTools dt;
 
 
@@ -25,8 +29,10 @@ public class DatabaseSynchronization {
      */
     public DatabaseSynchronization() {
         db = FirebaseFirestore.getInstance();
+        st = FirebaseStorage.getInstance();
         pColRef = db.collection("Profile");
         eColRef = db.collection("Event");
+        eStgRef = st.getReference().child("Event");
         dt = new DatabaseTools();
     }
 
@@ -62,6 +68,7 @@ public class DatabaseSynchronization {
      */
     public void delOrganizedEvent(String eventID) {
         eColRef.document(eventID).delete();
+        eStgRef.child(eventID).delete();
     }
 
     /**

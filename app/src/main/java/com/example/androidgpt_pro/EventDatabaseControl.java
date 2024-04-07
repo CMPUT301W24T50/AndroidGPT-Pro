@@ -125,6 +125,7 @@ public class EventDatabaseControl {
                 ds.delCheckInAllProfileEvent(getEventAllCheckInProfiles(docSns), eventID);
                 ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
                 eColRef.document(eventID).delete();
+                eStgRef.child(eventID).delete();
             }
         });
     }

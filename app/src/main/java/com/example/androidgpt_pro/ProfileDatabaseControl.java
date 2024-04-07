@@ -95,6 +95,7 @@ public class ProfileDatabaseControl {
                 ds.delCheckInAllEventProfile(getProfileAllCheckInEvent(docSns), pID);
                 ds.delOrganizedAllEvent(getProfileOrganizedEvents(docSns));
                 pDocRef.delete();
+                pStgRef.child(pID).delete();
             }
         });
     }
