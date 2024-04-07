@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
@@ -24,6 +25,8 @@ import androidx.core.content.FileProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -45,6 +48,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
     private TextView eventOrganizerAddress;
     private  TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
+    private TextView eventSignedUpAttendees;
     private ImageButton eventSendNotification;
     private TextView tvOpenMap;
     private Button openMap;
@@ -72,6 +76,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
         eventOrganizerAddress = findViewById(R.id.organizer_event_address);
         eventOrganizerDescription = findViewById(R.id.organizer_event_description);
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
+        eventSignedUpAttendees = findViewById(R.id.organizer_signed_up_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         tvOpenMap = findViewById(R.id.organizer_event_map);
         openMap = findViewById(R.id.organizer_event_map_btn);
@@ -204,6 +209,19 @@ public class EventMyDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void openSignedUpAttendees() {
+        eventSignedUpAttendees.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventMyDetailActivity.this, SignedUpAttendee.class);
+                intent.putExtra("eventID", eventID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
+
     private void openAttendees() {
         eventAttendeesNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,8 +305,8 @@ public class EventMyDetailActivity extends AppCompatActivity {
         Uri uri = getImageToShare(checkInQRCode);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, "Image Text");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
+        intent.putExtra(Intent.EXTRA_TEXT, "Image shared by GatherLink");
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Share via"));
     }
@@ -378,9 +396,10 @@ public class EventMyDetailActivity extends AppCompatActivity {
     }
 
     private void setupAlert() {
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        edc.getEvent(eventID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot docSns) {
+            public void onEvent(@Nullable DocumentSnapshot docSns,
+                                @Nullable FirebaseFirestoreException error) {
                 // Assuming getEventAllCheckInProfiles returns a String[][]
                 String[][] profiles = edc.getEventAllCheckInProfiles(docSns);
 
@@ -388,8 +407,11 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 if ((edc.getEventAllCheckInProfiles(docSns)) == null) {
                     return;
                 }
-                if (profiles.length % 3 == 0) {
-                    Toast.makeText(getApplicationContext(), "You have another 3 people checked in!", Toast.LENGTH_SHORT).show();
+
+                if (profiles.length % 5 == 0) {
+                    Toast.makeText(getApplicationContext(), "You have total "
+                            + profiles.length
+                            + " people checked in!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
