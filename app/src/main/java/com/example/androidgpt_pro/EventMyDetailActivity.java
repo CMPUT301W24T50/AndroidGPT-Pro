@@ -287,8 +287,8 @@ public class EventMyDetailActivity extends AppCompatActivity {
         Uri uri = getImageToShare(checkInQRCode);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, "Image Text");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
+        intent.putExtra(Intent.EXTRA_TEXT, "Image shared by GatherLink");
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Share via"));
     }
@@ -388,8 +388,10 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 if ((edc.getEventAllCheckInProfiles(docSns)) == null) {
                     return;
                 }
-                if (profiles.length % 10 == 0) {
-                    Toast.makeText(getApplicationContext(), "You have another 10 people checked in!", Toast.LENGTH_SHORT).show();
+                if (profiles.length % 2 == 0) {
+                    Toast.makeText(getApplicationContext(), "You have total "
+                            + profiles.length
+                            + " people checked in!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
