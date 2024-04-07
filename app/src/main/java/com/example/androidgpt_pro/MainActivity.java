@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        Intent intent = new Intent(MainActivity.this, EventQRDetailActivity.class);
-//        intent.putExtra("eventID", "00000027");
+//        intent.putExtra("eventID", "00000034");
 //        intent.putExtra("userID", uniqueID);
-//        intent.putExtra("userOp", "CheckIn");
+//        intent.putExtra("userOp", "SignUp");
 //        startActivity(intent);
 
         // set up animated background
