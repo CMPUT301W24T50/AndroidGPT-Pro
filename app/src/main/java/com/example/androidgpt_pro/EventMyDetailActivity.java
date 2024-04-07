@@ -48,6 +48,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
     private TextView eventOrganizerAddress;
     private  TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
+    private TextView eventSignedUpAttendees;
     private ImageButton eventSendNotification;
     private TextView tvOpenMap;
     private Button openMap;
@@ -75,6 +76,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
         eventOrganizerAddress = findViewById(R.id.organizer_event_address);
         eventOrganizerDescription = findViewById(R.id.organizer_event_description);
         eventAttendeesNumber = findViewById(R.id.organizer_event_attendee);
+        eventSignedUpAttendees = findViewById(R.id.organizer_signed_up_event_attendee);
         eventSendNotification = findViewById(R.id.organizer_notification_btn);
         tvOpenMap = findViewById(R.id.organizer_event_map);
         openMap = findViewById(R.id.organizer_event_map_btn);
@@ -206,6 +208,19 @@ public class EventMyDetailActivity extends AppCompatActivity {
             });
         }
     }
+
+    private void openSignedUpAttendees() {
+        eventSignedUpAttendees.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventMyDetailActivity.this, SignedUpAttendee.class);
+                intent.putExtra("eventID", eventID);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     private void openAttendees() {
         eventAttendeesNumber.setOnClickListener(new View.OnClickListener() {
