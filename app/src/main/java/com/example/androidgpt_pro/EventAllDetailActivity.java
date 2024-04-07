@@ -187,7 +187,6 @@ public class EventAllDetailActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 pdc.delProfileSignUpEvent(eventID);
-                withdrawButton.setEnabled(Boolean.FALSE);
                 withdrawSuccess();
             }
         });
