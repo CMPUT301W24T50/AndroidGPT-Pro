@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 public class Notifications extends AppCompatActivity {
     private String userID;
-    private String[] allEventID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     private ArrayList<String> notificationList;
