@@ -107,7 +107,6 @@
         </activity>
 
         <activity android:name=".EventSignUpActivity"
-            android:theme="@style/PopMe"
             android:exported="true">
         </activity>
 
@@ -117,11 +116,8 @@
         </activity>
 
         <activity android:name=".ProfileManagementActivity"
-            android:theme="@style/PopMe"
             android:exported="false">
         </activity>
-
-
 
         <provider
             android:authorities="com.example.androidgpt_pro"
@@ -132,6 +128,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider>
-
     </application>
 </manifest>

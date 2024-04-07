@@ -1,9 +1,7 @@
 package com.example.androidgpt_pro;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -58,20 +54,19 @@ public class ProfileManagementActivity extends AppCompatActivity {
     private void fetchProfiles() {
         pdc.requestAllProfiles().addOnSuccessListener(queryDocumentSnapshots -> {
             profilesList.clear();
-            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                String profileID = documentSnapshot.getId(); // Get the profile ID
+            String[] lst = pdc.getAllProfileID(queryDocumentSnapshots);
+            for (int i = 0; i < lst.length; i++) {
+                String profileID = lst[i];
                 ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
                 tempPdc.getProfileSnapshot().addOnSuccessListener(profileDoc -> {
-                    if (profileDoc.exists()) {
-                        String name = tempPdc.getProfileName(profileDoc);
-                        String imageUrl = profileDoc.getString("imageUrl");
-                        Profile profile = new Profile(profileID, name, null, imageUrl);
-                        profilesList.add(profile);
-                        adapter.notifyDataSetChanged();
-                    }
+                    String name = tempPdc.getProfileName(profileDoc);
+                    String imageUrl = profileDoc.getString("imageUrl");
+                    Profile profile = new Profile(profileID, name, null, imageUrl);
+                    profilesList.add(profile);
+                    adapter.notifyDataSetChanged();
                 });
             }
-        }).addOnFailureListener(e -> Log.e("ProfileFetch", "Error fetching profiles", e));
+        });
     }
 
 
@@ -109,8 +104,10 @@ public class ProfileManagementActivity extends AppCompatActivity {
             }).addOnFailureListener(e -> {
                 // If there's an error loading profile image, display initials or a default image
                 holder.profileImageView.setImageResource(R.drawable.profile_icon);
-                holder.deleteButton.setOnClickListener(v -> {deleteProfile(currentProfile.getProfileId());
-                });
+            });
+
+            holder.deleteButton.setOnClickListener(v -> {
+                deleteProfile(currentProfile.getProfileId());
             });
         }
 

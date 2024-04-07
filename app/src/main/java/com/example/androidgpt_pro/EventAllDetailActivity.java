@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,8 +22,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 /**
  * This class represents a single event. It includes the event
@@ -72,7 +69,6 @@ public class EventAllDetailActivity extends AppCompatActivity{
         edc = new EventDatabaseControl();
         pdc = new ProfileDatabaseControl(userID);
 
-
         //Initialize views
         eventPosterImageCard = findViewById(R.id.card_event_image);
         eventPosterImageView = findViewById(R.id.iv_event_image);
@@ -90,10 +86,8 @@ public class EventAllDetailActivity extends AppCompatActivity{
         clearImageButton.setVisibility(View.INVISIBLE);
         announcementBoxButton = findViewById(R.id.notification_icon);
 
-
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,7 +194,6 @@ public class EventAllDetailActivity extends AppCompatActivity{
         setupDeleteButton();
         setupClearImageButton();
         setupAnnouncementBox();
-
     }
 
     public void signUpSuccess() {

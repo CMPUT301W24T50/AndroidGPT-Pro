@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.content.Context;
 
 import javax.annotation.Nullable;
 
@@ -53,7 +52,7 @@ public class SendNotificationActivity extends Activity {
                     Toast.makeText(SendNotificationActivity.this, "Illegal Symbol Included.",
                             Toast.LENGTH_SHORT).show();
                 } else if (!message.isEmpty()) {
-                    edc.addEventNotification(userID, message);
+                    edc.addEventNotification(eventID, message);
                     Toast.makeText(SendNotificationActivity.this, "Message Sent!",
                             Toast.LENGTH_SHORT).show();
                 } else {
