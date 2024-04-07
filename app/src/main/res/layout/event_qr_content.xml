@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_color">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -10,6 +11,17 @@
         android:background="@drawable/back_arrow_icon"
         android:id="@+id/back_button"
         android:layout_margin="16dp"/>
+
+    <ImageButton
+        android:id="@+id/notification_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/MainTheme2"
+        android:src="@android:drawable/ic_dialog_email"
+        app:tint="@color/MainTheme1" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/organizer_event_card"
@@ -40,6 +52,7 @@
                     android:layout_width="260dp"
                     android:layout_height="180dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
                     android:layout_marginTop="15dp">
                     <androidx.cardview.widget.CardView
                         android:layout_width="260dp"

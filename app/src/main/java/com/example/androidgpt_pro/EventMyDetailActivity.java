@@ -128,16 +128,15 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 checkIfAdmin();
                 setupDeleteButton();
                 setupClearImageButton();
-                if (edc.getEventAllSignUpProfiles(docSns) == null)
-                    return;
-                int eventAttendeeNumber = edc.getEventAllSignUpProfiles(docSns).size();
-                if (eventAttendeeNumber != 0){
-                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees" + eventAttendeeNumber + "/∞");
+
+
+                if (edc.getEventAllSignUpProfiles(docSns) != null){
+                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees " + edc.getEventAllSignUpProfiles(docSns).size());
                     underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
                     eventAttendeesNumber.setText(underlineAttendeesNumber);
                 }
-                else{
-                    eventAttendeesNumber.setText("0/∞");
+                else {
+                    eventAttendeesNumber.setText("Attendees");
                 }
             }
         });
@@ -378,9 +377,27 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void setupAlert() {
+        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                // Assuming getEventAllCheckInProfiles returns a String[][]
+                String[][] profiles = edc.getEventAllCheckInProfiles(docSns);
+
+                // Check if we have reached a new milestone
+                if ((edc.getEventAllCheckInProfiles(docSns)) == null) {
+                    return;
+                }
+                if (profiles.length % 10 == 0) {
+                    Toast.makeText(getApplicationContext(), "You have another 10 people checked in!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_my_content);
 
@@ -394,5 +411,6 @@ public class EventMyDetailActivity extends AppCompatActivity {
         initViews();
         setupBackButton();
         fetchEventInfo();
+        setupAlert();
     }
 }

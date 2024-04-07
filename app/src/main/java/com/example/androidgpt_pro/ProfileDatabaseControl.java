@@ -84,6 +84,22 @@ public class ProfileDatabaseControl {
         pDocRef.set(data);
     }
 
+    /**
+     * This is a profile deleter.
+     */
+    public void delProfile() {
+        getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot docSns) {
+                ds.delSignUpAllEventProfile(getProfileAllSignUpEvents(docSns), pID);
+                ds.delCheckInAllEventProfile(getProfileAllCheckInEvent(docSns), pID);
+                ds.delOrganizedAllEvent(getProfileOrganizedEvents(docSns));
+                pDocRef.delete();
+                pStgRef.child(pID).delete();
+            }
+        });
+    }
+
 
     /**
      * This is a getter for a profile snapshot.
@@ -274,11 +290,11 @@ public class ProfileDatabaseControl {
     }
 
     /**
-     * This is a deleter for Profile Organized Events.
+     * This is a deleter for Profile Organized Event.
      * @param eventID
      * eventID: The ID of the event that needs to be deleted.
      */
-    public void delProfileOrganizedEvents(String eventID) {
+    public void delProfileOrganizedEvent(String eventID) {
         pDocRef.update("pOrganizedEvents", FieldValue.arrayRemove(eventID))
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

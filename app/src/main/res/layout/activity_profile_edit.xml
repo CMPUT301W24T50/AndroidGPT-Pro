@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile_edit_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_list">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -21,19 +23,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:layout_below="@id/back_button">
-
         <androidx.cardview.widget.CardView
             android:layout_width="120dp"
             android:layout_height="120dp"
             app:cardCornerRadius="250dp">
-
             <ImageView
                 android:id="@+id/iv_edit_profile_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:color="@color/white"
-                android:scaleType="centerCrop">
-            </ImageView>
+                android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 
@@ -49,19 +48,17 @@
             android:id="@+id/ib_edit_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/MainTheme2"
+            android:backgroundTint="#00FEF7FF"
             android:src="@android:drawable/ic_menu_add"
-            app:tint="@color/MainTheme1">
-        </ImageButton>
+            app:tint="@color/MainTheme1"/>
 
         <ImageButton
             android:id="@+id/ib_del_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/MainTheme2"
+            android:backgroundTint="#00FEF7FF"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
-            app:tint="@color/MainTheme1">
-        </ImageButton>
+            app:tint="@color/MainTheme1"/>
     </LinearLayout>
 
 

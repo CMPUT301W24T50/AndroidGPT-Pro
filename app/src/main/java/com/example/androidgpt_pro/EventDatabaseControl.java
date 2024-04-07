@@ -113,7 +113,7 @@ public class EventDatabaseControl {
 
 
     /**
-     * This is the event deleter.
+     * This is an event deleter.
      * @param eventID
      * eventID: An ID of an event.
      */
@@ -121,9 +121,11 @@ public class EventDatabaseControl {
         getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-                eColRef.document(eventID).delete();
+                ds.delSignUpAllProfileEvent(getEventAllSignUpProfiles(docSns), eventID);
+                ds.delCheckInAllProfileEvent(getEventAllCheckInProfiles(docSns), eventID);
                 ds.delOrganizedProfileEvent(getEventOrganizerID(docSns), eventID);
-                ds.delSignUpAllProfileEvent(eventID);
+                eColRef.document(eventID).delete();
+                eStgRef.child(eventID).delete();
             }
         });
     }
@@ -446,6 +448,8 @@ public class EventDatabaseControl {
      * eventSignUpLimit: The limit for sign up.
      */
     public String getEventSignUpLimit(DocumentSnapshot eventDocumentSnapshot) {
+        if (Objects.equals(eventDocumentSnapshot.getString("eSignUpLimit"), ""))
+            return "100000000";
         return eventDocumentSnapshot.getString("eSignUpLimit");
     }
 

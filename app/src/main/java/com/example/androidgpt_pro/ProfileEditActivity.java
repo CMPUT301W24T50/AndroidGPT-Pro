@@ -2,6 +2,7 @@ package com.example.androidgpt_pro;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,6 +44,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     private EditText editEmailEditText;
     private Button saveButton;
     private ToggleButton geolocationToggle;
+    private RelativeLayout editScreen;
 
 
     private void initViews() {
@@ -54,6 +58,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         editEmailEditText = findViewById(R.id.edit_text_edit_email);
         saveButton = findViewById(R.id.button_save_profile);
         geolocationToggle = findViewById(R.id.toggle_geolocation_tracking);
+        editScreen = findViewById(R.id.profile_edit_layout);
     }
 
 
@@ -170,7 +175,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         pdc.setProfileGLTState(geolocationToggle.isChecked());
 
         // just display a toast message confirming the changes for now.
-        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
 
         // Finish the activity and return to the profile screen.
         finish();
@@ -198,5 +203,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         setupProfileImageEditor();
         setupProfileImageDeleter();
         setupSaveButton();
+
+        AnimationDrawable animationDrawable = (AnimationDrawable) editScreen.getBackground();
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
     }
 }

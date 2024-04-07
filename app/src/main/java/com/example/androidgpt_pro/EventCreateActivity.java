@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -61,7 +60,7 @@ public class EventCreateActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button eventConfirm;
     private int hour, minute;
-    private long eTimestamp;
+    private  int SYear, SMonth, SDay; // select year month and day
 
 
     private void initViews() {
@@ -97,6 +96,9 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
+                SYear = year;
+                SMonth = month;
+                SDay = day;
                 eDateFormat = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day);
                 eventDateEditButton.setText(date);
             }
@@ -138,9 +140,23 @@ public class EventCreateActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                hour = selectedHour;
-                minute = selectedMinute;
-                eventTimeEditButton.setText(String.format(Locale.getDefault(), "%02d: %02d", hour, minute));
+                Calendar now = Calendar.getInstance();
+
+                Calendar selectedTime = Calendar.getInstance();
+                selectedTime.set(SYear, SMonth, SDay, selectedHour, selectedMinute);
+                
+                if (selectedTime.after(now)) {
+                    hour = selectedHour;
+                    minute = selectedMinute;
+                    eventTimeEditButton.setText(String.format(Locale.getDefault(), "%02d: %02d", hour, minute));
+                }
+                else {
+                    CharSequence text = "Please enter a valid time";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
+                    toast.show();
+                }
             }
         };
 
@@ -211,10 +227,6 @@ public class EventCreateActivity extends AppCompatActivity {
 
         // handel time picker
         String eventTime = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
-        String eTimestampFormat = eDateFormat + " " + eventTime + ":00.000";
-        // Parse the string to a Timestamp object
-        Timestamp timestamp = Timestamp.valueOf(eTimestampFormat);
-        eTimestamp = timestamp.getTime();
 
         eTime = eventTime;
 
@@ -262,9 +274,17 @@ public class EventCreateActivity extends AppCompatActivity {
         setupBackButton();
         setupEventImageSelector();
 
-        // get current timestamp
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        long currentTimestamp = timestamp.getTime();
+//        Calendar calendar = Calendar.getInstance();
+//        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int currentMinute = calendar.get(Calendar.MINUTE);
+//        int currentYear = calendar.get(Calendar.YEAR);
+//        int currentMonth = calendar.get(Calendar.MONTH);
+//        int CurrentDay = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//        Calendar selectedTime = Calendar.getInstance();
+//        selectedTime.set(year, month, day, hour, minute);
+
+
         initEventDatePicker();
         eventDateEditButton.setText(getToday());
 
@@ -273,27 +293,23 @@ public class EventCreateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setEvent();
                 // create a new event
-                if(eName != null && eLocStreet != null
-                        && eLocCity != null && eLocProvince != null
-                        && eDate != null && eTime != null
-                        && eDescription != null && eImageURI != null
-                        && eTimestamp > currentTimestamp) {
-                    applyNewEvent();
-                }
-                else if(eTimestamp < currentTimestamp){
-                    CharSequence text = "Please Select a Valid Time";
-                    int duration = Toast.LENGTH_SHORT;
 
-                    Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
-                    toast.show();
+                if(!eName.isEmpty() && !eLocStreet.isEmpty()
+                        && !eLocCity.isEmpty() && !eLocProvince.isEmpty()
+                        && !eDate.isEmpty() && !eTime.isEmpty()
+                        && !eDescription.isEmpty() && eImageURI != null) {
+
+                        applyNewEvent();
                 }
                 else {
-                    CharSequence text = "Please Fill up all Messages";
+                    CharSequence text = "Please fill up all necessary messages";
                     int duration = Toast.LENGTH_SHORT;
 
                     Toast toast = Toast.makeText(EventCreateActivity.this, text, duration);
                     toast.show();
                 }
+
+
             }
         });
         setupBackButton();

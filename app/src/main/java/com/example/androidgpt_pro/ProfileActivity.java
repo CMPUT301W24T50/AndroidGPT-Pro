@@ -30,6 +30,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 /**
  * This class displays the users profile information on the screen.
  */
@@ -45,8 +47,10 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView pEmailTextView;
     private Button editProfileButton;
     private ImageView notificationIcon;
+    private ImageView unreadDot;
     private Button myEventButton;
     private Button signedUpEvent;
+    private Button adminFunctionsButton;
 
 
     private void initViews() {
@@ -58,13 +62,9 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileButton = findViewById(R.id.btn_edit_profile);
         myEventButton = findViewById(R.id.btn_my_event);
         notificationIcon = findViewById(R.id.notification_icon);
+        unreadDot = findViewById(R.id.unread_dot);
+        unreadDot.setVisibility(View.GONE);
         signedUpEvent = findViewById(R.id.btn_sign_up_event);
-        notificationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "No outstanding notifications", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
@@ -118,6 +118,8 @@ public class ProfileActivity extends AppCompatActivity {
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
+
+                setupUnreadDot();
             }
         });
     }
@@ -160,6 +162,37 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void setupNotificationIcon() {
+        notificationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch NotificationBox activity to display notifications
+                Intent intent = new Intent(ProfileActivity.this, Notifications.class);
+                // Pass necessary data, such as user ID, to fetch notifications
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+        });
+    }
+    private void setupUnreadDot() {
+        pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot doSns) {
+                unreadDot.setVisibility(View.GONE);
+                if(pdc.getProfileAllNotificationRecords(doSns) == null){
+                    return;
+                }
+                for(int i = 0; i < pdc.getProfileAllNotificationRecords(doSns).length; i++){
+                    if(!Objects.equals(pdc.getProfileAllNotificationRecords(doSns)[i][1],
+                            pdc.getProfileAllNotificationRecords(doSns)[i][2])) {
+                        unreadDot.setVisibility(View.VISIBLE);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
 
     private void initNavigationTabs() {
         navigationTabs = findViewById(R.id.nav_profile);
@@ -174,13 +207,13 @@ public class ProfileActivity extends AppCompatActivity {
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                 } else if (itemId == R.id.qr_scanner_tab) {
                     Intent newIntent = new Intent(ProfileActivity.this, QRScannerActivity.class);
                     newIntent.putExtra("userID", userID);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(newIntent);
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                 } else if (itemId == R.id.profile_tab) {
                     assert Boolean.TRUE;
                 } else {
@@ -209,5 +242,30 @@ public class ProfileActivity extends AppCompatActivity {
         setupEditProfileButton();
         setupMyEventButton();
         setupSignedUpEventButton();
+        setupNotificationIcon();
+//        setupUnreadDot();
+
+        adminFunctionsButton = findViewById(R.id.btn_admin_functions);
+        adminFunctionsButton.setVisibility(View.INVISIBLE);
+        checkIfAdmin();
+        adminFunctionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to the ProfileManagementActivity
+                Intent intent = new Intent(ProfileActivity.this, ProfileManagementActivity.class);
+                intent.putExtra("USER_ID_KEY", userID);
+                startActivity(intent);
+            }
+        });
     }
+
+    protected void checkIfAdmin() {
+        pdc.getProfileSnapshot().addOnSuccessListener(docSns -> {
+            String role = pdc.getProfileRole(docSns);
+            if (role.equals("admin")) {
+                adminFunctionsButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
 }

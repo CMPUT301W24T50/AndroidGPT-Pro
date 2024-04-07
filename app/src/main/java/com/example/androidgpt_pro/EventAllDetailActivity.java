@@ -45,6 +45,8 @@ public class EventAllDetailActivity extends AppCompatActivity{
     private TextView eventTimeDateTextView;
     private TextView eventAddressTextView;
     private TextView eventDescription;
+
+    private ImageButton announcementBoxButton;
     private Boolean eventSignUpLimit;
     private Button signUpButton;
     private Button withdrawButton;
@@ -56,7 +58,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_all_content);
 
@@ -66,7 +68,6 @@ public class EventAllDetailActivity extends AppCompatActivity{
         userID = intent.getStringExtra("userID");
         edc = new EventDatabaseControl();
         pdc = new ProfileDatabaseControl(userID);
-
 
         //Initialize views
         eventPosterImageCard = findViewById(R.id.card_event_image);
@@ -83,11 +84,10 @@ public class EventAllDetailActivity extends AppCompatActivity{
         clearImageButton = findViewById(R.id.btn_clear_image);
         deleteButton.setVisibility(View.INVISIBLE);
         clearImageButton.setVisibility(View.INVISIBLE);
-
+        announcementBoxButton = findViewById(R.id.notification_icon);
 
         // set the button function to back to eventList page
         backButton = findViewById(R.id.back_button);
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +109,12 @@ public class EventAllDetailActivity extends AppCompatActivity{
                         + ", " + edc.getEventLocationCity(docSns)
                         + ", " + edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
-                eventSignUpLimit = (edc.getEventAllSignUpProfiles(docSns).size()
+                int alreadySignUp;
+                if (edc.getEventAllSignUpProfiles(docSns) == null)
+                    alreadySignUp = 0;
+                else
+                    alreadySignUp = edc.getEventAllSignUpProfiles(docSns).size();
+                eventSignUpLimit = (alreadySignUp
                         >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
                 fetchEventPoster();
                 setupButtons();
@@ -128,6 +133,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         eventTimeDateTextView.setVisibility(View.GONE);
         eventAddressTextView.setVisibility(View.GONE);
         eventDescription.setVisibility(View.GONE);
+        announcementBoxButton.setVisibility(View.GONE);
         signUpButton.setVisibility(View.GONE);
         withdrawButton.setVisibility(View.GONE);
     }
@@ -181,10 +187,13 @@ public class EventAllDetailActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 pdc.delProfileSignUpEvent(eventID);
-                withdrawButton.setEnabled(Boolean.FALSE);
                 withdrawSuccess();
             }
         });
+        checkIfAdmin();
+        setupDeleteButton();
+        setupClearImageButton();
+        setupAnnouncementBox();
     }
 
     public void signUpSuccess() {
@@ -247,6 +256,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 eventTimeDateTextView.setVisibility(View.GONE);
                 eventAddressTextView.setVisibility(View.GONE);
                 eventDescription.setVisibility(View.GONE);
+                announcementBoxButton.setVisibility(View.GONE);
                 signUpButton.setVisibility(View.GONE);
                 withdrawButton.setVisibility(View.GONE);
                 CharSequence text = "Event Deleted";
@@ -273,6 +283,17 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(EventAllDetailActivity.this, text, duration);
                 toast.show();
+            }
+        });
+    }
+
+    private void setupAnnouncementBox() {
+        announcementBoxButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventAllDetailActivity.this, AnnouncementBox.class);
+                intent.putExtra("eventID", eventID);
+                startActivity(intent);
             }
         });
     }
