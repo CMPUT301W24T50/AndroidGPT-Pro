@@ -63,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         myEventButton = findViewById(R.id.btn_my_event);
         notificationIcon = findViewById(R.id.notification_icon);
         unreadDot = findViewById(R.id.unread_dot);
+        unreadDot.setVisibility(View.GONE);
         signedUpEvent = findViewById(R.id.btn_sign_up_event);
     }
 
@@ -117,6 +118,8 @@ public class ProfileActivity extends AppCompatActivity {
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
+
+                setupUnreadDot();
             }
         });
     }
@@ -175,16 +178,15 @@ public class ProfileActivity extends AppCompatActivity {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot doSns) {
+                unreadDot.setVisibility(View.GONE);
                 if(pdc.getProfileAllNotificationRecords(doSns) == null){
-                    unreadDot.setVisibility(View.GONE);
+                    return;
                 }
                 for(int i = 0; i < pdc.getProfileAllNotificationRecords(doSns).length; i++){
                     if(!Objects.equals(pdc.getProfileAllNotificationRecords(doSns)[i][1],
                             pdc.getProfileAllNotificationRecords(doSns)[i][2])) {
                         unreadDot.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        unreadDot.setVisibility(View.GONE);
+                        break;
                     }
                 }
             }
@@ -241,7 +243,7 @@ public class ProfileActivity extends AppCompatActivity {
         setupMyEventButton();
         setupSignedUpEventButton();
         setupNotificationIcon();
-        setupUnreadDot();
+//        setupUnreadDot();
 
         adminFunctionsButton = findViewById(R.id.btn_admin_functions);
         adminFunctionsButton.setVisibility(View.INVISIBLE);
