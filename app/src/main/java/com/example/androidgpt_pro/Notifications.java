@@ -84,9 +84,8 @@ public class Notifications extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot docSns) {
                     if(edc.getEventAllNotifications(docSns) != null) {
                         for(int j = Integer.parseInt(allNotificationRecord[finalI][2]) + 1;
-                            j <= Integer.parseInt(allNotificationRecord[finalI][1]);
-                            j++) {
-                            notificationList.add(edc.getEventAllNotifications(docSns).get(j));
+                            j <= Integer.parseInt(allNotificationRecord[finalI][1]); j++) {
+                            notificationList.add(edc.getEventAllNotifications(docSns).get(j + 1));
                             NotificationListArrayAdapter = new ArrayAdapter<>(Notifications.this,
                                     android.R.layout.simple_list_item_1, notificationList);
                             notificationListView.setAdapter(NotificationListArrayAdapter);
