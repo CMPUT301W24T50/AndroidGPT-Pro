@@ -133,6 +133,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
         eventTimeDateTextView.setVisibility(View.GONE);
         eventAddressTextView.setVisibility(View.GONE);
         eventDescription.setVisibility(View.GONE);
+        announcementBoxButton.setVisibility(View.GONE);
         signUpButton.setVisibility(View.GONE);
         withdrawButton.setVisibility(View.GONE);
     }
@@ -256,6 +257,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 eventTimeDateTextView.setVisibility(View.GONE);
                 eventAddressTextView.setVisibility(View.GONE);
                 eventDescription.setVisibility(View.GONE);
+                announcementBoxButton.setVisibility(View.GONE);
                 signUpButton.setVisibility(View.GONE);
                 withdrawButton.setVisibility(View.GONE);
                 CharSequence text = "Event Deleted";
