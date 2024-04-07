@@ -126,6 +126,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 fetchEventPoster();
                 showQRCode();
                 openMap();
+                openSignedUpAttendees();
                 openAttendees();
                 openSender();
                 setupSaveQRCode();
