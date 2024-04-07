@@ -6,11 +6,9 @@ public class Profile {
     private String email;
     private String imageUrl;
 
-    // Default constructor is required for Firebase deserialization
     public Profile() {
     }
 
-    // Add other constructors, getters, and setters as needed for your application
     public Profile(String profileId, String name, String email, String imageUrl) {
         this.profileId = profileId;
         this.name = name;

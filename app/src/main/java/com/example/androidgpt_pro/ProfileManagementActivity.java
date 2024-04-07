@@ -1,31 +1,32 @@
 package com.example.androidgpt_pro;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androidgpt_pro.Profile;
-
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 public class ProfileManagementActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProfileAdapter adapter;
     private ArrayList<Profile> profilesList;
+    private String adminUserID;
     private ProfileDatabaseControl pdc;
 
     @Override
@@ -33,27 +34,53 @@ public class ProfileManagementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_management);
 
+        ImageButton backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Finish this activity and go back to the previous one
+                finish();
+            }
+        });
+
+        adminUserID = getIntent().getStringExtra("USER_ID_KEY");
+        pdc = new ProfileDatabaseControl(adminUserID);
+
         recyclerView = findViewById(R.id.recyclerView_profiles);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         profilesList = new ArrayList<>();
         adapter = new ProfileAdapter(profilesList, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        pdc = new ProfileDatabaseControl();
         fetchProfiles();
     }
 
     private void fetchProfiles() {
-        // Assuming ProfileDatabaseControl has a method to fetch all profiles
-        pdc.getAllProfiles().addOnSuccessListener(queryDocumentSnapshots -> {
+        pdc.requestAllProfiles().addOnSuccessListener(queryDocumentSnapshots -> {
             profilesList.clear();
-            for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                Profile profile = snapshot.toObject(Profile.class);
-                profilesList.add(profile);
+            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                String profileID = documentSnapshot.getId(); // Get the profile ID
+                ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
+                tempPdc.getProfileSnapshot().addOnSuccessListener(profileDoc -> {
+                    if (profileDoc.exists()) {
+                        String name = tempPdc.getProfileName(profileDoc);
+                        String imageUrl = profileDoc.getString("imageUrl");
+                        Profile profile = new Profile(profileID, name, null, imageUrl);
+                        profilesList.add(profile);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
-            adapter.notifyDataSetChanged();
-        }).addOnFailureListener(e -> Log.e("ProfileManagement", "Error fetching profiles", e));
+        }).addOnFailureListener(e -> Log.e("ProfileFetch", "Error fetching profiles", e));
     }
+
+
+    private void deleteProfile(String profileID) {
+        ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
+        tempPdc.delProfile();
+        fetchProfiles(); // Refresh the profile list immediately
+    }
+
 
     public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
         private final List<Profile> profilesList;
@@ -64,40 +91,39 @@ public class ProfileManagementActivity extends AppCompatActivity {
             this.inflater = LayoutInflater.from(context);
         }
 
-        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = inflater.inflate(R.layout.profile_item, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
             Profile currentProfile = profilesList.get(position);
             holder.nameTextView.setText(currentProfile.getName());
-            // Assuming Profile has a method to get image URL. Load image using your preferred method.
-            // Example: Picasso.get().load(currentProfile.getImageUrl()).into(holder.profileImageView);
 
-            holder.deleteButton.setOnClickListener(v -> deleteProfile(currentProfile.getProfileId(), position));
+            // Fetch and load the profile image
+            ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(currentProfile.getProfileId());
+            tempPdc.getProfileImage().addOnSuccessListener(uri -> {
+                Picasso.get().load(uri).into(holder.profileImageView);
+            }).addOnFailureListener(e -> {
+                // If there's an error loading profile image, display initials or a default image
+                holder.profileImageView.setImageResource(R.drawable.profile_icon);
+                holder.deleteButton.setOnClickListener(v -> {deleteProfile(currentProfile.getProfileId());
+                });
+            });
         }
 
-        private void deleteProfile(String profileId, int position) {
-            pdc.deleteProfile(profileId).addOnSuccessListener(aVoid -> {
-                profilesList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, profilesList.size());
-            }).addOnFailureListener(e -> Log.e("ProfileAdapter", "Error deleting profile", e));
-        }
 
         @Override
         public int getItemCount() {
             return profilesList.size();
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            final ImageView profileImageView;
-            final TextView nameTextView;
-            final Button deleteButton;
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            ImageView profileImageView;
+            TextView nameTextView;
+            Button deleteButton;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -108,4 +134,3 @@ public class ProfileManagementActivity extends AppCompatActivity {
         }
     }
 }
-

@@ -227,6 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Navigate to the ProfileManagementActivity
                 Intent intent = new Intent(ProfileActivity.this, ProfileManagementActivity.class);
+                intent.putExtra("USER_ID_KEY", userID);
                 startActivity(intent);
             }
         });

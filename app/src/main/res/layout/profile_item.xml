@@ -9,7 +9,7 @@
         android:id="@+id/profile_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_profile_placeholder" />
+        android:src="@drawable/profile_icon" />
 
     <TextView
         android:id="@+id/profile_name"
@@ -24,4 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete" />
+
+
 </LinearLayout>
