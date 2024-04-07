@@ -175,7 +175,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         pdc.setProfileGLTState(geolocationToggle.isChecked());
 
         // just display a toast message confirming the changes for now.
-        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
 
         // Finish the activity and return to the profile screen.
         finish();
