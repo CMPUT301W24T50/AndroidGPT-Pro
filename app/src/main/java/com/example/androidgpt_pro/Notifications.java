@@ -67,9 +67,7 @@ public class Notifications extends AppCompatActivity {
                     String[][] profileAllNotificationRecord = pdc.getProfileAllNotificationRecords(docSns);
                     getALlNotification(profileAllNotificationRecord);
                     setUpReadButton(profileAllNotificationRecord);
-                }
-                else {
-                    Toast.makeText(Notifications.this, "there's no notification", Toast.LENGTH_SHORT).show();
+                } else {
                     setUpReadButton();
                 }
             }
