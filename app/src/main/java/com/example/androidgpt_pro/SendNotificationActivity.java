@@ -68,13 +68,12 @@ public class SendNotificationActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notif_sender);
+
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
-        pdc = new ProfileDatabaseControl(userID);
-
         eventID = intent.getStringExtra("eventID");
+        pdc = new ProfileDatabaseControl(userID);
         edc = new EventDatabaseControl();
-
 
         initViews();
         popUpWindow();

@@ -17,13 +17,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProfileManagementActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private ProfileAdapter adapter;
     private ArrayList<Profile> profilesList;
     private String adminUserID;
     private ProfileDatabaseControl pdc;
+    private String lastDelete = "LastDelete";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +58,11 @@ public class ProfileManagementActivity extends AppCompatActivity {
         pdc.requestAllProfiles().addOnSuccessListener(queryDocumentSnapshots -> {
             profilesList.clear();
             String[] lst = pdc.getAllProfileID(queryDocumentSnapshots);
-            for (int i = 0; i < lst.length; i++) {
-                String profileID = lst[i];
+            for (String profileID : lst) {
                 ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
                 tempPdc.getProfileSnapshot().addOnSuccessListener(profileDoc -> {
+                    if (Objects.equals(lastDelete, profileID))
+                        return;
                     String name = tempPdc.getProfileName(profileDoc);
                     String imageUrl = profileDoc.getString("imageUrl");
                     Profile profile = new Profile(profileID, name, null, imageUrl);
@@ -73,6 +77,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
     private void deleteProfile(String profileID) {
         ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
         tempPdc.delProfile();
+        lastDelete = profileID;
         fetchProfiles(); // Refresh the profile list immediately
     }
 
