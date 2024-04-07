@@ -38,11 +38,9 @@ public class AnnouncementBox extends AppCompatActivity {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
-
                 if (edc.getEventAllNotifications(docSns) == null) {
-                    Toast.makeText(AnnouncementBox.this, "There's no announcement for this event",
+                    Toast.makeText(AnnouncementBox.this, "No Announcement",
                             Toast.LENGTH_SHORT).show();
-                    finish();
                 } else {
                     announcementList = new ArrayList<>();
                     announcementList.addAll(edc.getEventAllNotifications(docSns));

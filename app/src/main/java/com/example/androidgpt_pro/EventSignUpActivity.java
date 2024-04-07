@@ -146,7 +146,7 @@ public class EventSignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signed_up_events);
+        setContentView(R.layout.activity_sign_up_events);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");

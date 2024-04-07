@@ -10,7 +10,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerInParent="true"
-        android:background="@color/MainTheme2"
+        android:background="#00FEF7FF"
         android:scaleType="fitCenter"
         android:src="@drawable/qr_scan_icon" />
 
