@@ -388,8 +388,8 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 if ((edc.getEventAllCheckInProfiles(docSns)) == null) {
                     return;
                 }
-                if (profiles.length % 10 == 0) {
-                    Toast.makeText(getApplicationContext(), "You have another 10 people checked in!", Toast.LENGTH_SHORT).show();
+                if (profiles.length % 3 == 0) {
+                    Toast.makeText(getApplicationContext(), "You have another 3 people checked in!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
