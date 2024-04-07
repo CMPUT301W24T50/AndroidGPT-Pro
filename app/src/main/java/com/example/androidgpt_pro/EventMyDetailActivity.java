@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
@@ -24,6 +25,8 @@ import androidx.core.content.FileProvider;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -378,9 +381,10 @@ public class EventMyDetailActivity extends AppCompatActivity {
     }
 
     private void setupAlert() {
-        edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        edc.getEvent(eventID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot docSns) {
+            public void onEvent(@Nullable DocumentSnapshot docSns,
+                                @Nullable FirebaseFirestoreException error) {
                 // Assuming getEventAllCheckInProfiles returns a String[][]
                 String[][] profiles = edc.getEventAllCheckInProfiles(docSns);
 
@@ -388,7 +392,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 if ((edc.getEventAllCheckInProfiles(docSns)) == null) {
                     return;
                 }
-                if (profiles.length % 2 == 0) {
+                if (profiles.length % 5 == 0) {
                     Toast.makeText(getApplicationContext(), "You have total "
                             + profiles.length
                             + " people checked in!", Toast.LENGTH_SHORT).show();
