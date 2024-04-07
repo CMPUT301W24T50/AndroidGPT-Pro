@@ -65,12 +65,12 @@ public class Notifications extends AppCompatActivity {
 
                 if(pdc.getProfileAllNotificationRecords(docSns) != null) {
                     String[][] profileAllNotificationRecord = pdc.getProfileAllNotificationRecords(docSns);
-
                     getALlNotification(profileAllNotificationRecord);
                     setUpReadButton(profileAllNotificationRecord);
                 }
                 else {
                     Toast.makeText(Notifications.this, "there's no notification", Toast.LENGTH_SHORT).show();
+                    setUpReadButton();
                 }
             }
         });
@@ -99,18 +99,26 @@ public class Notifications extends AppCompatActivity {
         }
     }
 
-    private void setUpReadButton(String[][] allNotificationRecord) {
+
+    private void setUpReadButton() {
         readButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < allNotificationRecord.length; i++){
-                    pdc.setProfileNotificationRead(allNotificationRecord[i][0]);
-                }
                 finish();
             }
         });
     }
 
-
+    private void setUpReadButton(String[][] allNotificationRecord) {
+        readButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (String[] strings : allNotificationRecord) {
+                    pdc.setProfileNotificationRead(strings[0]);
+                }
+                finish();
+            }
+        });
+    }
 }
 
