@@ -38,6 +38,7 @@ public class EventQRDetailActivity extends AppCompatActivity {
     private final int GEO_LOCATION_CONTROL = 1;
 
     private ImageButton backButton;
+    private ImageButton announcementBoxButton;
     private CardView eventPosterCardView;
     private ImageView eventPosterImageView;
     private TextView eventNameTextView;
@@ -71,6 +72,7 @@ public class EventQRDetailActivity extends AppCompatActivity {
 
         //Initialize views
         eventPosterCardView = findViewById(R.id.card_event_image);
+        announcementBoxButton = findViewById(R.id.notification_icon);
         eventPosterImageView = findViewById(R.id.iv_event_image);
         eventNameTextView = findViewById(R.id.event_name);
         eventTimeDateTextView = findViewById(R.id.event_time_date);
@@ -346,6 +348,17 @@ public class EventQRDetailActivity extends AppCompatActivity {
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(EventQRDetailActivity.this, text, duration);
                 toast.show();
+            }
+        });
+    }
+
+    private void setUpAnnouncementBoxButton() {
+        announcementBoxButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventQRDetailActivity.this, AnnouncementBox.class);
+                intent.putExtra("eventID", eventID);
+                startActivity(intent);
             }
         });
     }
