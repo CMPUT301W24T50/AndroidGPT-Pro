@@ -76,7 +76,7 @@
 
     <Button
         android:id="@+id/btn_edit_profile"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="@string/edit_profile"
         android:layout_below="@id/text_email"
@@ -85,7 +85,7 @@
 
     <Button
         android:id="@+id/btn_my_event"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="My Events"
         android:layout_below="@id/btn_edit_profile"
@@ -94,7 +94,7 @@
 
     <Button
         android:id="@+id/btn_sign_up_event"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Sign-Up Events"
         android:layout_below="@id/btn_my_event"
