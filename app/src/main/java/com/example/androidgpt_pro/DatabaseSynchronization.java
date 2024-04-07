@@ -341,8 +341,11 @@ public class DatabaseSynchronization {
                     .update("pNotificationsRecords", FieldValue.arrayRemove(oldRecord));
                 pColRef.document(profileID)
                     .update("pNotificationsRecords", FieldValue.arrayUnion(newRecord));
-                break;
+                return;
             }
         }
+        String newRecord = dt.constructSharpString(eventID, tnn, "-1");
+        pColRef.document(profileID)
+                .update("pNotificationsRecords", FieldValue.arrayUnion(newRecord));
     }
 }
