@@ -2,12 +2,15 @@ package com.example.androidgpt_pro;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -56,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
 //        intent.putExtra("userID", uniqueID);
 //        intent.putExtra("userOp", "CheckIn");
 //        startActivity(intent);
+
+        // set up animated background
+        ConstraintLayout openScreen = findViewById(R.id.main);
+        AnimationDrawable animationDrawable = (AnimationDrawable) openScreen.getBackground();
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
     }
 
 }
