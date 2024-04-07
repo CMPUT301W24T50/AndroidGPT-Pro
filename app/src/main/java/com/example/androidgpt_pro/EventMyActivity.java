@@ -81,6 +81,10 @@ public class EventMyActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot docSns) {
+                    if (edc.getEventName(docSns) == null) {
+                        pdc.delProfileOrganizedEvent(eventID);
+                        return;
+                    }
                     getEventImage(eventID, docSns);
                 }
             });
