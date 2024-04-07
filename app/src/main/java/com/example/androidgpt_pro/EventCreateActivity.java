@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,7 +14,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import java.text.SimpleDateFormat;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -147,13 +144,6 @@ public class EventCreateActivity extends AppCompatActivity {
 
                 Calendar selectedTime = Calendar.getInstance();
                 selectedTime.set(SYear, SMonth, SDay, selectedHour, selectedMinute);
-
-//                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-//                String formattedNow = dateFormat.format(now.getTime());
-//                String formattedSelectedTime = dateFormat.format(selectedTime.getTime());
-//                // Log the formatted dates
-//                Log.d("CurrentTime", formattedNow);
-//                Log.d("SelectedTime", formattedSelectedTime);
                 
                 if (selectedTime.after(now)) {
                     hour = selectedHour;

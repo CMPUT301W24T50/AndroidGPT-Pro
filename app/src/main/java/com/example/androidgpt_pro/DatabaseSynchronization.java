@@ -73,8 +73,9 @@ public class DatabaseSynchronization {
         if (profileOrganizedEvents == null)
             return;
         EventDatabaseControl edc = new EventDatabaseControl();
-        for (int i = 0; i < profileOrganizedEvents.size(); i++)
-            edc.removeEvent(profileOrganizedEvents.get(i));
+        for (int i = 0; i < profileOrganizedEvents.size(); i++) {
+            delOrganizedEvent(profileOrganizedEvents.get(i));
+        }
     }
 
 

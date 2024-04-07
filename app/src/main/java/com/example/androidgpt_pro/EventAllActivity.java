@@ -67,15 +67,14 @@ public class EventAllActivity extends AppCompatActivity {
     }
 
     private void getEventInfo(String[] allFutureEventID) {
-        for (int i = 0; i < allFutureEventID.length; i++) {
-            String futureEventID = allFutureEventID[i];
+        for (String futureEventID : allFutureEventID) {
             edc.getEventSnapshot(futureEventID).
-                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot docSns) {
-                    getEventImage(futureEventID, docSns);
-                }
-            });
+                addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot docSns) {
+                        getEventImage(futureEventID, docSns);
+                    }
+                });
         }
     }
 
