@@ -27,8 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/event_title"
         android:layout_marginTop="0dp"
-        android:divider="#00000000"
-        android:padding="16dp" />
+        android:divider="#00000000" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/event_create_btn"

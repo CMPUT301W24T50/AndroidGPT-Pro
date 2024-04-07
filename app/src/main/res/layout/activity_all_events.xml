@@ -6,21 +6,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_color">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/back_arrow_icon"
-        android:id="@+id/back_button"
-        android:layout_margin="16dp"/>
 
     <TextView
         android:id="@+id/event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:text="Signed up Events"
-        android:layout_marginTop="50dp"
+        android:text="Events"
+        android:layout_marginTop="36dp"
         android:textSize="36sp" />
+
 
     <ListView
         android:id="@+id/event_list_view"
@@ -28,6 +23,17 @@
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:layout_below="@+id/event_title"
-        tools:listitem="@layout/event_array_adapter" />
+        android:layout_above="@+id/nav_event"
+        tools:listitem="@layout/event_array_adapter"
+        android:divider="#00000000" />
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nav_event"
+        app:menu="@menu/bottom_nav"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>

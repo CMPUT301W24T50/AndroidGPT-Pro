@@ -50,19 +50,17 @@
             android:id="@+id/ib_edit_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/MainTheme2"
+            android:backgroundTint="#00FEF7FF"
             android:src="@android:drawable/ic_menu_add"
-            app:tint="@color/MainTheme1">
-        </ImageButton>
+            app:tint="@color/MainTheme1"/>
 
         <ImageButton
             android:id="@+id/ib_del_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/MainTheme2"
+            android:backgroundTint="#00FEF7FF"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
-            app:tint="@color/MainTheme1">
-        </ImageButton>
+            app:tint="@color/MainTheme1"/>
     </LinearLayout>
 
 

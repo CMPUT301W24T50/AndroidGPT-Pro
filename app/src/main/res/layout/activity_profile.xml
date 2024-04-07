@@ -66,28 +66,28 @@
 
     <ImageView
         android:id="@+id/notification_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="45dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/MainTheme2"
+        android:background="#00FEF7FF"
         android:src="@android:drawable/ic_dialog_email"
         app:tint="@color/MainTheme1" />
 
     <Button
         android:id="@+id/btn_edit_profile"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_profile"
+        android:layout_height="45dp"
         android:layout_below="@id/text_email"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:text="@string/edit_profile" />
 
     <Button
         android:id="@+id/btn_my_event"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:text="My Events"
         android:layout_below="@id/btn_edit_profile"
         android:layout_centerHorizontal="true"
@@ -96,7 +96,7 @@
     <Button
         android:id="@+id/btn_sign_up_event"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:text="Sign-Up Events"
         android:layout_below="@id/btn_my_event"
         android:layout_centerHorizontal="true"
@@ -105,7 +105,7 @@
     <Button
         android:id="@+id/btn_admin_functions"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:text="Manage User Profiles"
         android:layout_below="@id/btn_sign_up_event"
         android:layout_centerHorizontal="true"
