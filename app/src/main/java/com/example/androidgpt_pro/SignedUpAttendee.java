@@ -26,6 +26,9 @@ public class SignedUpAttendee extends AppCompatActivity {
     private ArrayList<String> attendeesSignedUpList;
     private ArrayAdapter<String> attendeeSignedUpArrayAdapter;
 
+    /**
+     * Handler to pop out window
+     */
     private void popUpWindow(){
         getSignedUpAttendee();
         DisplayMetrics dm = new DisplayMetrics();
@@ -42,6 +45,9 @@ public class SignedUpAttendee extends AppCompatActivity {
         getWindow().setAttributes(params);
     }
 
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         attendeesSignedUpListView = findViewById(R.id.attendee_signed_up_list);
         attendeesSignedUpList = new ArrayList<>();
@@ -50,6 +56,9 @@ public class SignedUpAttendee extends AppCompatActivity {
         attendeesSignedUpListView.setAdapter(attendeeSignedUpArrayAdapter);
     }
 
+    /**
+     * Getter for attendees who have signed up
+     */
     private void getSignedUpAttendee() {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -59,6 +68,10 @@ public class SignedUpAttendee extends AppCompatActivity {
         });
     }
 
+    /**
+     * Getter for names of signed up attendees
+     * @param eventAllSignUpProfiles - signed up attendees
+     */
     private void getSignedUpAttendeeName(ArrayList eventAllSignUpProfiles) {
         if(eventAllSignUpProfiles == null) {
             CharSequence text = "No one has signed in!";

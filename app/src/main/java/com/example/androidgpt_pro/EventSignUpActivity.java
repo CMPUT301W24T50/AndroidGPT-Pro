@@ -35,6 +35,9 @@ public class EventSignUpActivity extends AppCompatActivity {
         events = new ArrayList<>();
     }
 
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         backButton = findViewById(R.id.back_button);
         eventsListView = findViewById(R.id.event_list_view);
@@ -42,6 +45,9 @@ public class EventSignUpActivity extends AppCompatActivity {
         eventsListView.setAdapter(eventArrayAdapter);
     }
 
+    /**
+     * Creates listener for back button
+     */
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,10 +57,16 @@ public class EventSignUpActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Getter for events
+     */
     private void getEvents() {
         getAllEventIDsFromEvent();
     }
 
+    /**
+     * Getter for event IDs
+     */
     private void getAllEventIDsFromEvent() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -67,6 +79,10 @@ public class EventSignUpActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Getter for event details
+     * @param allSignUpEvent
+     */
     private void getEventInfo(ArrayList<String> allSignUpEvent) {
         for (int i = 0; i < allSignUpEvent.size(); i++) {
             String signUpEventID = allSignUpEvent.get(i);
@@ -84,6 +100,11 @@ public class EventSignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Getter for event poster
+     * @param eventID
+     * @param documentSnapshot
+     */
     private void getEventImage(String eventID, DocumentSnapshot documentSnapshot) {
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -120,7 +141,9 @@ public class EventSignUpActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Creates listener for events list view
+     */
     private void setupEventsListView() {
         // handle click action
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -134,6 +157,17 @@ public class EventSignUpActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Refreshes data
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

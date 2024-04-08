@@ -59,7 +59,9 @@ public class GeoLocationActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
 
-
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         btnBackButton = findViewById(R.id.btn_glt_back_button);
         tvGLTTitle = findViewById(R.id.tv_glt_title);
@@ -79,6 +81,9 @@ public class GeoLocationActivity extends AppCompatActivity {
         tvDownloadingLocation.setVisibility(View.GONE);
     }
 
+    /**
+     * Creates listener for back button
+     */
     private void setupBackButton() {
         btnBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +93,9 @@ public class GeoLocationActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for start button
+     */
     private void setupStart() {
         btnStart.setEnabled(Boolean.TRUE);
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -105,12 +113,16 @@ public class GeoLocationActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Getter for users current location
+     */
     private void getCurrentLocation() {
         getLocationPermission();
     }
 
-
+    /**
+     * Getter for users's location permissions
+     */
     private void getLocationPermission() {
         ivRequestingPermission.setVisibility(View.VISIBLE);
         tvRequestingPermission.setVisibility(View.VISIBLE);
@@ -124,6 +136,16 @@ public class GeoLocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if location permissions were successful
+     * @param requestCode The request code passed in {@link #requestPermissions(
+     * android.app.Activity, String[], int)}
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -143,7 +165,9 @@ public class GeoLocationActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Checks if location is enabled
+     */
     private void checkLocationServices() {
         LocationManager locationManager
             = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -154,6 +178,9 @@ public class GeoLocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Turns on location services
+     */
     private void turnOnLocationServices() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest);
@@ -175,6 +202,10 @@ public class GeoLocationActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handler for API Exceptions
+     * @param e
+     */
     private void handleAPIException(ApiException e) {
         switch (e.getStatusCode()) {
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -197,6 +228,17 @@ public class GeoLocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Changes visibilities
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -214,7 +256,9 @@ public class GeoLocationActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Requests user location
+     */
     @SuppressLint("MissingPermission")
     private void requestLocation() {
         ivRequestingPermission.setVisibility(View.GONE);
@@ -239,7 +283,9 @@ public class GeoLocationActivity extends AppCompatActivity {
             }, Looper.getMainLooper());
     }
 
-
+    /**
+     * Sends location then returns
+     */
     private void pushLocationThenBack() {
         edc.addEventCheckInLocation(eventID, String.valueOf(latitude), String.valueOf(longitude));
         ivDownloadingLocation.setVisibility(View.GONE);

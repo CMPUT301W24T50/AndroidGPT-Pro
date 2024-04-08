@@ -17,6 +17,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This class represents the Event announcement box
+ */
 public class AnnouncementBox extends AppCompatActivity {
     private EventDatabaseControl edc;
     private String eventID;

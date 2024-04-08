@@ -2,6 +2,9 @@ package com.example.androidgpt_pro;
 
 import android.net.Uri;
 
+/**
+ * This class represents a user profile.
+ */
 public class Profile {
     private String profileId;
     private String name;

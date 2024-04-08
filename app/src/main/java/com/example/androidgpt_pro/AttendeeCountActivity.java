@@ -31,12 +31,18 @@ public class AttendeeCountActivity extends Activity {
         attendees = new ArrayList<>();
     }
 
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         attendeesCountListView = findViewById(R.id.attendee_list);
         attendeeArrayAdapter = new AttendeeArrayAdapter(this, attendees);
         attendeesCountListView.setAdapter(attendeeArrayAdapter);
     }
 
+    /**
+     * Handles the pop-up window to display attendees and count
+     */
     private void popUpWindow(){
         getAttendee();
         DisplayMetrics dm = new DisplayMetrics();
@@ -53,6 +59,9 @@ public class AttendeeCountActivity extends Activity {
         getWindow().setAttributes(params);
     }
 
+    /**
+     * Gets attendees from event database
+     */
     private void getAttendee(){
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -62,6 +71,9 @@ public class AttendeeCountActivity extends Activity {
         });
     }
 
+    /**
+     * Gets the names of attendees
+     */
     private void getAttendeeName(String[][] eventAttendeeNamesCount) {
         if(eventAttendeeNamesCount == null) {
             CharSequence text = "No one has checked in!";

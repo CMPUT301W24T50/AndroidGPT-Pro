@@ -45,16 +45,25 @@ public class EventAllActivity extends AppCompatActivity {
         events = new ArrayList<>();
     }
 
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         eventsListView = findViewById(R.id.event_list_view);
         eventArrayAdapter = new EventArrayAdapter(this, events);
         eventsListView.setAdapter(eventArrayAdapter);
     }
 
+    /**
+     * Getter for all events
+     */
     private void getEvents() {
         getAllEventIDsFromEvent();
     }
 
+    /**
+     * Getter for event IDs
+     */
     private void getAllEventIDsFromEvent() {
 
         edc.requestAllEvents().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -66,6 +75,10 @@ public class EventAllActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gets event details from event IDs
+     * @param allFutureEventID
+     */
     private void getEventInfo(String[] allFutureEventID) {
         for (String futureEventID : allFutureEventID) {
             edc.getEventSnapshot(futureEventID).
@@ -78,6 +91,11 @@ public class EventAllActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Getter for the event poster, uses stock image if unsuccessful
+     * @param eventID
+     * @param documentSnapshot
+     */
     private void getEventImage(String eventID, DocumentSnapshot documentSnapshot) {
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -117,11 +135,17 @@ public class EventAllActivity extends AppCompatActivity {
         updateData(); // method to update the listView data
     }
 
+    /**
+     * updates the page data
+     */
     private void updateData() {
         // updating the data
 //        ArrayList<Event> aPageData = pagination.generateData(0);
     }
 
+    /**
+     * Handles placing events in list view
+     */
     private void setupEventsListView() {
         // handle click action
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -136,6 +160,17 @@ public class EventAllActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Calls extra functions to refresh data
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

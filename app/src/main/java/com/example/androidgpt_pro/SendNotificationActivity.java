@@ -21,11 +21,17 @@ public class SendNotificationActivity extends Activity {
     private String eventID;
     private String userID;
 
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         ntfEditText = findViewById(R.id.notif_text);
         ntfSendBtn = findViewById(R.id.btn_send);
     }
 
+    /**
+     * Handler to pop out window
+     */
     private void popUpWindow(){
         setReference();
         DisplayMetrics dm = new DisplayMetrics();
@@ -42,6 +48,9 @@ public class SendNotificationActivity extends Activity {
         getWindow().setAttributes(params);
     }
 
+    /**
+     * Setter for reference
+     */
     private void setReference() {
         ntfSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -57,6 +57,9 @@ public class NotificationsBox extends AppCompatActivity {
         getWindow().setAttributes(params);
     }
 
+    /**
+     * Getter for all notification event IDs
+     */
     private void getAllNotificationEventID() {
         // get all eventID from pdc.getProfileAllNotificationRecords
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -74,7 +77,10 @@ public class NotificationsBox extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Getter for all notifications
+     * @param allNotificationRecord
+     */
     private void getALlNotification(String[][] allNotificationRecord) {
 
         notificationList = new ArrayList<>();
@@ -110,7 +116,9 @@ public class NotificationsBox extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Creates listener for Read button
+     */
     private void setUpReadButton() {
         readButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +128,10 @@ public class NotificationsBox extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for Read button given multiple
+     * @param allNotificationRecord
+     */
     private void setUpReadButton(String[][] allNotificationRecord) {
         readButton.setOnClickListener(new View.OnClickListener() {
             @Override

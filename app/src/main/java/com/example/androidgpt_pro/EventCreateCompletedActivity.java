@@ -79,7 +79,9 @@ public class EventCreateCompletedActivity extends AppCompatActivity {
         });
     }
 
-    // Method to save the image
+    /**
+     * Method to save the image
+     */
     private void saveImage(Bitmap bitmap, String fileName) {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
@@ -97,6 +99,10 @@ public class EventCreateCompletedActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to share QR image
+     * @param bitmap
+     */
     private void shareImage(Bitmap bitmap) {
         Uri uri = getImageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -107,6 +113,11 @@ public class EventCreateCompletedActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, "Share via"));
     }
 
+    /**
+     * Getter for image URI
+     * @param bitmap
+     * @return URI of image to share
+     */
     private Uri getImageToShare(Bitmap bitmap) {
         File folder = new File(getCacheDir(), "images");
         Uri uri = null;
