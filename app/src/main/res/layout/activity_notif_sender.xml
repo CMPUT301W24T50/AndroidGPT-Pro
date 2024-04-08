@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="Send Notification to All Attendees" />
+        android:hint="Input Notification Here" />
 
     <Button
         android:id="@+id/btn_send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Send Notification" />
+        android:text="SEND" />
 
 
 </LinearLayout>

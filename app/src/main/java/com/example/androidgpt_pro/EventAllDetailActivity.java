@@ -109,13 +109,7 @@ public class EventAllDetailActivity extends AppCompatActivity{
                         + ", " + edc.getEventLocationCity(docSns)
                         + ", " + edc.getEventLocationProvince(docSns));
                 eventDescription.setText(edc.getEventDescription(docSns));
-                int alreadySignUp;
-                if (edc.getEventAllSignUpProfiles(docSns) == null)
-                    alreadySignUp = 0;
-                else
-                    alreadySignUp = edc.getEventAllSignUpProfiles(docSns).size();
-                eventSignUpLimit = (alreadySignUp
-                        >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
+                getSignUpLimit(docSns);
                 fetchEventPoster();
                 setupButtons();
                 checkIfAdmin();
@@ -123,6 +117,16 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 setupClearImageButton();
             }
         });
+    }
+
+    private void getSignUpLimit(DocumentSnapshot docSns) {
+        int alreadySignUp;
+        if (edc.getEventAllSignUpProfiles(docSns) == null)
+            alreadySignUp = 0;
+        else
+            alreadySignUp = edc.getEventAllSignUpProfiles(docSns).size();
+        eventSignUpLimit = (alreadySignUp
+                >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
     }
 
     private void handleInvalidEvent() {
@@ -176,9 +180,20 @@ public class EventAllDetailActivity extends AppCompatActivity{
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pdc.addProfileSignUpEvent(eventID);
-                signUpButton.setEnabled(Boolean.FALSE);
-                signUpSuccess();
+                edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot docSns) {
+                        getSignUpLimit(docSns);
+                        if (eventSignUpLimit) {
+                            signUpButton.setText("Unavailable");
+                            signUpButton.setEnabled(Boolean.FALSE);
+                            return;
+                        }
+                        pdc.addProfileSignUpEvent(eventID);
+                        signUpButton.setEnabled(Boolean.FALSE);
+                        signUpSuccess();
+                    }
+                });
             }
         });
 
