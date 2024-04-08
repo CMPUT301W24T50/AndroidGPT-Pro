@@ -1,9 +1,9 @@
 package com.example.androidgpt_pro;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressLint("NotifyDataSetChanged")
 public class ProfileManagementActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -87,13 +88,11 @@ public class ProfileManagementActivity extends AppCompatActivity {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.d("TESTO", String.valueOf(uri));
                 updateProfile(profileID, profileName, uri);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("TESTO", "11111");
                 handleNotHaveProfileImage(profileID, profileName);
             }
         });
