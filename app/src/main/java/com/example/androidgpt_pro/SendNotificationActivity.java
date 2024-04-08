@@ -14,12 +14,11 @@ import android.widget.Toast;
 import javax.annotation.Nullable;
 
 public class SendNotificationActivity extends Activity {
+
     private EditText ntfEditText;
     private Button ntfSendBtn;
     private EventDatabaseControl edc;
-    private ProfileDatabaseControl pdc;
     private String eventID;
-    private String userID;
 
     /**
      * Initializes the views to be used in this class
@@ -80,9 +79,7 @@ public class SendNotificationActivity extends Activity {
         setContentView(R.layout.activity_notif_sender);
 
         Intent intent = getIntent();
-        userID = intent.getStringExtra("userID");
         eventID = intent.getStringExtra("eventID");
-        pdc = new ProfileDatabaseControl(userID);
         edc = new EventDatabaseControl();
 
         initViews();
