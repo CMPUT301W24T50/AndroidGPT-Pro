@@ -10,8 +10,6 @@ public class Profile {
     private String name;
     private Uri imageUri;
 
-    public Profile() {
-    }
 
     /**
      * this is the constructor of the profile
