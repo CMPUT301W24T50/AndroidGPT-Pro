@@ -74,7 +74,7 @@ public class SignedUpAttendee extends AppCompatActivity {
      */
     private void getSignedUpAttendeeName(ArrayList<String> eventAllSignUpProfiles) {
         if(eventAllSignUpProfiles == null) {
-            CharSequence text = "No one has signed in!";
+            CharSequence text = "No one has signed up!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(SignedUpAttendee.this, text, duration);
             toast.show();
