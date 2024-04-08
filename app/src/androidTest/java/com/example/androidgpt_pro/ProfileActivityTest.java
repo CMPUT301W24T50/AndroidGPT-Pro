@@ -99,7 +99,7 @@ public class ProfileActivityTest {
     public void testNotificationActivityChange() throws InterruptedException {
         initialize();
         onView(withId(R.id.notification_icon)).perform(click());
-        intended(hasComponent(Notifications.class.getName()));
+        intended(hasComponent(Notification.class.getName()));
         Intents.release();
     }
 
