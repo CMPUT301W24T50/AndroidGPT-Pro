@@ -149,7 +149,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
                     eventAttendeesNumber.setText(underlineAttendeesNumber);
                 }
                 else {
-                    eventAttendeesNumber.setText("Attendees");
+                    eventAttendeesNumber.setText("Checked in Attendees");
                 }
             }
         });
