@@ -6,6 +6,11 @@ public class Pagination {
     private final int itemsPerPage, lastPageItems, lastPage;
     private final ArrayList<Event> eventData;
 
+    /**
+     * this is the constructor of pagination
+     * @param itemsPerPage
+     * @param eventData
+     */
     public Pagination(int itemsPerPage, ArrayList<Event> eventData) {
         this.itemsPerPage = itemsPerPage;
         this.eventData = eventData;
@@ -14,6 +19,11 @@ public class Pagination {
         this.lastPageItems = totalItem % itemsPerPage;
     }
 
+    /**
+     * this function generate Data for each page
+     * @param currentPage
+     * @return currentPage
+     */
     public ArrayList<Event> generateData(int currentPage) {
         int startItem = currentPage * itemsPerPage;
         ArrayList<Event> newPageData = new ArrayList<>();

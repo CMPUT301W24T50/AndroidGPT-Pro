@@ -119,7 +119,7 @@
             android:exported="false">
         </activity>
 
-        <activity android:name=".Notifications"
+        <activity android:name=".NotificationsBox"
             android:theme="@style/NotificationPopMe"
             android:exported="true">
         </activity>
