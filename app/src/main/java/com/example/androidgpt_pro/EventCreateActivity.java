@@ -191,8 +191,6 @@ public class EventCreateActivity extends AppCompatActivity {
             }
         };
 
-//        int style = android.R.style.Theme_Material_Light_Dialog_Alert;
-
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
 
         timePickerDialog.setTitle("Select Time");
@@ -312,17 +310,6 @@ public class EventCreateActivity extends AppCompatActivity {
         initViews();
         setupBackButton();
         setupEventImageSelector();
-
-//        Calendar calendar = Calendar.getInstance();
-//        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-//        int currentMinute = calendar.get(Calendar.MINUTE);
-//        int currentYear = calendar.get(Calendar.YEAR);
-//        int currentMonth = calendar.get(Calendar.MONTH);
-//        int CurrentDay = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//        Calendar selectedTime = Calendar.getInstance();
-//        selectedTime.set(year, month, day, hour, minute);
-
 
         initEventDatePicker();
         eventDateEditButton.setText(getToday());

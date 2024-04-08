@@ -125,7 +125,6 @@ public class ProfileActivity extends AppCompatActivity {
                 pEmailTextView.setText(pdc.getProfileEmail(docSns));
                 if (pdc.getProfileImageUpdatedState(docSns))
                     displayProfileImage();
-
                 setupUnreadDot();
             }
         });
@@ -267,7 +266,6 @@ public class ProfileActivity extends AppCompatActivity {
         setupMyEventButton();
         setupSignedUpEventButton();
         setupNotificationIcon();
-//        setupUnreadDot();
 
         adminFunctionsButton = findViewById(R.id.btn_admin_functions);
         adminFunctionsButton.setVisibility(View.INVISIBLE);
@@ -294,5 +292,4 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
 }

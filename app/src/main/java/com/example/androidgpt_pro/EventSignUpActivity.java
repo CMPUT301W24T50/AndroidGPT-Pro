@@ -185,8 +185,6 @@ public class EventSignUpActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
         pdc = new ProfileDatabaseControl(userID);
-
-        //eventID = intent.getStringExtra("eventID");
         edc = new EventDatabaseControl();
 
         initEvents();
