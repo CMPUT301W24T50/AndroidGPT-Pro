@@ -28,9 +28,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/event_name"
         app:layout_constraintTop_toTopOf="parent"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="12sp"
-        app:autoSizeMaxTextSize="20sp"
-        app:autoSizeStepGranularity="2sp"/>
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"/>
 
 </LinearLayout>
