@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:text="Sign-Up Events"
+        android:text="Signed-Up Events"
         android:layout_marginTop="50dp"
         android:textSize="36sp" />
 
