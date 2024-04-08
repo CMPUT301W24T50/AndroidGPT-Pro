@@ -81,6 +81,11 @@ public class ProfileManagementActivity extends AppCompatActivity {
         fetchProfiles(); // Refresh the profile list immediately
     }
 
+    private void deleteProfilePicture(String profileID) {
+        ProfileDatabaseControl pdc = new ProfileDatabaseControl(profileID);
+        pdc.delProfileImage();
+        fetchProfiles(); // Refresh the profiles list
+    }
 
     public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
         private final List<Profile> profilesList;
@@ -114,6 +119,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
             holder.deleteButton.setOnClickListener(v -> {
                 deleteProfile(currentProfile.getProfileId());
             });
+            holder.deleteProfilePictureButton.setOnClickListener(v -> deleteProfilePicture(currentProfile.getProfileId()));
         }
 
 
@@ -126,12 +132,14 @@ public class ProfileManagementActivity extends AppCompatActivity {
             ImageView profileImageView;
             TextView nameTextView;
             Button deleteButton;
+            Button deleteProfilePictureButton;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 profileImageView = itemView.findViewById(R.id.profile_image);
                 nameTextView = itemView.findViewById(R.id.profile_name);
                 deleteButton = itemView.findViewById(R.id.delete_button);
+                deleteProfilePictureButton = itemView.findViewById(R.id.delete_profile_picture_button);
             }
         }
     }
