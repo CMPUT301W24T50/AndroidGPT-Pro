@@ -42,9 +42,8 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot doc = task.getResult();
-                    if (!doc.exists()) {
+                    if (!doc.exists())
                         pdc.initProfile("user");
-                    }
                     Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra("userID", uniqueID);
