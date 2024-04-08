@@ -92,7 +92,7 @@
 
     <Button
         android:id="@+id/btn_edit_profile"
-        android:layout_width="165dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_below="@id/text_email"
         android:layout_centerHorizontal="true"
@@ -101,7 +101,7 @@
 
     <Button
         android:id="@+id/btn_my_event"
-        android:layout_width="165dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
         android:text="My Events"
         android:layout_below="@id/btn_edit_profile"
@@ -110,16 +110,16 @@
 
     <Button
         android:id="@+id/btn_sign_up_event"
-        android:layout_width="165dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
-        android:text="Signed-Up Events"
+        android:text="My SignUps"
         android:layout_below="@id/btn_my_event"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/btn_admin_functions"
-        android:layout_width="165dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
         android:text="Manage Users"
         android:layout_below="@id/btn_sign_up_event"
