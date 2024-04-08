@@ -2,16 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="NavigationBarTest">
-        <State />
-      </entry>
-      <entry key="ProfileActivityTest">
-        <State />
-      </entry>
-      <entry key="SignedUpEventsTest">
-        <State />
-      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testEventCreateActivitySwitch()">
         <State />
       </entry>
     </value>
