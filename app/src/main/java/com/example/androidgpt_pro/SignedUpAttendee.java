@@ -45,6 +45,9 @@ public class SignedUpAttendee extends AppCompatActivity {
     private void initViews() {
         attendeesSignedUpListView = findViewById(R.id.attendee_signed_up_list);
         attendeesSignedUpList = new ArrayList<>();
+        attendeeSignedUpArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, attendeesSignedUpList);
+        attendeesSignedUpListView.setAdapter(attendeeSignedUpArrayAdapter);
     }
 
     private void getSignedUpAttendee() {
@@ -71,15 +74,12 @@ public class SignedUpAttendee extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot docSns) {
-                                String attendeeName = pdc.getProfileName(docSns);
-                                attendeesSignedUpList.add(attendeeName);
+                                attendeesSignedUpList.add(pdc.getProfileName(docSns));
+                                attendeeSignedUpArrayAdapter.notifyDataSetChanged();
                             }
                         });
 
             }
-            attendeeSignedUpArrayAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, attendeesSignedUpList);
-            attendeesSignedUpListView.setAdapter(attendeeSignedUpArrayAdapter);
         }
     }
     @Override

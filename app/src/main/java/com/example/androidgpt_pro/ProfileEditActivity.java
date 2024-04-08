@@ -25,6 +25,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * This class allows the user to edit their profile information.
  */
@@ -155,6 +158,20 @@ public class ProfileEditActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveProfileChanges());
     }
 
+    // Email validation method
+    public boolean isValidEmail(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    // Phone number validation method
+    public boolean isValidPhoneNumber(String phoneNumber) {
+        String phonePattern = "[0-9]{10}";
+        return phoneNumber.matches(phonePattern);
+    }
+
     /**
      * This method saves the changes to the profile.
      */
@@ -164,14 +181,36 @@ public class ProfileEditActivity extends AppCompatActivity {
         String updatedPhoneNumber = editPhoneNumberEditText.getText().toString();
         String updatedEmail = editEmailEditText.getText().toString();
 
+        // Validate email format
+        if (!updatedEmail.isEmpty() && !isValidEmail(updatedEmail)) {
+            Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+            return; // Stop further execution if email is invalid
+        }
+
+        // Validate phone number format
+        if (!updatedPhoneNumber.isEmpty() && !isValidPhoneNumber(updatedPhoneNumber)) {
+            Toast.makeText(this, "Please enter a valid 10-digit phone number", Toast.LENGTH_SHORT).show();
+            return; // Stop further execution if phone number is invalid
+        }
+
         //update the profile information in firebase.
         if (imageUri == null)
             pdc.delProfileImage();
         else
             pdc.setProfileImage(imageUri);
+
         pdc.setProfileName(updatedProfileName);
+
+        if (updatedPhoneNumber.isEmpty()) {
+            updatedPhoneNumber = "";
+        }
         pdc.setProfilePhoneNumber(updatedPhoneNumber);
+
+        if (updatedEmail.isEmpty()) {
+            updatedEmail = "";
+        }
         pdc.setProfileEmail(updatedEmail);
+
         pdc.setProfileGLTState(geolocationToggle.isChecked());
 
         // just display a toast message confirming the changes for now.
