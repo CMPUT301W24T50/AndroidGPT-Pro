@@ -120,5 +120,4 @@ public class AttendeeCountActivity extends Activity {
 
         popUpWindow();
     }
-
 }

@@ -31,14 +31,9 @@ public class EventAllActivity extends AppCompatActivity {
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
     BottomNavigationView navigationTabs;
-    private FloatingActionButton createEventBtn;
     private ListView eventsListView;
-    private Pagination pagination;
-    private int lastPage, currentPage = 0;
     private ArrayList<Event> events;
     private EventArrayAdapter eventArrayAdapter;
-    private ImageButton previous_btn;
-    private ImageButton next_btn;
 
 
     private void initEvents() {
@@ -129,18 +124,6 @@ public class EventAllActivity extends AppCompatActivity {
                 eventArrayAdapter.notifyDataSetChanged();
             }
         });
-
-        pagination = new Pagination(5, events);
-        lastPage = pagination.getLastPage();
-        updateData(); // method to update the listView data
-    }
-
-    /**
-     * updates the page data
-     */
-    private void updateData() {
-        // updating the data
-//        ArrayList<Event> aPageData = pagination.generateData(0);
     }
 
     /**
