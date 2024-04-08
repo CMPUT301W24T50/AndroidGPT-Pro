@@ -24,7 +24,7 @@ public class MainActivityTest {
 
     public void initialize() throws InterruptedException {
         Intents.init();
-        Thread.sleep(8000);
+        Thread.sleep(3000);
     }
     @Test
     public void testProfileActivityChange() throws InterruptedException {

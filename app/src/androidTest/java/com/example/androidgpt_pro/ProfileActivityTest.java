@@ -37,7 +37,7 @@ public class ProfileActivityTest {
 
     public void initialize() throws InterruptedException {
         Intents.init();
-        Thread.sleep(8000);
+        Thread.sleep(3000);
     }
 
     public static void hideKeyboard(Activity activity) {

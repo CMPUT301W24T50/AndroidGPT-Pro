@@ -20,7 +20,7 @@ public class NavigationBarTest {
 
     public void initialize() throws InterruptedException {
         Intents.init();
-        Thread.sleep(8000);
+        Thread.sleep(3000);
     }
     @Test
     public void testEventsActivityChange() throws InterruptedException {
