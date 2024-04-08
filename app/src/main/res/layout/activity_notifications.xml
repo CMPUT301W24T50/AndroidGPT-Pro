@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pop_up_bg">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
-        android:layout_width="398dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="96dp"
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Events"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="Event"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/event_notification"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="172dp"
+            android:id="@+id/event_notification"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" Notifications"
-            android:textSize="20sp" />
-
-    </LinearLayout>
+            android:text="Notification"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/event_name"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
         android:id="@+id/notification_list"
         android:layout_width="match_parent"
-        android:layout_height="609dp"
+        android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:padding="8dp"
         android:layout_below="@+id/header"
@@ -43,16 +49,11 @@
 
     <Button
         android:id="@+id/read_close_btn"
-        android:layout_width="112dp"
-        android:layout_height="58dp"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="DONE" />
-
-
 </RelativeLayout>

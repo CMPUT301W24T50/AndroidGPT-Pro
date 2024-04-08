@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,8 +19,8 @@
             android:id="@+id/attendee_title_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Attendees"
-            android:textSize="20sp"
+            android:text="Attendee"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/checked_in_title_count"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:text="# Check In"
-            android:textSize="20sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/attendee_title_name"
             app:layout_constraintTop_toTopOf="parent" />
