@@ -142,9 +142,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
                 setupClearImageButton();
 
 
-                if (edc.getEventAllSignUpProfiles(docSns) != null){
+                if (edc.getEventAllCheckInProfiles(docSns) != null){
                     SpannableString underlineAttendeesNumber = new SpannableString("Checked In Attendees "
-                            + edc.getEventAllSignUpProfiles(docSns).size());
+                            + edc.getEventAllCheckInProfiles(docSns).length);
                     underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
                     eventAttendeesNumber.setText(underlineAttendeesNumber);
                 }
