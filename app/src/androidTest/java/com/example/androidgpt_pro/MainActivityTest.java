@@ -25,18 +25,10 @@ public class MainActivityTest {
     public void testActivityChange() throws InterruptedException {
         // Tests if brought to Profile screen on login
         Intents.init();
-        Thread.sleep(10000);
+        Thread.sleep(8000);
         intended(hasComponent(ProfileActivity.class.getName()));
         Intents.release();
 
-    }
-    @Test
-    public void testProfileActivityEditButton() throws InterruptedException {
-        Intents.init();
-        Thread.sleep(10000);
-        onView(withId(R.id.btn_edit_profile)).perform(click());
-        intended(hasComponent(ProfileEditActivity.class.getName()));
-        Intents.release();
     }
 
 }

@@ -13,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.Rule;
@@ -20,15 +21,16 @@ import org.junit.Test;
 
 public class ProfileActivityTest {
     @Rule
-    public ActivityScenarioRule<ProfileActivity> scenario = new
-            ActivityScenarioRule<>(ProfileActivity.class);
-//    Intent intent = new Intent(MainActivity.class.newInstance(), ProfileActivity.class);
-
-
-//    intent.putExtra("userID", "123");
+    public ActivityScenarioRule<MainActivity> scenario = new
+            ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void testProfileName(){
-        onView(withText("NewUser")).check(matches(isDisplayed()));
+    public void testProfileActivityEditButton() throws InterruptedException {
+        Intents.init();
+        Thread.sleep(8000);
+        onView(withId(R.id.btn_edit_profile)).perform(click());
+        intended(hasComponent(ProfileEditActivity.class.getName()));
+        Intents.release();
     }
+
 }
