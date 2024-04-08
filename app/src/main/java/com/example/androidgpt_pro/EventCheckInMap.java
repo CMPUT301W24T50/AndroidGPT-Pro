@@ -20,7 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.android.gms.maps.model.LatLng;
 
-public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCallback{
+public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCallback {
+
     GoogleMap gMap;
     private EventDatabaseControl edc;
     private String eventID;
@@ -98,6 +99,7 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
             gMap.moveCamera(CameraUpdateFactory.newLatLng(markerFirstPosition));
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

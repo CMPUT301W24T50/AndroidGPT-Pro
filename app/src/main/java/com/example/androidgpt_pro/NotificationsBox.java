@@ -17,8 +17,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NotificationsBox extends AppCompatActivity {
+
     private String userID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
@@ -90,25 +92,30 @@ public class NotificationsBox extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot docSns) {
                     if(edc.getEventAllNotifications(docSns) != null) {
+                        if (Objects.equals(allNotificationRecord[finalI][2], "-1")) {
+                            String notifications = edc.getEventAllNotifications(docSns)
+                                    .get(edc.getEventAllNotifications(docSns).size() - 1);
+                            String eventID = allNotificationRecord[finalI][0];
+                            NotificationListArrayAdapter = new NotificationArrayAdapter
+                                    (NotificationsBox.this, notificationList);
+                            notificationListView.setAdapter(NotificationListArrayAdapter);
+                            String eventName = edc.getEventName(docSns);
+                            notificationList.add(new Notification(eventID,
+                                    eventName, notifications));
+                            NotificationListArrayAdapter.notifyDataSetChanged();
+                            return;
+                        }
                         for(int j = Integer.parseInt(allNotificationRecord[finalI][2]) + 1;
                             j <= Integer.parseInt(allNotificationRecord[finalI][1]); j++) {
                             String notifications = (edc.getEventAllNotifications(docSns).get(j));
                             String eventID = allNotificationRecord[finalI][0];
-
-                            EventDatabaseControl edcTemp = new EventDatabaseControl();
-                            edcTemp.getEventSnapshot(eventID)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot docSns) {
-                                            NotificationListArrayAdapter = new NotificationArrayAdapter
-                                                    (NotificationsBox.this, notificationList);
-                                            notificationListView.setAdapter(NotificationListArrayAdapter);
-                                            String eventName = edc.getEventName(docSns);
-                                            notificationList.add(new Notification(eventID,
-                                                    eventName, notifications));
-                                            NotificationListArrayAdapter.notifyDataSetChanged();
-                                        }
-                                    });
+                            NotificationListArrayAdapter = new NotificationArrayAdapter
+                                    (NotificationsBox.this, notificationList);
+                            notificationListView.setAdapter(NotificationListArrayAdapter);
+                            String eventName = edc.getEventName(docSns);
+                            notificationList.add(new Notification(eventID,
+                                    eventName, notifications));
+                            NotificationListArrayAdapter.notifyDataSetChanged();
                         }
                     }
                 }

@@ -46,7 +46,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
     private TextView eventOrganizerTitle;
     private TextView eventOrganizerTimeDate;
     private TextView eventOrganizerAddress;
-    private  TextView eventOrganizerDescription;
+    private TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
     private TextView eventSignedUpAttendees;
     private ImageButton eventSendNotification;
@@ -143,13 +143,13 @@ public class EventMyDetailActivity extends AppCompatActivity {
 
 
                 if (edc.getEventAllSignUpProfiles(docSns) != null){
-                    SpannableString underlineAttendeesNumber = new SpannableString("Checked in Attendees "
+                    SpannableString underlineAttendeesNumber = new SpannableString("Checked In Attendees "
                             + edc.getEventAllSignUpProfiles(docSns).size());
                     underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
                     eventAttendeesNumber.setText(underlineAttendeesNumber);
                 }
                 else {
-                    eventAttendeesNumber.setText("Attendees");
+                    eventAttendeesNumber.setText("Checked In Attendees");
                 }
             }
         });
@@ -330,7 +330,6 @@ public class EventMyDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.putExtra(Intent.EXTRA_TEXT, "Image shared by GatherLink");
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Share via"));
     }

@@ -55,7 +55,6 @@ public class AnnouncementBox extends AppCompatActivity {
         });
 
 
-
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;

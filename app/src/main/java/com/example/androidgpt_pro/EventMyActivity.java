@@ -31,7 +31,6 @@ public class EventMyActivity extends AppCompatActivity {
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
 
-    BottomNavigationView navigationTabs;
     private ImageButton btnBackButton;
     private FloatingActionButton createEventBtn;
     private ListView eventsListView;

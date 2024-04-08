@@ -119,6 +119,7 @@ public class EventQRDetailActivity extends AppCompatActivity {
                 checkIfAdmin();
                 setupDeleteButton();
                 setupClearImageButton();
+                setUpAnnouncementBoxButton();
             }
         });
     }
@@ -356,7 +357,7 @@ public class EventQRDetailActivity extends AppCompatActivity {
     /**
      * Checks if user is admin and gives permissions
      */
-    protected void checkIfAdmin(){
+    protected void checkIfAdmin() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot docSns) {
