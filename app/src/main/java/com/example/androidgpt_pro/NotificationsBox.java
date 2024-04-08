@@ -102,7 +102,7 @@ public class NotificationsBox extends AppCompatActivity {
                             notificationList.add(new Notification(eventID,
                                     eventName, notifications));
                             NotificationListArrayAdapter.notifyDataSetChanged();
-
+                            return;
                         }
                         for(int j = Integer.parseInt(allNotificationRecord[finalI][2]) + 1;
                             j <= Integer.parseInt(allNotificationRecord[finalI][1]); j++) {
