@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
  * to an event
  */
 @SuppressLint("SetTextI18n")
-public class EventAllDetailActivity extends AppCompatActivity{
+public class EventAllDetailActivity extends AppCompatActivity {
 
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;

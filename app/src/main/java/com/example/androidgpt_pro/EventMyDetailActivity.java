@@ -46,7 +46,7 @@ public class EventMyDetailActivity extends AppCompatActivity {
     private TextView eventOrganizerTitle;
     private TextView eventOrganizerTimeDate;
     private TextView eventOrganizerAddress;
-    private  TextView eventOrganizerDescription;
+    private TextView eventOrganizerDescription;
     private TextView eventAttendeesNumber;
     private TextView eventSignedUpAttendees;
     private ImageButton eventSendNotification;
