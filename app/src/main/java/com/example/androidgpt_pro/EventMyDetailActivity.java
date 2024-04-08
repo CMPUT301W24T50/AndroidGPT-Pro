@@ -136,7 +136,8 @@ public class EventMyDetailActivity extends AppCompatActivity {
 
 
                 if (edc.getEventAllSignUpProfiles(docSns) != null){
-                    SpannableString underlineAttendeesNumber = new SpannableString("Attendees " + edc.getEventAllSignUpProfiles(docSns).size());
+                    SpannableString underlineAttendeesNumber = new SpannableString("Checked in Attendees "
+                            + edc.getEventAllSignUpProfiles(docSns).size());
                     underlineAttendeesNumber.setSpan(new UnderlineSpan(), 0, underlineAttendeesNumber.length(), 0);
                     eventAttendeesNumber.setText(underlineAttendeesNumber);
                 }
