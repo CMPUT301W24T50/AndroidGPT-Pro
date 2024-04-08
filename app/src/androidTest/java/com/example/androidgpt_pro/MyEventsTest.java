@@ -86,17 +86,18 @@ public class MyEventsTest {
         Intents.release();
     }
 
-//    @Test
-//    public void testCreateEvent() throws InterruptedException {
-//        initialize();
-//        onView(withId(R.id.event_create_btn)).perform(click());
-//        onView(withId(R.id.edit_event_name)).perform(typeText("Test Event"))
-//                .perform(closeSoftKeyboard());
-//        onView(withId(R.id.edit_event_date)).perform((ViewAction) PickerActions.setDate(2025, 1, 1));
-//        onView(withId(R.id.edit_event_time)).perform((ViewAction) PickerActions.setTime(5, 0));
-//        onView(withId(R.id.edit_street_address)).perform(typeText("123 Test St"));
-//        onView(withId(R.id.edit_city_address)).perform(typeText("Test City"));
-//        onView(withId(R.id.edit_province_address)).perform(typeText("Alberta"));
-//        onView(withId(R.id.geo_location_switch)).perform(click());
-//    }
+    @Test
+    public void testCreateEvent() throws InterruptedException {
+        initialize();
+        onView(withId(R.id.event_create_btn)).perform(click());
+        onView(withId(R.id.edit_event_name)).perform(typeText("Test Event"))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.edit_event_date)).perform((ViewAction) PickerActions.setDate(2025, 1, 1));
+        onView(withId(R.id.edit_event_time)).perform((ViewAction) PickerActions.setTime(5, 0));
+        onView(withId(R.id.edit_street_address)).perform(typeText("123 Test St"));
+        onView(withId(R.id.edit_city_address)).perform(typeText("Test City"));
+        onView(withId(R.id.edit_province_address)).perform(typeText("Alberta"));
+        onView(withId(R.id.geo_location_switch)).perform(click());
+        onView(withId(R.id.edit_event_description)).perform(typeText("TestTest"));
+    }
 }
