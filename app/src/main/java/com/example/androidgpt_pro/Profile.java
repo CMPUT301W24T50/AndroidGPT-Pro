@@ -1,10 +1,11 @@
 package com.example.androidgpt_pro;
 
+import android.net.Uri;
+
 public class Profile {
     private String profileId;
     private String name;
-    private String email;
-    private String imageUrl;
+    private Uri imageUri;
 
     public Profile() {
     }
@@ -13,14 +14,12 @@ public class Profile {
      * this is the constructor of the profile
      * @param profileId
      * @param name
-     * @param email
-     * @param imageUrl
+     * @param imageUri
      */
-    public Profile(String profileId, String name, String email, String imageUrl) {
+    public Profile(String profileId, String name, Uri imageUri) {
         this.profileId = profileId;
         this.name = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
     }
 
     /**
@@ -40,19 +39,11 @@ public class Profile {
     }
 
     /**
-     * this is the getter of the profile email
-     * @return profile email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
      * this is the setter of the image url
      * @return image url
      */
-    public String getImageUrl() {
-        return imageUrl;
+    public Uri getImageUri() {
+        return imageUri;
     }
 
     /**
@@ -72,18 +63,10 @@ public class Profile {
     }
 
     /**
-     * this is the setter of the profile email
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
      * this is the setter of the profile image url
-     * @param imageUrl
+     * @param imageUri
      */
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
     }
 }

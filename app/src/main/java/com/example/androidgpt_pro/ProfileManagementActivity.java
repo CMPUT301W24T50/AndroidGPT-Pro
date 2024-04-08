@@ -1,7 +1,9 @@
 package com.example.androidgpt_pro;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +11,20 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ProfileManagementActivity extends AppCompatActivity {
 
@@ -26,7 +33,8 @@ public class ProfileManagementActivity extends AppCompatActivity {
     private ArrayList<Profile> profilesList;
     private String adminUserID;
     private ProfileDatabaseControl pdc;
-    private String lastDelete = "LastDelete";
+    private ArrayList<String> lastDeleteProfilePID = new ArrayList<>();
+    private ArrayList<String> lastDeleteImagePID = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +69,59 @@ public class ProfileManagementActivity extends AppCompatActivity {
             for (String profileID : lst) {
                 ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
                 tempPdc.getProfileSnapshot().addOnSuccessListener(profileDoc -> {
-                    if (Objects.equals(lastDelete, profileID))
+                    String profileName = tempPdc.getProfileName(profileDoc);
+                    if (lastDeleteProfilePID.contains(profileID))
                         return;
-                    String name = tempPdc.getProfileName(profileDoc);
-                    String imageUrl = profileDoc.getString("imageUrl");
-                    Profile profile = new Profile(profileID, name, null, imageUrl);
-                    profilesList.add(profile);
-                    adapter.notifyDataSetChanged();
+                    if (!lastDeleteImagePID.contains(profileID)) {
+                        handleHaveProfileImage(tempPdc, profileID, profileName);
+                    } else {
+                        handleNotHaveProfileImage(profileID, profileName);
+                    }
                 });
             }
         });
+    }
+
+    private void handleHaveProfileImage(ProfileDatabaseControl pdc, String profileID, String profileName) {
+        pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("TESTO", String.valueOf(uri));
+                updateProfile(profileID, profileName, uri);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TESTO", "11111");
+                handleNotHaveProfileImage(profileID, profileName);
+            }
+        });
+    }
+
+    private void handleNotHaveProfileImage(String profileID, String profileName) {
+        Profile profile = new Profile(profileID, profileName, null);
+        profilesList.add(profile);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void updateProfile(String profileID, String profileName, Uri imageUri) {
+        Profile profile = new Profile(profileID, profileName, imageUri);
+        profilesList.add(profile);
+        adapter.notifyDataSetChanged();
     }
 
 
     private void deleteProfile(String profileID) {
         ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
         tempPdc.delProfile();
-        lastDelete = profileID;
+        lastDeleteProfilePID.add(profileID);
         fetchProfiles(); // Refresh the profile list immediately
     }
 
     private void deleteProfilePicture(String profileID) {
         ProfileDatabaseControl pdc = new ProfileDatabaseControl(profileID);
         pdc.delProfileImage();
+        lastDeleteImagePID.add(profileID);
         fetchProfiles(); // Refresh the profiles list
     }
 
@@ -107,14 +145,11 @@ public class ProfileManagementActivity extends AppCompatActivity {
             Profile currentProfile = profilesList.get(position);
             holder.nameTextView.setText(currentProfile.getName());
 
-            // Fetch and load the profile image
-            ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(currentProfile.getProfileId());
-            tempPdc.getProfileImage().addOnSuccessListener(uri -> {
-                Picasso.get().load(uri).into(holder.profileImageView);
-            }).addOnFailureListener(e -> {
+            if (currentProfile.getImageUri() != null)
+                Picasso.get().load(currentProfile.getImageUri()).into(holder.profileImageView);
+            else
                 // If there's an error loading profile image, display initials or a default image
                 holder.profileImageView.setImageResource(R.drawable.profile_icon);
-            });
 
             holder.deleteButton.setOnClickListener(v -> {
                 deleteProfile(currentProfile.getProfileId());
