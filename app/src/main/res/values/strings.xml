@@ -12,6 +12,8 @@
     <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
     <string name="remove_event">× Event</string>
     <string name="remove_poster">× Poster</string>
+    <string name="remove_profile">× Profile</string>
+    <string name="remove_picture">× Picture</string>
     <string name="glt_text">Geo-Location Tracking</string>
     <string name="start_text">Start</string>
     <string name="glt_description">The event organizer wants to get your current location information to complete the Check In. Depending on your privacy settings, you are willing to share your current location with the event organizer.</string>
