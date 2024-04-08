@@ -182,13 +182,13 @@ public class ProfileEditActivity extends AppCompatActivity {
         String updatedEmail = editEmailEditText.getText().toString();
 
         // Validate email format
-        if (!isValidEmail(updatedEmail)) {
+        if (!updatedEmail.isEmpty() && !isValidEmail(updatedEmail)) {
             Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
             return; // Stop further execution if email is invalid
         }
 
         // Validate phone number format
-        if (!isValidPhoneNumber(updatedPhoneNumber)) {
+        if (!updatedPhoneNumber.isEmpty() && !isValidPhoneNumber(updatedPhoneNumber)) {
             Toast.makeText(this, "Please enter a valid 10-digit phone number", Toast.LENGTH_SHORT).show();
             return; // Stop further execution if phone number is invalid
         }
@@ -198,9 +198,19 @@ public class ProfileEditActivity extends AppCompatActivity {
             pdc.delProfileImage();
         else
             pdc.setProfileImage(imageUri);
+
         pdc.setProfileName(updatedProfileName);
+
+        if (updatedPhoneNumber.isEmpty()) {
+            updatedPhoneNumber = "";
+        }
         pdc.setProfilePhoneNumber(updatedPhoneNumber);
+
+        if (updatedEmail.isEmpty()) {
+            updatedEmail = "";
+        }
         pdc.setProfileEmail(updatedEmail);
+
         pdc.setProfileGLTState(geolocationToggle.isChecked());
 
         // just display a toast message confirming the changes for now.

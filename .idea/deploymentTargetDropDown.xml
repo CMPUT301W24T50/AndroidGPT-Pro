@@ -2,16 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="All Tests">
+      <entry key="NavigationBarTest">
         <State />
       </entry>
-      <entry key="MainActivityTest">
-        <State />
-      </entry>
-      <entry key="ProfileActivityTest">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.androidgpt_pro'">
+      <entry key="SignedUpEventsTest">
         <State />
       </entry>
       <entry key="app">
