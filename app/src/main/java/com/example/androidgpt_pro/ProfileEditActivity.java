@@ -49,7 +49,9 @@ public class ProfileEditActivity extends AppCompatActivity {
     private ToggleButton geolocationToggle;
     private RelativeLayout editScreen;
 
-
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         // Initialize views.
         backButton = findViewById(R.id.back_button);
@@ -64,7 +66,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         editScreen = findViewById(R.id.profile_edit_layout);
     }
 
-
+    /**
+     * Creates listener for back button
+     */
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +78,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Getter for original profile data
+     */
     private void fetchOriginalProfile() {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -97,6 +103,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for profile picture edit
+     */
     private void setupProfileImageEditor() {
         // Set click listener for profile image.
         ibEditProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +116,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Opens phone photo gallery
+     */
     private void openGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -141,7 +153,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Creates listener for picture deleter
+     */
     private void setupProfileImageDeleter() {
         ibDelProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,13 +166,19 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Creates listener for Save button
+     */
     private void setupSaveButton() {
         // Handle save button click event.
         saveButton.setOnClickListener(view -> saveProfileChanges());
     }
 
-    // Email validation method
+    /**
+     * Determines if email is valid
+     * @param email
+     * @return true if valid email
+     */
     public boolean isValidEmail(String email) {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         Pattern pattern = Pattern.compile(emailPattern);
@@ -166,7 +186,11 @@ public class ProfileEditActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    // Phone number validation method
+    /**
+     * Determines if phone number is valid
+     * @param phoneNumber
+     * @return true if valid
+     */
     public boolean isValidPhoneNumber(String phoneNumber) {
         String phonePattern = "[0-9]{10}";
         return phoneNumber.matches(phonePattern);

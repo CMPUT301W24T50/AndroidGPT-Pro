@@ -66,7 +66,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
     private Bitmap signUpQRCode;
     private Bitmap checkInQRCode;
 
-
+    /**
+     * Initializes views used in this class
+     */
     private void initViews(){
         backButton = findViewById(R.id.back_button);
         eventOrganizerPosterCard = findViewById(R.id.card_event_image);
@@ -94,7 +96,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         clearImageButton.setVisibility(View.INVISIBLE);
     }
 
-
+    /**
+     * Creates listener for back button
+     */
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +108,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Getter for event details
+     */
     private void fetchEventInfo() {
         // get event time&Date and city&Province and attendee#
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -149,6 +155,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handler for invalid or deleted events
+     */
     private void handleInvalidEvent() {
         eventOrganizerTitle.setText(R.string.invalid_name_text);
         deleteButton.setVisibility(View.GONE);
@@ -171,6 +180,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         ibCheckInQRCodeShare.setVisibility(View.GONE);
     }
 
+    /**
+     * Getter for event poster
+     */
     private void fetchEventPoster() {
         // get event poster
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -187,7 +199,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Opens the check-in map
+     */
     private void openMap() {
         edc.getEventSnapshot(eventID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -211,6 +225,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Opens list of signed up attendees
+     */
     private void openSignedUpAttendees() {
         eventSignedUpAttendees.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +240,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Opens list of checked-in attendees
+     */
     private void openAttendees() {
         eventAttendeesNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,6 +255,9 @@ public class EventMyDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Allows user to send notifications to attendees
+     */
     private void openSender(){
         eventSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override

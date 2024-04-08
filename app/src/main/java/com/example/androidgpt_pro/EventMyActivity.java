@@ -43,6 +43,9 @@ public class EventMyActivity extends AppCompatActivity {
         events = new ArrayList<>();
     }
 
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         btnBackButton = findViewById(R.id.back_button);
         createEventBtn = findViewById(R.id.event_create_btn);
@@ -51,6 +54,9 @@ public class EventMyActivity extends AppCompatActivity {
         eventsListView.setAdapter(eventArrayAdapter);
     }
 
+    /**
+     * Creates listener for back button
+     */
     private void setupBackButton() {
         btnBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +66,16 @@ public class EventMyActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Getter for user's created events
+     */
     private void getEvents() {
         getEventIDsFromProfile();
     }
 
+    /**
+     * Getter for user's created event IDs
+     */
     private void getEventIDsFromProfile() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -74,6 +86,10 @@ public class EventMyActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Getter for event details
+     * @param organizedEvents
+     */
     private void getEventInfo(ArrayList<String> organizedEvents) {
         for (int i = 0; i < organizedEvents.size(); i++) {
             String eventID = organizedEvents.get(i);
@@ -91,6 +107,11 @@ public class EventMyActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Getter for event poster, shows default image if no poster
+     * @param eventID
+     * @param documentSnapshot
+     */
     private void getEventImage(String eventID, DocumentSnapshot documentSnapshot) {
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -126,6 +147,9 @@ public class EventMyActivity extends AppCompatActivity {
         });
     };
 
+    /**
+     * Creates listener for event list view
+     */
     private void setupEventsListView() {
         // handle click action
         eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -139,7 +163,9 @@ public class EventMyActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Creates listener for Create Event button
+     */
     private void setupCreateEventButton() {
         // handle click event to open the creatingEvent
         createEventBtn.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +178,17 @@ public class EventMyActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Refreshes data on activity result
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -161,7 +197,13 @@ public class EventMyActivity extends AppCompatActivity {
         getEvents();
     }
 
-
+    /**
+     * Initialize
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

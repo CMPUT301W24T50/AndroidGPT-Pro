@@ -123,6 +123,10 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Getter for sign up limit
+     * @param docSns
+     */
     private void getSignUpLimit(DocumentSnapshot docSns) {
         int alreadySignUp;
         if (edc.getEventAllSignUpProfiles(docSns) == null)
@@ -133,6 +137,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
                 >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
     }
 
+    /**
+     * Handler for invalid or deleted events
+     */
     private void handleInvalidEvent() {
         eventNameTextView.setText(R.string.invalid_name_text);
         deleteButton.setVisibility(View.GONE);
@@ -146,6 +153,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         checkInButton.setVisibility(View.GONE);
     }
 
+    /**
+     * Getter for event poster
+     */
     private void fetchEventPoster() {
         // get event poster
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -162,7 +172,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Handler for event sign up
+     */
     private void eventSignUp() {
         // check if the user has sign up the event
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -186,6 +198,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates sign up button listener
+     */
     private void setupSignUpButton() {
         // handle the sign up events when clicking signUp button
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -209,6 +224,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for withdraw button
+     */
     private void setupWithdrawButton() {
         // handle the withdraw events when clicking withdraw button
         withdrawButton.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +239,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handler for successful sign up
+     */
     private void signUpSuccess() {
         dialog = new Dialog(EventQRDetailActivity.this);
         dialog.setContentView(R.layout.success_sign_up_content);
@@ -238,6 +259,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Handler for successful withdrawal
+     */
     private void withdrawSuccess() {
         dialog = new Dialog(EventQRDetailActivity.this);
         dialog.setContentView(R.layout.success_withdraw_content);
@@ -255,7 +279,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
+    /**
+     * Handler for event check in
+     */
     private void eventCheckIn() {
         checkInButton.setVisibility(View.VISIBLE);
         checkInButton.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +292,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Checks details of user profile to check in
+     */
     private void checkProfileToCheckIn() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -282,6 +311,17 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handler for activity result
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -293,6 +333,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handler for successful check in
+     */
     private void checkInSuccess() {
         dialog = new Dialog(EventQRDetailActivity.this);
         dialog.setContentView(R.layout.success_check_in_content);
@@ -310,7 +353,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
+    /**
+     * Checks if user is admin and gives permissions
+     */
     protected void checkIfAdmin(){
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -324,6 +369,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for delete button
+     */
     private void setupDeleteButton() {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,6 +395,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for clear image
+     */
     private void setupClearImageButton() {
         clearImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -367,6 +418,9 @@ public class EventQRDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for announcement box button
+     */
     private void setUpAnnouncementBoxButton() {
         announcementBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override

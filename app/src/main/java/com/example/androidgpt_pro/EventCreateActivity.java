@@ -62,7 +62,9 @@ public class EventCreateActivity extends AppCompatActivity {
     private int hour, minute;
     private  int SYear, SMonth, SDay; // select year month and day
 
-
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         // Initialize views.
         eventNameEditText = findViewById(R.id.edit_event_name);
@@ -80,6 +82,9 @@ public class EventCreateActivity extends AppCompatActivity {
         eventConfirm = findViewById(R.id.confirm_create_event);
     }
 
+    /**
+     * Creates listener for back button
+     */
     private void setupBackButton() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +94,9 @@ public class EventCreateActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Creates Date picker
+     */
     private void initEventDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -113,10 +120,22 @@ public class EventCreateActivity extends AppCompatActivity {
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
 
+    /**
+     * Formats date string
+     * @param day
+     * @param month
+     * @param year
+     * @return
+     */
     private String makeDateString(int day, int month, int year) {
         return getMonthFormat(month) + " " + day + " " + year;
     }
 
+    /**
+     * Formats Month string
+     * @param month
+     * @return
+     */
     private String getMonthFormat(int month) {
         String[] lst = {"JAN", "FEB", "MAR", "APR",
                 "MAY", "JUN", "JUL", "AUG",
@@ -124,6 +143,10 @@ public class EventCreateActivity extends AppCompatActivity {
         return lst[month - 1];
     }
 
+    /**
+     * Getter for today's date
+     * @return string containing today's date
+     */
     private String getToday() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -132,10 +155,18 @@ public class EventCreateActivity extends AppCompatActivity {
         return makeDateString(day, month, year);
     }
 
+    /**
+     * Shows the date picker
+     * @param view
+     */
     public void openEventDatePicker(View view) {
         datePickerDialog.show();
     }
 
+    /**
+     * Shows Time picker
+     * @param view
+     */
     public void popEventTimePicker(View view) {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -168,7 +199,9 @@ public class EventCreateActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-
+    /**
+     * Creates listener for image selector
+     */
     private void setupEventImageSelector() {
         // handel eventPoster
         eventSelectPicButton.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +212,9 @@ public class EventCreateActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Opens phone gallery
+     */
     private void openGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -253,6 +289,9 @@ public class EventCreateActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method changes activities on event creation completion
+     */
     private void createCompleted() {
         // jump to next page
         Intent newIntent = new Intent(EventCreateActivity.this, EventCreateCompletedActivity.class);

@@ -25,6 +25,9 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
     private EventDatabaseControl edc;
     private String eventID;
 
+    /**
+     * Creates the pop up window to display the map fragment
+     */
     private void PopUpWindow() {
         mapFragment();
 
@@ -42,6 +45,9 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
         getWindow().setAttributes(params);
     }
 
+    /**
+     * Creates the map fragment
+     */
     private void mapFragment() {
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -49,7 +55,10 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
     }
 
 
-
+    /**
+     * handler for attendee check in map
+     * @param googleMap
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
@@ -61,6 +70,11 @@ public class EventCheckInMap extends AppCompatActivity implements OnMapReadyCall
             }
         });
     }
+
+    /**
+     * Getter for attendee check-in locations
+     * @param checkInLocation
+     */
     private void getLocation(String[][] checkInLocation) {
         if(checkInLocation == null) {
             CharSequence text = "No one has checked in!";

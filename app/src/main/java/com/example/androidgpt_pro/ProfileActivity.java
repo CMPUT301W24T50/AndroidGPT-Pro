@@ -49,7 +49,9 @@ public class ProfileActivity extends AppCompatActivity {
     private Button signedUpEvent;
     private Button adminFunctionsButton;
 
-
+    /**
+     * Initializes the views to be used in this class
+     */
     private void initViews() {
         // Initialize views.
         pImageView = findViewById(R.id.iv_profile_image);
@@ -64,7 +66,9 @@ public class ProfileActivity extends AppCompatActivity {
         signedUpEvent = findViewById(R.id.btn_sign_up_event);
     }
 
-
+    /**
+     * Generates user image based on name
+     */
     private void generateInitialsAndDisplay() {
         // Get the first letter of the user's name
         String name = pNameTextView.getText().toString().trim();
@@ -87,6 +91,9 @@ public class ProfileActivity extends AppCompatActivity {
         pImageView.setImageBitmap(bitmap);
     }
 
+    /**
+     * Displays profile image on screen
+     */
     private void displayProfileImage() {
         pdc.getProfileImage().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -104,6 +111,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Displays profile information
+     */
     private void displayProfileInfo() {
         pdc.getProfile().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -121,7 +131,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Creates listener for edit profile button
+     */
     private void setupEditProfileButton() {
         // Handle click event for edit profile button.
         editProfileButton.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +147,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for my events button
+     */
     protected void setupMyEventButton() {
         myEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +162,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for Signed Up Events button
+     */
     protected void setupSignedUpEventButton() {
         signedUpEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +177,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates listener for notifications icon
+     */
     private void setupNotificationIcon() {
         notificationIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +192,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Creates indicator that user has unread notifications
+     */
     private void setupUnreadDot() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -190,7 +215,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Handles bottom tab navigation
+     */
     private void initNavigationTabs() {
         navigationTabs = findViewById(R.id.nav_profile);
         navigationTabs.setSelectedItemId(R.id.profile_tab);
@@ -256,6 +283,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Checks if user is admin and gives priviledges
+     */
     protected void checkIfAdmin() {
         pdc.getProfileSnapshot().addOnSuccessListener(docSns -> {
             String role = pdc.getProfileRole(docSns);
