@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pop_up_bg">
 
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:text="Attendee Names"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Checked in Amount"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/attendee_list"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="405dp"
+        android:layout_height="633dp"
         android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/header"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp" />
+        tools:listitem="@layout/attendee_list_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

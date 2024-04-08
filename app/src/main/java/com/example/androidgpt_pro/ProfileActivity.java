@@ -11,11 +11,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -167,7 +164,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch NotificationBox activity to display notifications
-                Intent intent = new Intent(ProfileActivity.this, Notifications.class);
+                Intent intent = new Intent(ProfileActivity.this, NotificationsBox.class);
                 // Pass necessary data, such as user ID, to fetch notifications
                 intent.putExtra("userID", userID);
                 startActivity(intent);
