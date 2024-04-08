@@ -24,13 +24,18 @@ public class ProfileActivityTest {
     public ActivityScenarioRule<MainActivity> scenario = new
             ActivityScenarioRule<>(MainActivity.class);
 
-    @Test
-    public void testProfileActivityEditButton() throws InterruptedException {
+    public void initialize() throws InterruptedException {
         Intents.init();
         Thread.sleep(8000);
+    }
+
+    @Test
+    public void testProfileActivityEditButton() throws InterruptedException {
+        initialize();
         onView(withId(R.id.btn_edit_profile)).perform(click());
         intended(hasComponent(ProfileEditActivity.class.getName()));
         Intents.release();
     }
+
 
 }
