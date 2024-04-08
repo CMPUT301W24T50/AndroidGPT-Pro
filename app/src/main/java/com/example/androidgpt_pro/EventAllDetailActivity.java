@@ -119,6 +119,10 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Getter for sign up limit
+     * @param docSns
+     */
     private void getSignUpLimit(DocumentSnapshot docSns) {
         int alreadySignUp;
         if (edc.getEventAllSignUpProfiles(docSns) == null)
@@ -129,6 +133,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
                 >= Integer.parseInt(edc.getEventSignUpLimit(docSns)));
     }
 
+    /**
+     * Handler for an invalid or deleted event
+     */
     private void handleInvalidEvent() {
         eventNameTextView.setText(R.string.invalid_name_text);
         deleteButton.setVisibility(View.GONE);
@@ -142,6 +149,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         withdrawButton.setVisibility(View.GONE);
     }
 
+    /**
+     * Getter for event poster
+     */
     public void fetchEventPoster() {
         // get event poster
         edc.getEventImage(eventID).addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -158,7 +168,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
     }
 
-
+    /**
+     * Creates listeners for buttons
+     */
     public void setupButtons() {
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -211,6 +223,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         setupAnnouncementBox();
     }
 
+    /**
+     * Handler for successful event sign up
+     */
     public void signUpSuccess() {
         dialog = new Dialog(EventAllDetailActivity.this);
         dialog.setContentView(R.layout.success_sign_up_content);
@@ -228,6 +243,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         dialog.show();
     }
 
+    /**
+     * Handler for successful event withdrawal
+     */
     public void withdrawSuccess() {
         dialog = new Dialog(EventAllDetailActivity.this);
         dialog.setContentView(R.layout.success_withdraw_content);
@@ -245,7 +263,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         dialog.show();
     }
 
-
+    /**
+     * Determines if user has admin privileges, adds buttons
+     */
     protected void checkIfAdmin(){
         pdc.getProfileSnapshot().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -259,6 +279,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Creates listener for event deletion button
+     */
     private void setupDeleteButton() {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,6 +305,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Creates listener for delete event poster button
+     */
     private void setupClearImageButton() {
         clearImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,6 +328,9 @@ public class EventAllDetailActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Creates listener for announcement box button
+     */
     private void setupAnnouncementBox() {
         announcementBoxButton.setOnClickListener(new View.OnClickListener() {
             @Override

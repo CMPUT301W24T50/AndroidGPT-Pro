@@ -54,6 +54,9 @@ public class ProfileManagementActivity extends AppCompatActivity {
         fetchProfiles();
     }
 
+    /**
+     * Getter for user profiles
+     */
     private void fetchProfiles() {
         pdc.requestAllProfiles().addOnSuccessListener(queryDocumentSnapshots -> {
             profilesList.clear();
@@ -73,7 +76,10 @@ public class ProfileManagementActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Handler for deleting profiles
+     * @param profileID
+     */
     private void deleteProfile(String profileID) {
         ProfileDatabaseControl tempPdc = new ProfileDatabaseControl(profileID);
         tempPdc.delProfile();
@@ -81,26 +87,47 @@ public class ProfileManagementActivity extends AppCompatActivity {
         fetchProfiles(); // Refresh the profile list immediately
     }
 
+    /**
+     * Handler for deleting a users profile picture
+     * @param profileID
+     */
     private void deleteProfilePicture(String profileID) {
         ProfileDatabaseControl pdc = new ProfileDatabaseControl(profileID);
         pdc.delProfileImage();
         fetchProfiles(); // Refresh the profiles list
     }
 
+    /**
+     * Adapter for Profile list
+     */
     public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
         private final List<Profile> profilesList;
         private final LayoutInflater inflater;
 
+        /**
+         * Constructor
+         * @param profilesList - list of profiles
+         * @param context - context
+         */
         public ProfileAdapter(List<Profile> profilesList, Context context) {
             this.profilesList = profilesList;
             this.inflater = LayoutInflater.from(context);
         }
 
+        /**
+         *
+         * @param parent The ViewGroup into which the new View will be added after it is bound to
+         *               an adapter position.
+         * @param viewType The view type of the new View.
+         *
+         * @return new view holder
+         */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = inflater.inflate(R.layout.profile_item, parent, false);
             return new ViewHolder(view);
         }
+
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
@@ -122,12 +149,18 @@ public class ProfileManagementActivity extends AppCompatActivity {
             holder.deleteProfilePictureButton.setOnClickListener(v -> deleteProfilePicture(currentProfile.getProfileId()));
         }
 
-
+        /**
+         * Getter for item count
+         * @return number of profiles in list
+         */
         @Override
         public int getItemCount() {
             return profilesList.size();
         }
 
+        /**
+         * Holder for views
+         */
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView profileImageView;
             TextView nameTextView;

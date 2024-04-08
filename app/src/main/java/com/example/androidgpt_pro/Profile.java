@@ -1,5 +1,8 @@
 package com.example.androidgpt_pro;
 
+/**
+ * This class represents a user profile.
+ */
 public class Profile {
     private String profileId;
     private String name;
