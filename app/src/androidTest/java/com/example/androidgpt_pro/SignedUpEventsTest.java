@@ -38,18 +38,18 @@ public class SignedUpEventsTest {
         Intents.release();
     }
 
-//    @Test
-//    public void testSignedUpEventsDisplayed() {
-//        // Simulate creating and signing up for test events
-//        Intents.init();
-//        // Navigate to EventSignUpActivity
-//        onView(withId(R.id.btn_sign_up_event)).perform(click());
-//        // Verify if the EventSignUpActivity is displayed
-//        intended(hasComponent(EventSignUpActivity.class.getName()));
-//
-//
-//        onView(withText("Event 1")).check(matches(isDisplayed()));
-//        onView(withText("Event 2")).check(matches(isDisplayed()));
-//        onView(withText("Event 3")).check(matches(isDisplayed()));
-//    }
+    @Test
+    public void testSignedUpEventsDisplayed() {
+        // Simulate creating and signing up for test events
+        Intents.init();
+        // Navigate to EventSignUpActivity
+        onView(withId(R.id.btn_sign_up_event)).perform(click());
+        // Verify if the EventSignUpActivity is displayed
+        intended(hasComponent(EventSignUpActivity.class.getName()));
+
+
+        onView(withText("test")).check(matches(isDisplayed()));
+        //onView(withText("Event 2")).check(matches(isDisplayed()));
+        //onView(withText("Event 3")).check(matches(isDisplayed()));
+    }
 }
