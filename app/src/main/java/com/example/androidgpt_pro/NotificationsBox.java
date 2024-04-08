@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class NotificationsBox extends AppCompatActivity {
+
     private String userID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
