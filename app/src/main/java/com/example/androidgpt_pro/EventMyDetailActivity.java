@@ -330,7 +330,6 @@ public class EventMyDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.putExtra(Intent.EXTRA_TEXT, "Image shared by GatherLink");
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Share via"));
     }
