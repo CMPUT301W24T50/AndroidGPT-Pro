@@ -47,6 +47,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.intents)
+    androidTestImplementation(libs.espresso.contrib)
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
