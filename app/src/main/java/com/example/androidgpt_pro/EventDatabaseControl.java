@@ -96,6 +96,7 @@ public class EventDatabaseControl {
         data.put("eLocStreet", eventLocationStreet);
         data.put("eLocCity", eventLocationCity);
         data.put("eLocProvince", eventLocationProvince);
+        data.put("eLocProvince", eventLocationProvince);
         data.put("eTime", eventTime);
         data.put("eDate", eventDate);
         data.put("eDescription", eventDescription);
