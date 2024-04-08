@@ -55,6 +55,7 @@ public class SendNotificationActivity extends Activity {
                     edc.addEventNotification(eventID, message);
                     Toast.makeText(SendNotificationActivity.this, "Message Sent!",
                             Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     Toast.makeText(SendNotificationActivity.this, "Write Some Text!",
                             Toast.LENGTH_SHORT).show();
