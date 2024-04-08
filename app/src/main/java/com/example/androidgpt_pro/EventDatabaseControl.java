@@ -509,6 +509,12 @@ public class EventDatabaseControl {
         return lst;
     }
 
+    /**
+     * Getter for count of checked in profiles
+     * @param eventDocumentSnapshot - snapshot
+     * @param profileID - profileId
+     * @return count of profiles checked in
+     */
     private String getEventCheckInProfileCount(DocumentSnapshot eventDocumentSnapshot,
                                              String profileID) {
         if (eventDocumentSnapshot.get("eCheckInProfiles") == null)
