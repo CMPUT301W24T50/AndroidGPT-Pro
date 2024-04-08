@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +18,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
-public class Notifications extends AppCompatActivity {
+public class NotificationsBox extends AppCompatActivity {
     private String userID;
     private ProfileDatabaseControl pdc;
     private EventDatabaseControl edc;
-    private ArrayList<String> notificationList;
-    private ArrayAdapter<String> NotificationListArrayAdapter;
+    private ArrayList<Notification> notificationList;
+    private NotificationArrayAdapter NotificationListArrayAdapter;
     private ListView notificationListView;
     private Button readButton;
 
@@ -35,6 +34,7 @@ public class Notifications extends AppCompatActivity {
 
         notificationListView = findViewById(R.id.notification_list);
         readButton = findViewById(R.id.read_close_btn);
+
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
@@ -74,6 +74,7 @@ public class Notifications extends AppCompatActivity {
         });
     }
 
+
     private void getALlNotification(String[][] allNotificationRecord) {
 
         notificationList = new ArrayList<>();
@@ -85,10 +86,23 @@ public class Notifications extends AppCompatActivity {
                     if(edc.getEventAllNotifications(docSns) != null) {
                         for(int j = Integer.parseInt(allNotificationRecord[finalI][2]) + 1;
                             j <= Integer.parseInt(allNotificationRecord[finalI][1]); j++) {
-                            notificationList.add(edc.getEventAllNotifications(docSns).get(j));
-                            NotificationListArrayAdapter = new ArrayAdapter<>(Notifications.this,
-                                    android.R.layout.simple_list_item_1, notificationList);
-                            notificationListView.setAdapter(NotificationListArrayAdapter);
+                            String notifications = (edc.getEventAllNotifications(docSns).get(j));
+                            String eventID = allNotificationRecord[finalI][0];
+
+                            EventDatabaseControl edcTemp = new EventDatabaseControl();
+                            edcTemp.getEventSnapshot(eventID)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot docSns) {
+                                            NotificationListArrayAdapter = new NotificationArrayAdapter
+                                                    (NotificationsBox.this, notificationList);
+                                            notificationListView.setAdapter(NotificationListArrayAdapter);
+                                            String eventName = edc.getEventName(docSns);
+                                            notificationList.add(new Notification(eventID,
+                                                    eventName, notifications));
+                                            NotificationListArrayAdapter.notifyDataSetChanged();
+                                        }
+                                    });
                         }
                     }
                 }
